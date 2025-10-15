@@ -417,9 +417,10 @@
                 When complete, click
                 <strong>"Download file for Canvas Submission"</strong>
               </li>
-              <li>Locate and upload this file to Canvas:
+              <li>
+                Locate and upload this file to Canvas:
                 <ul style="margin-top: 10px; line-height: 1.8">
-                  <li><em>Lab4_[timestamp].txt</em> (answer file)</li>
+                  <li><em>Lab04_EarthSunGeometry.txt</em> (answer file)</li>
                 </ul>
               </li>
             </ol>
@@ -1436,7 +1437,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        const filename = "Lab4_" + Date.now() + ".txt";
+        const filename = "Lab04_EarthSunGeometry.txt";
         a.download = filename;
         document.body.appendChild(a);
         a.click();

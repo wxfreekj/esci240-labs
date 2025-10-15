@@ -140,9 +140,12 @@
                 When complete, click
                 <strong>"Download file for Canvas Submission"</strong>
               </li>
-              <li>Locate and upload this file to Canvas:
+              <li>
+                Locate and upload this file to Canvas:
                 <ul style="margin-top: 10px; line-height: 1.8">
-                  <li><em>lab3_submission_[timestamp].txt</em> (answer file)</li>
+                  <li>
+                    <em>Lab03_AtmosphericAnalysis.txt</em> (answer file)
+                  </li>
                 </ul>
               </li>
             </ol>
@@ -1015,7 +1018,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `lab3_submission_${timestamp.replace(/[:.]/g, "-")}.txt`;
+        a.download = `Lab03_AtmosphericAnalysis.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

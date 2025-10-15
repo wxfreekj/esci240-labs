@@ -5,11 +5,12 @@
 
 export const lab05Config = {
     labNumber: 5,
-    labName: 'Lab5_Surface_Map_Analysis',
+    labName: 'Lab05_SurfaceMapAnalysis',
     totalPoints: 30,
     
     // Station Model Builder Configuration (Question 3)
     stationModelBuilder: {
+        saveFilename: 'Lab05_StationModel.png',
         weatherData: {
             currentWeather: 'Continuous light rain',
             pressure: '1004.5 mb',
@@ -28,7 +29,7 @@ export const lab05Config = {
         undoLastBtnId: 'undo-last-btn-single',
         undoAllBtnId: 'undo-all-btn-single',
         saveBtnId: 'save-btn-single',
-        saveFilename: 'lab5_isodrosotherm_45F.png',
+        saveFilename: 'Lab05_Isodrosotherm_45F.png',
         lineColor: '#FF0000',
         lineWidth: 2,
         lineDash: [6, 10]
@@ -42,7 +43,7 @@ export const lab05Config = {
         undoLastBtnId: 'undo-last-btn-multi',
         undoAllBtnId: 'undo-all-btn-multi',
         saveBtnId: 'save-btn-multi',
-        saveFilename: 'lab5_isotherms.png',
+        saveFilename: 'Lab05_Isotherms.png',
         lineTypes: {
             '0': { 
                 color: '#0070FF', 

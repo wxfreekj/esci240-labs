@@ -109,17 +109,17 @@
           <div class="section">
             <h3>Question 4: Minimizing Bias (3 pts)</h3>
             <div class="form-group">
-              <label for="q4a">Strategy 1:</label>
+              <label for="q4a">How might a scientist introduce bias into their data unintentionally?</label>
               <textarea
                 id="q4a"
-                placeholder="Enter first strategy here..."
+                placeholder="Enter your answer here..."
               ></textarea>
             </div>
             <div class="form-group">
-              <label for="q4b">Strategy 2:</label>
+              <label for="q4b">What is one strategy scientists can use to minimize bias in their work?</label>
               <textarea
                 id="q4b"
-                placeholder="Enter second strategy here..."
+                placeholder="Enter your answer here..."
               ></textarea>
             </div>
           </div>
@@ -370,15 +370,17 @@
         answers.push("[QUESTION_4]");
         answers.push("POINTS: 3");
         answers.push("TYPE: split");
-        answers.push(
-          "PROMPT: What are two strategies scientists can use to minimize or prevent personal bias in their research?"
-        );
+        answers.push("PROMPT: Bias in Science");
         answers.push("");
         answers.push("[PART_A]");
+        answers.push("How might a scientist introduce bias into their data unintentionally?");
+        answers.push("");
         answers.push(document.getElementById("q4a").value.trim());
         answers.push("[/PART_A]");
         answers.push("");
         answers.push("[PART_B]");
+        answers.push("What is one strategy scientists can use to minimize bias in their work?");
+        answers.push("");
         answers.push(document.getElementById("q4b").value.trim());
         answers.push("[/PART_B]");
         answers.push("[/QUESTION_4]");

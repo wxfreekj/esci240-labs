@@ -9,24 +9,37 @@ from datetime import datetime
 from pathlib import Path
 import json
 
-# ============================================================================
-# CONFIGURATION - Update these values for your Canvas instance
-# ============================================================================
+# Load configuration from .env file
+try:
+    from config import (
+        CANVAS_API_TOKEN,
+        CANVAS_DOMAIN,
+        COURSE_ID,
+        LAB_ASSIGNMENT_IDS,
+        OUTPUT_BASE_DIR,
+    )
+except ImportError as e:
+    print("\n❌ Configuration Error!")
+    print("\n📝 Setup Instructions:")
+    print("1. Copy .env.example to .env:")
+    print("   cp .env.example .env")
+    print("\n2. Edit .env and fill in your Canvas credentials")
+    print("\n3. Install python-dotenv:")
+    print("   pip install python-dotenv")
+    print()
+    raise
 
-# Your Canvas API access token (generate from Canvas Account > Settings > New Access Token)
-CANVAS_API_TOKEN = "YOUR_CANVAS_API_TOKEN_HERE"
+# Lab 1 specific configuration
+LAB_NUMBER = 1
+LAB01_ASSIGNMENT_ID = LAB_ASSIGNMENT_IDS.get(LAB_NUMBER)
 
-# Your Canvas domain (e.g., "canvas.instructure.com" or "yourschool.instructure.com")
-CANVAS_DOMAIN = "canvas.instructure.com"
-
-# Course ID (find in Canvas course URL: https://canvas.../courses/COURSE_ID)
-COURSE_ID = "YOUR_COURSE_ID_HERE"
-
-# Assignment ID for Lab 1 (find in assignment URL or via API)
-LAB01_ASSIGNMENT_ID = "YOUR_ASSIGNMENT_ID_HERE"
+if not LAB01_ASSIGNMENT_ID:
+    print(f"\n⚠️  Warning: LAB0{LAB_NUMBER}_ASSIGNMENT_ID not set in .env file")
+    print("\nRun: python list_assignments.py to find assignment IDs")
+    LAB01_ASSIGNMENT_ID = None  # Will be validated later
 
 # Output directory for downloaded submissions
-OUTPUT_DIR = Path("./lab01_submissions")
+OUTPUT_DIR = Path(OUTPUT_BASE_DIR) / f"lab{LAB_NUMBER:02d}_submissions"
 
 # ============================================================================
 # Canvas API Functions
@@ -247,31 +260,13 @@ def download_lab01_submissions(canvas, course_id, assignment_id, output_dir):
 
 def main():
     # Validate configuration
-    if CANVAS_API_TOKEN == "YOUR_CANVAS_API_TOKEN_HERE":
-        print("❌ Error: Please set your CANVAS_API_TOKEN in the script")
-        print("\nTo get your token:")
-        print("1. Log in to Canvas")
-        print("2. Go to Account > Settings")
-        print("3. Scroll to 'Approved Integrations'")
-        print("4. Click '+ New Access Token'")
-        print("5. Copy the token and paste it into this script")
-        return
-
-    if COURSE_ID == "YOUR_COURSE_ID_HERE":
-        print("❌ Error: Please set your COURSE_ID in the script")
-        print("\nTo find your course ID:")
-        print("1. Go to your Canvas course")
-        print("2. Look at the URL: https://canvas.../courses/COURSE_ID")
-        print("3. Copy the number after 'courses/' and paste it into this script")
-        return
-
-    if LAB01_ASSIGNMENT_ID == "YOUR_ASSIGNMENT_ID_HERE":
-        print("❌ Error: Please set your LAB01_ASSIGNMENT_ID in the script")
+    if not LAB01_ASSIGNMENT_ID:
+        print("❌ Error: LAB01_ASSIGNMENT_ID not set in .env file")
         print("\nTo find your assignment ID:")
-        print("1. Go to the Lab 1 assignment in Canvas")
-        print("2. Look at the URL: .../assignments/ASSIGNMENT_ID")
-        print("3. Copy the number and paste it into this script")
-        print("\nOr run: python list_assignments.py (to be created)")
+        print("1. Run: python list_assignments.py")
+        print("2. Find 'Lab 1' in the output")
+        print("3. Copy the assignment ID")
+        print("4. Add to .env file: LAB01_ASSIGNMENT_ID=your_id_here")
         return
 
     try:

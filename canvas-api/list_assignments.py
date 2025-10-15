@@ -6,13 +6,19 @@ Helper script to find assignment IDs for your course
 import requests
 import json
 
-# ============================================================================
-# CONFIGURATION - Update these values
-# ============================================================================
-
-CANVAS_API_TOKEN = "YOUR_CANVAS_API_TOKEN_HERE"
-CANVAS_DOMAIN = "canvas.instructure.com"
-COURSE_ID = "YOUR_COURSE_ID_HERE"
+# Load configuration from .env file
+try:
+    from config import CANVAS_API_TOKEN, CANVAS_DOMAIN, COURSE_ID
+except ImportError as e:
+    print("\n❌ Configuration Error!")
+    print("\n📝 Setup Instructions:")
+    print("1. Copy .env.example to .env:")
+    print("   cp .env.example .env")
+    print("\n2. Edit .env and fill in your Canvas credentials")
+    print("\n3. Install python-dotenv:")
+    print("   pip install python-dotenv")
+    print()
+    raise
 
 # ============================================================================
 
@@ -88,14 +94,9 @@ def list_assignments(domain, token, course_id):
 
 
 def main():
-    if CANVAS_API_TOKEN == "YOUR_CANVAS_API_TOKEN_HERE":
-        print("❌ Error: Please set your CANVAS_API_TOKEN")
-        return
-
-    if COURSE_ID == "YOUR_COURSE_ID_HERE":
-        print("❌ Error: Please set your COURSE_ID")
-        return
-
+    # Configuration is loaded from .env via config.py
+    # No additional validation needed here since config.py handles it
+    
     try:
         list_assignments(CANVAS_DOMAIN, CANVAS_API_TOKEN, COURSE_ID)
     except requests.exceptions.RequestException as e:

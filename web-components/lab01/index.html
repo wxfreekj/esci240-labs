@@ -109,14 +109,20 @@
           <div class="section">
             <h3>Question 4: Minimizing Bias (3 pts)</h3>
             <div class="form-group">
-              <label for="q4a">How might a scientist introduce bias into their data unintentionally?</label>
+              <label for="q4a"
+                >How might a scientist introduce bias into their data
+                unintentionally?</label
+              >
               <textarea
                 id="q4a"
                 placeholder="Enter your answer here..."
               ></textarea>
             </div>
             <div class="form-group">
-              <label for="q4b">What is one strategy scientists can use to minimize bias in their work?</label>
+              <label for="q4b"
+                >What is one strategy scientists can use to minimize bias in
+                their work?</label
+              >
               <textarea
                 id="q4b"
                 placeholder="Enter your answer here..."
@@ -127,13 +133,22 @@
           <div class="section">
             <h3>Question 5: Science and Authority (4 pts)</h3>
             <div class="form-group">
-              <label for="q5"
+              <label for="q5a"
                 >What does it mean to say that science is not based on
-                authority, and how does this affect the way scientific knowledge
-                is accepted or challenged?</label
+                authority?</label
               >
               <textarea
-                id="q5"
+                id="q5a"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="q5b"
+                >How does this affect the way scientific knowledge is accepted
+                or challenged?</label
+              >
+              <textarea
+                id="q5b"
                 placeholder="Enter your answer here..."
               ></textarea>
             </div>
@@ -142,13 +157,17 @@
           <div class="section">
             <h3>Question 6: Ethical Challenges (3 pts)</h3>
             <div class="form-group">
-              <label for="q6"
-                >Identify and briefly explain two common ethical challenges that
-                scientists may face in their work.</label
-              >
+              <label for="q6a">Ethical Challenge 1:</label>
               <textarea
-                id="q6"
-                placeholder="Enter your answer here..."
+                id="q6a"
+                placeholder="Identify and explain first ethical challenge..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="q6b">Ethical Challenge 2:</label>
+              <textarea
+                id="q6b"
+                placeholder="Identify and explain second ethical challenge..."
               ></textarea>
             </div>
           </div>
@@ -188,11 +207,24 @@
           q3: 4, // Q3: 4 pts
           q4a: 1.5,
           q4b: 1.5, // Q4: 3 pts total (1.5 each)
-          q5: 4, // Q5: 4 pts
-          q6: 3, // Q6: 3 pts
+          q5a: 2,
+          q5b: 2, // Q5: 4 pts total (2 each)
+          q6a: 1.5,
+          q6b: 1.5, // Q6: 3 pts total (1.5 each)
         };
 
-        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+        const fields = [
+          "q1a",
+          "q1b",
+          "q2",
+          "q3",
+          "q4a",
+          "q4b",
+          "q5a",
+          "q5b",
+          "q6a",
+          "q6b",
+        ];
 
         fields.forEach((field) => {
           const answer = document.getElementById(field).value.trim();
@@ -212,7 +244,18 @@
 
       // Load saved answers from localStorage when page loads
       window.addEventListener("load", function () {
-        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+        const fields = [
+          "q1a",
+          "q1b",
+          "q2",
+          "q3",
+          "q4a",
+          "q4b",
+          "q5a",
+          "q5b",
+          "q6a",
+          "q6b",
+        ];
         fields.forEach((field) => {
           const saved = localStorage.getItem(field);
           if (saved) {
@@ -275,7 +318,18 @@
         const emptyQuestions = [];
         const shortQuestions = [];
 
-        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+        const fields = [
+          "q1a",
+          "q1b",
+          "q2",
+          "q3",
+          "q4a",
+          "q4b",
+          "q5a",
+          "q5b",
+          "q6a",
+          "q6b",
+        ];
 
         fields.forEach((field) => {
           const textarea = document.getElementById(field);
@@ -373,44 +427,66 @@
         answers.push("PROMPT: Bias in Science");
         answers.push("");
         answers.push("[PART_A]");
-        answers.push("How might a scientist introduce bias into their data unintentionally?");
+        answers.push(
+          "How might a scientist introduce bias into their data unintentionally?"
+        );
         answers.push("");
         answers.push(document.getElementById("q4a").value.trim());
         answers.push("[/PART_A]");
         answers.push("");
         answers.push("[PART_B]");
-        answers.push("What is one strategy scientists can use to minimize bias in their work?");
+        answers.push(
+          "What is one strategy scientists can use to minimize bias in their work?"
+        );
         answers.push("");
         answers.push(document.getElementById("q4b").value.trim());
         answers.push("[/PART_B]");
         answers.push("[/QUESTION_4]");
         answers.push("");
 
-        // Question 5
+        // Question 5 - Split format
         answers.push("[QUESTION_5]");
         answers.push("POINTS: 4");
-        answers.push("TYPE: essay");
+        answers.push("TYPE: split");
+        answers.push("PROMPT: Science and Authority");
+        answers.push("");
+        answers.push("[PART_A]");
         answers.push(
-          "PROMPT: What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?"
+          "What does it mean to say that science is not based on authority?"
         );
         answers.push("");
-        answers.push("[ANSWER]");
-        answers.push(document.getElementById("q5").value.trim());
-        answers.push("[/ANSWER]");
+        answers.push(document.getElementById("q5a").value.trim());
+        answers.push("[/PART_A]");
+        answers.push("");
+        answers.push("[PART_B]");
+        answers.push(
+          "How does this affect the way scientific knowledge is accepted or challenged?"
+        );
+        answers.push("");
+        answers.push(document.getElementById("q5b").value.trim());
+        answers.push("[/PART_B]");
         answers.push("[/QUESTION_5]");
         answers.push("");
 
-        // Question 6
+        // Question 6 - Split format
         answers.push("[QUESTION_6]");
         answers.push("POINTS: 3");
-        answers.push("TYPE: essay");
+        answers.push("TYPE: split");
         answers.push(
           "PROMPT: Identify and briefly explain two common ethical challenges that scientists may face in their work."
         );
         answers.push("");
-        answers.push("[ANSWER]");
-        answers.push(document.getElementById("q6").value.trim());
-        answers.push("[/ANSWER]");
+        answers.push("[PART_A]");
+        answers.push("Ethical Challenge 1:");
+        answers.push("");
+        answers.push(document.getElementById("q6a").value.trim());
+        answers.push("[/PART_A]");
+        answers.push("");
+        answers.push("[PART_B]");
+        answers.push("Ethical Challenge 2:");
+        answers.push("");
+        answers.push(document.getElementById("q6b").value.trim());
+        answers.push("[/PART_B]");
         answers.push("[/QUESTION_6]");
         answers.push("");
 
@@ -437,7 +513,18 @@
             "Are you sure you want to clear all answers? This cannot be undone."
           )
         ) {
-          const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+          const fields = [
+            "q1a",
+            "q1b",
+            "q2",
+            "q3",
+            "q4a",
+            "q4b",
+            "q5a",
+            "q5b",
+            "q6a",
+            "q6b",
+          ];
           fields.forEach((field) => {
             document.getElementById(field).value = "";
             localStorage.removeItem(field);

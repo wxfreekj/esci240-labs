@@ -1,0 +1,38 @@
+# Canvas API - Git Ignore
+
+# Never commit API tokens or credentials
+.env
+config.py
+secrets.py
+*_token.txt
+
+# Downloaded submissions
+lab*_submissions/
+*_submissions/
+downloads/
+
+# Metadata and logs
+*.log
+assignments_list.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

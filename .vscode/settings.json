@@ -8,5 +8,6 @@
     "**/.git": false
   },
   "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false
+  "explorer.confirmDragAndDrop": false,
+  "liveServer.settings.root": "/web-components"
 }

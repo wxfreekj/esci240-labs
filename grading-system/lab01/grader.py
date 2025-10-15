@@ -138,7 +138,9 @@ class Lab01Grader(LabGrader):
                 score_b, fb_b = self.grade_answer(answers["q5b"], self.q5_keywords, 20)
                 q5_score = (score_a + score_b) * 2
                 total_score += q5_score
-                feedback.append(f"Q5 ({q5_score:.1f}/4.0): Part A: {fb_a}, Part B: {fb_b}")
+                feedback.append(
+                    f"Q5 ({q5_score:.1f}/4.0): Part A: {fb_a}, Part B: {fb_b}"
+                )
 
             # Question 6: Ethical Challenges (3 pts total, 1.5 each)
             if "q6a" in answers and "q6b" in answers:
@@ -146,7 +148,9 @@ class Lab01Grader(LabGrader):
                 score_b, fb_b = self.grade_answer(answers["q6b"], self.q6_keywords, 15)
                 q6_score = (score_a + score_b) * 1.5
                 total_score += q6_score
-                feedback.append(f"Q6 ({q6_score:.1f}/3.0): Part A: {fb_a}, Part B: {fb_b}")
+                feedback.append(
+                    f"Q6 ({q6_score:.1f}/3.0): Part A: {fb_a}, Part B: {fb_b}"
+                )
 
             percentage = (total_score / max_score) * 100
 

@@ -103,6 +103,63 @@
       </div>
 
       <div class="content">
+        <!-- For This Lab Section -->
+        <div class="section">
+          <h2>📋 For This Lab</h2>
+          <div
+            class="info-box"
+            style="
+              background: #e3f2fd;
+              border-left: 4px solid #2196f3;
+              padding: 20px;
+              border-radius: 8px;
+              margin-bottom: 25px;
+            "
+          >
+            <h3
+              style="
+                margin-top: 0;
+                margin-bottom: 15px;
+                color: #1976d2;
+                font-size: 1.1em;
+              "
+            >
+              Instructions
+            </h3>
+            <ol style="margin: 0; padding-left: 25px; line-height: 2">
+              <li>
+                Complete all atmospheric calculations and analysis sections
+              </li>
+              <li>Fill in tables with accurate numerical values</li>
+              <li>
+                Monitor your progress using the progress bar at the top of the
+                page
+              </li>
+              <li>Your work is automatically saved as you type</li>
+              <li>
+                When complete, click
+                <strong>"Download file for Canvas Submission"</strong>
+              </li>
+              <li>
+                Locate the downloaded file
+                (<em>lab03_atmospheric_analysis.txt</em>) and upload it to
+                Canvas
+              </li>
+            </ol>
+            <p
+              style="
+                margin-top: 15px;
+                margin-bottom: 0;
+                font-size: 0.95em;
+                color: #555;
+              "
+            >
+              <strong>💡 Tip:</strong> Use a calculator for precise
+              calculations. Pay attention to units and significant figures.
+            </p>
+          </div>
+        </div>
+
         <!-- Introduction Section -->
         <div class="section">
           <h2>📚 Introduction</h2>
@@ -570,19 +627,47 @@
         </div>
 
         <!-- Buttons -->
-        <div class="button-container">
-          <button class="save-btn" onclick="saveProgress()">
-            💾 Save Progress
+        <div
+          class="button-container"
+          style="
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+          "
+        >
+          <button
+            class="export-btn"
+            onclick="exportToTextFile()"
+            style="flex: 1; min-width: 200px"
+          >
+            � Download file for Canvas Submission
           </button>
-          <button class="export-btn" onclick="exportToTextFile()">
-            📄 Generate Text File
+          <button
+            class="reset-btn"
+            onclick="resetForm()"
+            style="flex: 1; min-width: 200px"
+          >
+            �️ Clear All Answers
           </button>
-          <button class="reset-btn" onclick="resetForm()">🔄 Reset Form</button>
           <button
             type="button"
             class="help-btn"
             onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 3 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 3:%0D%0A%0D%0A'"
-            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; margin-top: 10px;"
+            style="
+              flex: 1;
+              min-width: 200px;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              padding: 12px 24px;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 1em;
+              font-weight: 600;
+              transition: transform 0.2s, box-shadow 0.2s;
+            "
             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(102, 126, 234, 0.4)'"
             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)'"
           >

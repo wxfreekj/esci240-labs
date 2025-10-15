@@ -42,34 +42,46 @@
 
     <div class="container">
       <div class="header">
-        <h1>Lab 1: The Nature of Science</h1>
-        <p>ESCI 240 - Fall 2025</p>
+        <h1>📚 Lab 1: The Nature of Science</h1>
+        <p>Understanding Scientific Principles and Methods (30 Points)</p>
       </div>
 
       <div class="content">
-        <div class="intro-box">
-          <h3>📚 Required Reading</h3>
-          <p>Please read the chapter before answering the questions:</p>
-          <a
-            href="http://www.project2061.org/publications/sfaa/online/chap1.htm"
-            target="_blank"
-          >
-            http://www.project2061.org/publications/sfaa/online/chap1.htm
-          </a>
+        <!-- Introduction Section -->
+        <div class="section">
+          <h2>📖 Introduction</h2>
+          <div class="intro-box">
+            <p>
+              This lab explores the fundamental principles of scientific inquiry
+              and methodology. You'll examine the assumptions scientists make,
+              how scientific knowledge is validated, and the ethical
+              considerations that guide scientific research.
+            </p>
+            <p>
+              <strong>Required Reading:</strong> Before answering the questions,
+              please read the chapter:
+              <a
+                href="http://www.project2061.org/publications/sfaa/online/chap1.htm"
+                target="_blank"
+              >
+                Science for All Americans - Chapter 1
+              </a>
+            </p>
+          </div>
         </div>
 
         <form id="questionForm">
           <div class="section">
-            <h3>Question 1: Assumptions in Science (3 pts)</h3>
+            <h3>Question 1: Assumptions in Science (6 pts)</h3>
             <div class="form-group">
-              <label for="q1a">Assumption 1:</label>
+              <label for="q1a">Assumption 1: (3 pts)</label>
               <textarea
                 id="q1a"
                 placeholder="Enter first assumption here..."
               ></textarea>
             </div>
             <div class="form-group">
-              <label for="q1b">Assumption 2:</label>
+              <label for="q1b">Assumption 2: (3 pts)</label>
               <textarea
                 id="q1b"
                 placeholder="Enter second assumption here..."
@@ -92,7 +104,7 @@
           </div>
 
           <div class="section">
-            <h3>Question 3: Testing Past Events (4 pts)</h3>
+            <h3>Question 3: Testing Past Events (3 pts)</h3>
             <div class="form-group">
               <label for="q3"
                 >Since scientific ideas are often validated by making
@@ -107,11 +119,11 @@
           </div>
 
           <div class="section">
-            <h3>Question 4: Minimizing Bias (3 pts)</h3>
+            <h3>Question 4: Minimizing Bias (6 pts)</h3>
             <div class="form-group">
               <label for="q4a"
                 >How might a scientist introduce bias into their data
-                unintentionally?</label
+                unintentionally? (3 pts)</label
               >
               <textarea
                 id="q4a"
@@ -121,7 +133,7 @@
             <div class="form-group">
               <label for="q4b"
                 >What is one strategy scientists can use to minimize bias in
-                their work?</label
+                their work? (3 pts)</label
               >
               <textarea
                 id="q4b"
@@ -131,11 +143,11 @@
           </div>
 
           <div class="section">
-            <h3>Question 5: Science and Authority (4 pts)</h3>
+            <h3>Question 5: Science and Authority (6 pts)</h3>
             <div class="form-group">
               <label for="q5a"
                 >What does it mean to say that science is not based on
-                authority?</label
+                authority? (3 pts)</label
               >
               <textarea
                 id="q5a"
@@ -145,7 +157,7 @@
             <div class="form-group">
               <label for="q5b"
                 >How does this affect the way scientific knowledge is accepted
-                or challenged?</label
+                or challenged? (3 pts)</label
               >
               <textarea
                 id="q5b"
@@ -155,16 +167,16 @@
           </div>
 
           <div class="section">
-            <h3>Question 6: Ethical Challenges (3 pts)</h3>
+            <h3>Question 6: Ethical Challenges (6 pts)</h3>
             <div class="form-group">
-              <label for="q6a">Ethical Challenge 1:</label>
+              <label for="q6a">Ethical Challenge 1: (3 pts)</label>
               <textarea
                 id="q6a"
                 placeholder="Identify and explain first ethical challenge..."
               ></textarea>
             </div>
             <div class="form-group">
-              <label for="q6b">Ethical Challenge 2:</label>
+              <label for="q6b">Ethical Challenge 2: (3 pts)</label>
               <textarea
                 id="q6b"
                 placeholder="Identify and explain second ethical challenge..."
@@ -199,18 +211,18 @@
       // Update progress indicator based on points
       function updateProgress() {
         let earnedPoints = 0;
-        const totalPoints = 20; // 3+3+4+3+4+3
+        const totalPoints = 30; // 6+3+3+6+6+6 = 30 points
         const questionPoints = {
-          q1a: 1.5,
-          q1b: 1.5, // Q1: 3 pts total (1.5 each)
+          q1a: 3,
+          q1b: 3, // Q1: 6 pts total (3 each)
           q2: 3, // Q2: 3 pts
-          q3: 4, // Q3: 4 pts
-          q4a: 1.5,
-          q4b: 1.5, // Q4: 3 pts total (1.5 each)
-          q5a: 2,
-          q5b: 2, // Q5: 4 pts total (2 each)
-          q6a: 1.5,
-          q6b: 1.5, // Q6: 3 pts total (1.5 each)
+          q3: 3, // Q3: 3 pts
+          q4a: 3,
+          q4b: 3, // Q4: 6 pts total (3 each)
+          q5a: 3,
+          q5b: 3, // Q5: 6 pts total (3 each)
+          q6a: 3,
+          q6b: 3, // Q6: 6 pts total (3 each)
         };
 
         const fields = [
@@ -372,13 +384,13 @@
         answers.push("TITLE: The Nature of Science");
         answers.push("COURSE: ESCI 240");
         answers.push("DATE: " + new Date().toISOString());
-        answers.push("TOTAL_POINTS: 20");
+        answers.push("TOTAL_POINTS: 30");
         answers.push("=".repeat(70));
         answers.push("");
 
         // Question 1 - Split format
         answers.push("[QUESTION_1]");
-        answers.push("POINTS: 3");
+        answers.push("POINTS: 6");
         answers.push("TYPE: split");
         answers.push("PROMPT: List two assumptions in science.");
         answers.push("");
@@ -408,7 +420,7 @@
 
         // Question 3
         answers.push("[QUESTION_3]");
-        answers.push("POINTS: 4");
+        answers.push("POINTS: 3");
         answers.push("TYPE: essay");
         answers.push(
           "PROMPT: Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?"
@@ -422,7 +434,7 @@
 
         // Question 4 - Split format
         answers.push("[QUESTION_4]");
-        answers.push("POINTS: 3");
+        answers.push("POINTS: 6");
         answers.push("TYPE: split");
         answers.push("PROMPT: Bias in Science");
         answers.push("");
@@ -446,7 +458,7 @@
 
         // Question 5 - Split format
         answers.push("[QUESTION_5]");
-        answers.push("POINTS: 4");
+        answers.push("POINTS: 6");
         answers.push("TYPE: split");
         answers.push("PROMPT: Science and Authority");
         answers.push("");
@@ -470,7 +482,7 @@
 
         // Question 6 - Split format
         answers.push("[QUESTION_6]");
-        answers.push("POINTS: 3");
+        answers.push("POINTS: 6");
         answers.push("TYPE: split");
         answers.push(
           "PROMPT: Identify and briefly explain two common ethical challenges that scientists may face in their work."

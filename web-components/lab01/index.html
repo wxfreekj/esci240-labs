@@ -62,10 +62,17 @@
           <div class="section">
             <h3>Question 1: Assumptions in Science (3 pts)</h3>
             <div class="form-group">
-              <label for="q1">List two assumptions in science.</label>
+              <label for="q1a">Assumption 1:</label>
               <textarea
-                id="q1"
-                placeholder="Enter your answer here..."
+                id="q1a"
+                placeholder="Enter first assumption here..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="q1b">Assumption 2:</label>
+              <textarea
+                id="q1b"
+                placeholder="Enter second assumption here..."
               ></textarea>
             </div>
           </div>
@@ -102,13 +109,17 @@
           <div class="section">
             <h3>Question 4: Minimizing Bias (3 pts)</h3>
             <div class="form-group">
-              <label for="q4"
-                >What strategies can scientists use to minimize or prevent
-                personal bias in their research?</label
-              >
+              <label for="q4a">Strategy 1:</label>
               <textarea
-                id="q4"
-                placeholder="Enter your answer here..."
+                id="q4a"
+                placeholder="Enter first strategy here..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="q4b">Strategy 2:</label>
+              <textarea
+                id="q4b"
+                placeholder="Enter second strategy here..."
               ></textarea>
             </div>
           </div>
@@ -170,14 +181,25 @@
       function updateProgress() {
         let earnedPoints = 0;
         const totalPoints = 20; // 3+3+4+3+4+3
-        const questionPoints = [3, 3, 4, 3, 4, 3]; // Points for each question
+        const questionPoints = {
+          q1a: 1.5,
+          q1b: 1.5, // Q1: 3 pts total (1.5 each)
+          q2: 3, // Q2: 3 pts
+          q3: 4, // Q3: 4 pts
+          q4a: 1.5,
+          q4b: 1.5, // Q4: 3 pts total (1.5 each)
+          q5: 4, // Q5: 4 pts
+          q6: 3, // Q6: 3 pts
+        };
 
-        for (let i = 1; i <= 6; i++) {
-          const answer = document.getElementById("q" + i).value.trim();
+        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+
+        fields.forEach((field) => {
+          const answer = document.getElementById(field).value.trim();
           if (answer) {
-            earnedPoints += questionPoints[i - 1];
+            earnedPoints += questionPoints[field];
           }
-        }
+        });
 
         const percentage = (earnedPoints / totalPoints) * 100;
 
@@ -190,12 +212,13 @@
 
       // Load saved answers from localStorage when page loads
       window.addEventListener("load", function () {
-        for (let i = 1; i <= 6; i++) {
-          const saved = localStorage.getItem("q" + i);
+        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+        fields.forEach((field) => {
+          const saved = localStorage.getItem(field);
           if (saved) {
-            document.getElementById("q" + i).value = saved;
+            document.getElementById(field).value = saved;
           }
-        }
+        });
         // Update progress after loading saved values
         updateProgress();
       });
@@ -252,33 +275,35 @@
         const emptyQuestions = [];
         const shortQuestions = [];
 
-        for (let i = 1; i <= 6; i++) {
-          const textarea = document.getElementById("q" + i);
+        const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+
+        fields.forEach((field) => {
+          const textarea = document.getElementById(field);
           const value = textarea.value.trim();
 
           if (!value) {
-            emptyQuestions.push(i);
+            emptyQuestions.push(field);
             allValid = false;
           } else if (!validateTextarea(textarea)) {
-            shortQuestions.push(i);
+            shortQuestions.push(field);
             allValid = false;
           }
-        }
+        });
 
         if (!allValid) {
           let message = "Please complete the following before downloading:\n\n";
           if (emptyQuestions.length > 0) {
-            message += "Empty questions: " + emptyQuestions.join(", ") + "\n";
+            message += "Empty fields: " + emptyQuestions.join(", ") + "\n";
           }
           if (shortQuestions.length > 0) {
             message +=
-              "Questions needing more detail: " + shortQuestions.join(", ");
+              "Fields needing more detail: " + shortQuestions.join(", ");
           }
           alert(message);
 
           // Scroll to first error
           const firstError = document.getElementById(
-            "q" + (emptyQuestions[0] || shortQuestions[0])
+            emptyQuestions[0] || shortQuestions[0]
           );
           if (firstError) {
             firstError.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -298,26 +323,93 @@
         answers.push("=".repeat(50));
         answers.push("");
 
-        for (let i = 1; i <= 6; i++) {
-          const answer = document.getElementById("q" + i).value.trim();
-          const questions = [
-            "List two assumptions in science.",
-            "What are the fixed steps of science that scientists always follow?",
-            "Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?",
-            "What strategies can scientists use to minimize or prevent personal bias in their research?",
-            "What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?",
-            "Identify and briefly explain two common ethical challenges that scientists may face in their work.",
-          ];
+        // Question 1
+        answers.push("QUESTION 1: Assumptions in Science (3 pts)");
+        answers.push("");
+        answers.push("Assumption 1:");
+        answers.push(
+          document.getElementById("q1a").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("Assumption 2:");
+        answers.push(
+          document.getElementById("q1b").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
 
-          answers.push("QUESTION " + i + ":");
-          answers.push(questions[i - 1]);
-          answers.push("");
-          answers.push("ANSWER:");
-          answers.push(answer || "[No answer provided]");
-          answers.push("");
-          answers.push("-".repeat(50));
-          answers.push("");
-        }
+        // Question 2
+        answers.push("QUESTION 2: Scientific Method (3 pts)");
+        answers.push(
+          "What are the fixed steps of science that scientists always follow?"
+        );
+        answers.push("");
+        answers.push("ANSWER:");
+        answers.push(
+          document.getElementById("q2").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
+
+        // Question 3
+        answers.push("QUESTION 3: Testing Past Events (4 pts)");
+        answers.push(
+          "Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?"
+        );
+        answers.push("");
+        answers.push("ANSWER:");
+        answers.push(
+          document.getElementById("q3").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
+
+        // Question 4
+        answers.push("QUESTION 4: Minimizing Bias (3 pts)");
+        answers.push("");
+        answers.push("Strategy 1:");
+        answers.push(
+          document.getElementById("q4a").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("Strategy 2:");
+        answers.push(
+          document.getElementById("q4b").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
+
+        // Question 5
+        answers.push("QUESTION 5: Science and Authority (4 pts)");
+        answers.push(
+          "What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?"
+        );
+        answers.push("");
+        answers.push("ANSWER:");
+        answers.push(
+          document.getElementById("q5").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
+
+        // Question 6
+        answers.push("QUESTION 6: Ethical Challenges (3 pts)");
+        answers.push(
+          "Identify and briefly explain two common ethical challenges that scientists may face in their work."
+        );
+        answers.push("");
+        answers.push("ANSWER:");
+        answers.push(
+          document.getElementById("q6").value.trim() || "[No answer provided]"
+        );
+        answers.push("");
+        answers.push("-".repeat(50));
+        answers.push("");
 
         const blob = new Blob([answers.join("\n")], { type: "text/plain" });
         const url = window.URL.createObjectURL(blob);
@@ -338,10 +430,11 @@
             "Are you sure you want to clear all answers? This cannot be undone."
           )
         ) {
-          for (let i = 1; i <= 6; i++) {
-            document.getElementById("q" + i).value = "";
-            localStorage.removeItem("q" + i);
-          }
+          const fields = ["q1a", "q1b", "q2", "q3", "q4a", "q4b", "q5", "q6"];
+          fields.forEach((field) => {
+            document.getElementById(field).value = "";
+            localStorage.removeItem(field);
+          });
           updateProgress();
           alert("All answers have been cleared.");
         }

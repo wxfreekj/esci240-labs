@@ -312,110 +312,115 @@
         }
 
         const answers = [];
-        answers.push("THE NATURE OF SCIENCE - ANSWERS");
-        answers.push("=".repeat(50));
-        answers.push("");
-        answers.push(
-          "Reading Source: http://www.project2061.org/publications/sfaa/online/chap1.htm"
-        );
-        answers.push("Date: " + new Date().toLocaleDateString());
-        answers.push("");
-        answers.push("=".repeat(50));
+
+        // Header with metadata
+        answers.push("LAB: 01");
+        answers.push("TITLE: The Nature of Science");
+        answers.push("COURSE: ESCI 240");
+        answers.push("DATE: " + new Date().toISOString());
+        answers.push("TOTAL_POINTS: 20");
+        answers.push("=".repeat(70));
         answers.push("");
 
-        // Question 1
-        answers.push("QUESTION 1: Assumptions in Science (3 pts)");
+        // Question 1 - Split format
+        answers.push("[QUESTION_1]");
+        answers.push("POINTS: 3");
+        answers.push("TYPE: split");
+        answers.push("PROMPT: List two assumptions in science.");
         answers.push("");
-        answers.push("Assumption 1:");
-        answers.push(
-          document.getElementById("q1a").value.trim() || "[No answer provided]"
-        );
+        answers.push("[PART_A]");
+        answers.push(document.getElementById("q1a").value.trim());
+        answers.push("[/PART_A]");
         answers.push("");
-        answers.push("Assumption 2:");
-        answers.push(
-          document.getElementById("q1b").value.trim() || "[No answer provided]"
-        );
-        answers.push("");
-        answers.push("-".repeat(50));
+        answers.push("[PART_B]");
+        answers.push(document.getElementById("q1b").value.trim());
+        answers.push("[/PART_B]");
+        answers.push("[/QUESTION_1]");
         answers.push("");
 
         // Question 2
-        answers.push("QUESTION 2: Scientific Method (3 pts)");
+        answers.push("[QUESTION_2]");
+        answers.push("POINTS: 3");
+        answers.push("TYPE: essay");
         answers.push(
-          "What are the fixed steps of science that scientists always follow?"
+          "PROMPT: What are the fixed steps of science that scientists always follow?"
         );
         answers.push("");
-        answers.push("ANSWER:");
-        answers.push(
-          document.getElementById("q2").value.trim() || "[No answer provided]"
-        );
-        answers.push("");
-        answers.push("-".repeat(50));
+        answers.push("[ANSWER]");
+        answers.push(document.getElementById("q2").value.trim());
+        answers.push("[/ANSWER]");
+        answers.push("[/QUESTION_2]");
         answers.push("");
 
         // Question 3
-        answers.push("QUESTION 3: Testing Past Events (4 pts)");
+        answers.push("[QUESTION_3]");
+        answers.push("POINTS: 4");
+        answers.push("TYPE: essay");
         answers.push(
-          "Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?"
+          "PROMPT: Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?"
         );
         answers.push("");
-        answers.push("ANSWER:");
-        answers.push(
-          document.getElementById("q3").value.trim() || "[No answer provided]"
-        );
-        answers.push("");
-        answers.push("-".repeat(50));
+        answers.push("[ANSWER]");
+        answers.push(document.getElementById("q3").value.trim());
+        answers.push("[/ANSWER]");
+        answers.push("[/QUESTION_3]");
         answers.push("");
 
-        // Question 4
-        answers.push("QUESTION 4: Minimizing Bias (3 pts)");
-        answers.push("");
-        answers.push("Strategy 1:");
+        // Question 4 - Split format
+        answers.push("[QUESTION_4]");
+        answers.push("POINTS: 3");
+        answers.push("TYPE: split");
         answers.push(
-          document.getElementById("q4a").value.trim() || "[No answer provided]"
+          "PROMPT: What are two strategies scientists can use to minimize or prevent personal bias in their research?"
         );
         answers.push("");
-        answers.push("Strategy 2:");
-        answers.push(
-          document.getElementById("q4b").value.trim() || "[No answer provided]"
-        );
+        answers.push("[PART_A]");
+        answers.push(document.getElementById("q4a").value.trim());
+        answers.push("[/PART_A]");
         answers.push("");
-        answers.push("-".repeat(50));
+        answers.push("[PART_B]");
+        answers.push(document.getElementById("q4b").value.trim());
+        answers.push("[/PART_B]");
+        answers.push("[/QUESTION_4]");
         answers.push("");
 
         // Question 5
-        answers.push("QUESTION 5: Science and Authority (4 pts)");
+        answers.push("[QUESTION_5]");
+        answers.push("POINTS: 4");
+        answers.push("TYPE: essay");
         answers.push(
-          "What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?"
+          "PROMPT: What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?"
         );
         answers.push("");
-        answers.push("ANSWER:");
-        answers.push(
-          document.getElementById("q5").value.trim() || "[No answer provided]"
-        );
-        answers.push("");
-        answers.push("-".repeat(50));
+        answers.push("[ANSWER]");
+        answers.push(document.getElementById("q5").value.trim());
+        answers.push("[/ANSWER]");
+        answers.push("[/QUESTION_5]");
         answers.push("");
 
         // Question 6
-        answers.push("QUESTION 6: Ethical Challenges (3 pts)");
+        answers.push("[QUESTION_6]");
+        answers.push("POINTS: 3");
+        answers.push("TYPE: essay");
         answers.push(
-          "Identify and briefly explain two common ethical challenges that scientists may face in their work."
+          "PROMPT: Identify and briefly explain two common ethical challenges that scientists may face in their work."
         );
         answers.push("");
-        answers.push("ANSWER:");
-        answers.push(
-          document.getElementById("q6").value.trim() || "[No answer provided]"
-        );
+        answers.push("[ANSWER]");
+        answers.push(document.getElementById("q6").value.trim());
+        answers.push("[/ANSWER]");
+        answers.push("[/QUESTION_6]");
         answers.push("");
-        answers.push("-".repeat(50));
-        answers.push("");
+
+        // Footer
+        answers.push("=".repeat(70));
+        answers.push("END OF SUBMISSION");
 
         const blob = new Blob([answers.join("\n")], { type: "text/plain" });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "nature_of_science_answers.txt";
+        a.download = "lab01_nature_of_science_answers.txt";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

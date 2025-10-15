@@ -1,0 +1,33 @@
+﻿{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.pytest_cache": true,
+      "**/venv": true
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-python.black-formatter",
+      "ritwickdey.liveserver",
+      "eamodio.gitlens",
+      "usernamehw.errorlens",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

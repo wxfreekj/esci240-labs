@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 6: Upper Air Analysis</title>
+    <link rel="stylesheet" href="../shared/styles/common.css">
+    <link rel="stylesheet" href="../shared/styles/lab-styles.css">
+    <style>
+        /* Lab 6-specific styles for inline inputs */
+        .inline-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .inline-inputs input {
+            width: 150px;
+        }
+        .key-terms {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .key-terms h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .key-terms ul {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Indicator -->
+    <div class="progress-indicator" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.98); box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 8px 0;">
+      <div class="progress-bar" style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden;">
+        <div class="progress-fill" id="progressFill" style="height: 8px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: 0%; transition: width 0.3s ease; display: block;"></div>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Lab 6: Upper Air Analysis</h1>
+            <p>Total Points: 30</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>Introduction: Decoding the Atmosphere in 3D</h2>
+        <blockquote>
+            Upper-air analysis is a cornerstone of modern meteorology, providing a three-dimensional view of the weather patterns that shape our daily lives. While surface weather maps give us a snapshot of conditions at ground level, the true drivers of weather systems—large-scale winds, pressure systems, and temperature contrasts—are found high above. This lab explores the interpretation of upper-air charts, which map meteorological conditions not at a fixed height, but on a constant pressure surface.
+        </blockquote>
+
+        <h2>Background</h2>
+        <div class="key-terms">
+            <h3>Key Terms & Concepts</h3>
+            <ul>
+                <li><strong>Pressure Surface:</strong> An imaginary surface where the atmospheric pressure is the same everywhere. Common surfaces are 850-mb, 500-mb, and 200/300-mb, each representing different altitudes in the atmosphere.</li>
+                <li><strong>Contour Interval:</strong> The difference in value between adjacent contour lines on a map. For upper-air charts, this usually refers to the height difference (in meters or decameters) between lines.</li>
+                <li><strong>Height Contour:</strong> A line connecting points of equal height above sea level for a given pressure surface. These contours reveal the shape of the pressure surface and help identify ridges, troughs, and gradients.</li>
+                <li><strong>Advection:</strong> The horizontal movement of air, carrying properties like temperature or moisture from one place to another. <em>Warm air advection</em> means warmer air is moving into a region; <em>cold air advection</em> means colder air is moving in.</li>
+                <li><strong>Dew Point Depression:</strong> The difference between the air temperature and the dew point temperature. A small depression means the air is nearly saturated (humid); a large depression means drier air.</li>
+                <li><strong>Wind Barb:</strong> A symbol used to show both wind speed and direction. The shaft points in the direction the wind is coming from; barbs and flags indicate speed (each full barb = 10 knots, half barb = 5 knots, flag = 50 knots).</li>
+                <li><strong>Jet Stream:</strong> A fast-moving ribbon of air found near the top of the troposphere (200/300-mb level). Jet streams steer weather systems and are associated with strong wind speeds.</li>
+                <li><strong>Ridge:</strong> An elongated area of relatively high heights (pressure aloft), often associated with warmer, drier, and more stable weather.</li>
+                <li><strong>Trough:</strong> An elongated area of relatively low heights (pressure aloft), often associated with cooler, unsettled, and stormier weather.</li>
+            </ul>
+        </div>
+
+        <p>The key to understanding these charts is realizing that the altitude of a given pressure surface changes based on the temperature of the air column. Warmer, less dense air expands, pushing the pressure surface to a higher altitude. Colder, denser air contracts, causing the pressure surface to be found at a lower altitude. This difference in column height creates higher pressure aloft over a warm column and lower pressure over a cold column, causing air to move. This redistribution of mass results in rising surface pressure under the cold column and falling surface pressure under the warm column, which ultimately creates surface wind.</p>
+        
+        <img src="pressureexample.png" alt="Diagram showing how temperature differences in air columns create pressure gradients.">
+
+        <p>The station model for upper-air charts plots key data points including temperature, dew point depression, wind, and the height of the pressure surface.</p>
+
+        <img src="upperairdecoder.png" alt="Upper air station model and wind barb key.">
+
+        <hr>
+
+            <form id="lab-form" onsubmit="return false;">
+                <div class="section">
+                    <h2>Part 1: Low-level Analysis</h2>
+                    <p>The 850-mb level provides a view of the atmosphere above the boundary layer. Meteorologists use this level to find areas of warm-air advection (where winds blow from warmer to colder areas) and cold-air advection (where winds blow from colder to warmer areas), which are crucial for forecasting temperature changes and precipitation type.</p>
+                    <img src="850map.png" alt="850-mb weather map for analysis.">
+
+                    <h3>Question 1: Contour Interval (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Examine the 850-mb map above and determine what contour interval is used.</p>
+                    <div class="form-group">
+                        <label for="q1">Contour interval:</label>
+                        <input type="text" id="q1" name="q1">
+                    </div>
+
+                    <h3>Question 2: Height Range (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Identify the range of heights shown in the 850-mb map.</p>
+                    <div class="form-group">
+                        <label>Height range:</label>
+                        <div class="inline-inputs">
+                            <input type="text" id="q2_from" name="q2_from" placeholder="Lowest">
+                            <span>to</span>
+                            <input type="text" id="q2_to" name="q2_to" placeholder="Highest">
+                        </div>
+                    </div>
+
+                    <h3>Question 3: Wind Direction in Box A (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Determine the wind direction within box A.</p>
+                    <div class="form-group">
+                        <label for="q3">Wind direction:</label>
+                        <select id="q3" name="q3">
+                            <option value="">Select direction...</option>
+                            <option value="N">N</option>
+                            <option value="NE">NE</option>
+                            <option value="E">E</option>
+                            <option value="SE">SE</option>
+                            <option value="S">S</option>
+                            <option value="SW">SW</option>
+                            <option value="W">W</option>
+                            <option value="NW">NW</option>
+                        </select>
+                    </div>
+
+                    <h3>Question 4: Wind Direction in Box B (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Determine the wind direction within box B.</p>
+                    <div class="form-group">
+                        <label for="q4">Wind direction:</label>
+                        <select id="q4" name="q4">
+                            <option value="">Select direction...</option>
+                            <option value="N">N</option>
+                            <option value="NE">NE</option>
+                            <option value="E">E</option>
+                            <option value="SE">SE</option>
+                            <option value="S">S</option>
+                            <option value="SW">SW</option>
+                            <option value="W">W</option>
+                            <option value="NW">NW</option>
+                        </select>
+                    </div>
+
+                    <h3>Question 5: Cold Air Advection (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Identify which box shows cold air advection.</p>
+                    <div class="form-group">
+                        <label for="q5">Box letter (A, B, C, or D):</label>
+                        <input type="text" id="q5" name="q5" placeholder="Enter letter A, B, C, or D">
+                    </div>
+
+                    <h3>Question 6: Warm Air Advection (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Identify which box shows warm air advection.</p>
+                    <div class="form-group">
+                        <label for="q6">Box letter (A, B, C, or D):</label>
+                        <input type="text" id="q6" name="q6" placeholder="Enter letter A, B, C, or D">
+                    </div>
+
+                    <h3>Question 7: Light Winds Location (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Identify which state would have very light winds according to this map.</p>
+                    <div class="form-group">
+                        <label for="q7">State name:</label>
+                        <input type="text" id="q7" name="q7" placeholder="Enter state name">
+                    </div>
+                </div>
+                <hr>
+
+                <div class="section">
+                    <h2>Part 2: Mid-level Analysis</h2>
+                    <p>The 500-mb level is often called the "mid-level" flow. Maps at this level are crucial for forecasting the movement of storms, as the 500-mb winds effectively "steer" surface weather systems.</p>
+                    <img src="500mb.png" alt="500-mb weather map for analysis.">
+
+                    <h3>Question 8: 500-mb Contour Interval (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Examine the 500-mb map and determine the contour interval used.</p>
+                    <div class="form-group">
+                        <label for="q8">Contour interval:</label>
+                        <input type="text" id="q8" name="q8">
+                    </div>
+
+                    <h3>Question 9: Wind Direction in Box A (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Determine the wind direction within box A on the 500-mb map.</p>
+                    <div class="form-group">
+                        <label for="q9">Wind direction:</label>
+                        <select id="q9" name="q9">
+                            <option value="">Select direction...</option>
+                            <option value="N">N</option>
+                            <option value="NE">NE</option>
+                            <option value="E">E</option>
+                            <option value="SE">SE</option>
+                            <option value="S">S</option>
+                            <option value="SW">SW</option>
+                            <option value="W">W</option>
+                            <option value="NW">NW</option>
+                        </select>
+                    </div>
+
+                    <h3>Question 10: Wind Direction in Box B (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Determine the wind direction within box B on the 500-mb map.</p>
+                    <div class="form-group">
+                        <label for="q10">Wind direction:</label>
+                        <select id="q10" name="q10">
+                            <option value="">Select direction...</option>
+                            <option value="N">N</option>
+                            <option value="NE">NE</option>
+                            <option value="E">E</option>
+                            <option value="SE">SE</option>
+                            <option value="S">S</option>
+                            <option value="SW">SW</option>
+                            <option value="W">W</option>
+                            <option value="NW">NW</option>
+                        </select>
+                    </div>
+
+                    <h3>Question 11: 500-mb Height Range (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Identify the range of height contours on the 500-mb map.</p>
+                    <div class="form-group">
+                        <label>Height range:</label>
+                        <div class="inline-inputs">
+                            <input type="text" id="q11_from" name="q11_from" placeholder="Lowest">
+                            <span>to</span>
+                            <input type="text" id="q11_to" name="q11_to" placeholder="Highest">
+                        </div>
+                    </div>
+
+                    <h3>Question 12: Temperature-Density-Pressure Relationship (5 pts)</h3>
+                    <p><strong>Instructions:</strong> Explain how the spatial pattern of heights illustrates the relationship between temperature, density, and the rate of vertical pressure change.</p>
+                    <div class="form-group">
+                        <label for="q12">Your explanation:</label>
+                        <textarea id="q12" name="q12"></textarea>
+                    </div>
+
+                    <h3>Question 13: Surface Low Movement (2 pts)</h3>
+                    <p><strong>Instructions:</strong> If a surface low pressure center developed in eastern New Mexico, toward which direction would it likely move based on the 500-mb winds?</p>
+                    <div class="form-group">
+                        <label for="q13">Direction:</label>
+                        <input type="text" id="q13" name="q13" placeholder="e.g., Northeast">
+                    </div>
+                </div>
+                <hr>
+
+                <div class="section">
+                    <h2>Part 3: Upper-level Analysis</h2>
+                    <p>Maps at the 200-mb or 300-mb level are used to identify the location and strength of the jet stream. Jet streaks, or areas of maximum wind within the jet stream, are often identified with their own contours.</p>
+                    <img src="200mb.png" alt="200-mb weather map for analysis.">
+
+                    <h3>Question 14: 200-mb Height Contour Interval (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Examine the 200-mb map and determine the contour interval used to show heights.</p>
+                    <div class="form-group">
+                        <label for="q14">Contour interval:</label>
+                        <input type="text" id="q14" name="q14">
+                    </div>
+
+                    <h3>Question 15: Wind Direction in Box A (1 pt)</h3>
+                    <p><strong>Instructions:</strong> Determine the wind direction in box A on the 200-mb map.</p>
+                    <div class="form-group">
+                        <label for="q15">Wind direction:</label>
+                        <select id="q15" name="q15">
+                            <option value="">Select direction...</option>
+                            <option value="N">N</option>
+                            <option value="NE">NE</option>
+                            <option value="E">E</option>
+                            <option value="SE">SE</option>
+                            <option value="S">S</option>
+                            <option value="SW">SW</option>
+                            <option value="W">W</option>
+                            <option value="NW">NW</option>
+                        </select>
+                    </div>
+
+                    <h3>Question 16: High Wind Locations (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Identify two states where winds exceed 100 kts.</p>
+                    <div class="form-group">
+                        <label>States with winds exceeding 100 kts:</label>
+                        <div class="inline-inputs">
+                            <input type="text" id="q16_1" name="q16_1" placeholder="State 1">
+                            <span>and</span>
+                            <input type="text" id="q16_2" name="q16_2" placeholder="State 2">
+                        </div>
+                    </div>
+
+                    <h3>Question 17: Lightest Winds Location (2 pts)</h3>
+                    <p><strong>Instructions:</strong> Identify which US state has the lightest winds on the 200-mb map.</p>
+                    <div class="form-group">
+                        <label for="q17">State name:</label>
+                        <input type="text" id="q17" name="q17" placeholder="Enter state name">
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="download-btn" onclick="exportAnswers()">📥 Export Answers for Canvas</button>
+                    <button class="clear-btn" onclick="clearForm()">🗑️ Clear All Answers</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function exportAnswers() {
+            // Build the output string in the Canvas LMS compatible format
+            let output = '';
+            output += 'ASSIGNMENT=Lab6_Upper_Air_Analysis\n';
+            output += 'DATE=' + new Date().toISOString() + '\n';
+            output += 'TOTAL_POINTS=30\n';
+            output += '---BEGIN_ANSWERS---\n';
+            
+            // Part 1
+            output += 'Q1=' + document.getElementById('q1').value + '\n';
+            output += 'Q2_FROM=' + document.getElementById('q2_from').value + '\n';
+            output += 'Q2_TO=' + document.getElementById('q2_to').value + '\n';
+            output += 'Q3=' + document.getElementById('q3').value + '\n';
+            output += 'Q4=' + document.getElementById('q4').value + '\n';
+            output += 'Q5=' + document.getElementById('q5').value + '\n';
+            output += 'Q6=' + document.getElementById('q6').value + '\n';
+            output += 'Q7=' + document.getElementById('q7').value + '\n';
+
+            // Part 2
+            output += 'Q8=' + document.getElementById('q8').value + '\n';
+            output += 'Q9=' + document.getElementById('q9').value + '\n';
+            output += 'Q10=' + document.getElementById('q10').value + '\n';
+            output += 'Q11_FROM=' + document.getElementById('q11_from').value + '\n';
+            output += 'Q11_TO=' + document.getElementById('q11_to').value + '\n';
+            output += 'Q12=' + document.getElementById('q12').value.replace(/\n/g, ' ') + '\n'; // Replace newlines for single-line processing
+            output += 'Q13=' + document.getElementById('q13').value + '\n';
+
+            // Part 3
+            output += 'Q14=' + document.getElementById('q14').value + '\n';
+            output += 'Q15=' + document.getElementById('q15').value + '\n';
+            output += 'Q16_1=' + document.getElementById('q16_1').value + '\n';
+            output += 'Q16_2=' + document.getElementById('q16_2').value + '\n';
+            output += 'Q17=' + document.getElementById('q17').value + '\n';
+            
+            output += '---END_ANSWERS---\n';
+            
+            // Create a Blob and trigger the download
+            const blob = new Blob([output], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const filename = 'Lab6_Answers_' + Date.now() + '.txt';
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Answers exported successfully!\n\nFile: ' + filename + '\n\nPlease submit this file to Canvas.');
+        }
+
+        function clearForm() {
+            if (confirm('⚠️ Are you sure you want to clear all answers? This cannot be undone.')) {
+                document.getElementById('lab-form').reset();
+                updateProgress();
+                alert('✅ All answers have been cleared.');
+            }
+        }
+
+        // Update progress indicator
+        function updateProgress() {
+            let completedCount = 0;
+            const totalQuestions = 17;
+
+            // Count completed questions (checking all input fields)
+            const inputs = [
+                'q1', 'q2_from', 'q2_to', 'q3', 'q4', 'q5', 'q6', 'q7',
+                'q8', 'q9', 'q10', 'q11_from', 'q11_to', 'q12', 'q13',
+                'q14', 'q15', 'q16_1', 'q16_2', 'q17'
+            ];
+
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element && element.value.trim()) {
+                    completedCount++;
+                }
+            });
+
+            // Adjust count since q2, q11, and q16 each have 2 fields but count as 1 question
+            if (document.getElementById('q2_from').value.trim() && 
+                document.getElementById('q2_to').value.trim()) {
+                completedCount--; // Remove double count
+            }
+            if (document.getElementById('q11_from').value.trim() && 
+                document.getElementById('q11_to').value.trim()) {
+                completedCount--; // Remove double count
+            }
+            if (document.getElementById('q16_1').value.trim() && 
+                document.getElementById('q16_2').value.trim()) {
+                completedCount--; // Remove double count
+            }
+
+            const percentage = (completedCount / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        // Add event listeners to all inputs
+        document.querySelectorAll('input, textarea').forEach((element) => {
+            element.addEventListener('input', updateProgress);
+        });
+
+        // Initial progress update
+        updateProgress();
+    </script>
+</body>
+</html>

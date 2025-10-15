@@ -1,0 +1,79 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Push All Changes to Main Repo",
+      "type": "shell",
+      "command": "git add . && git commit -m \"Update labs\" && git push origin main",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "📊 Check Git Status",
+      "type": "shell",
+      "command": "git status",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🔄 Pull Latest Changes",
+      "type": "shell",
+      "command": "git pull origin main",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🌐 View All GitHub Pages URLs",
+      "type": "shell",
+      "command": "echo 'Your deployed labs:' && for i in {01..10}; do echo \"Lab ${i}: https://wxfreekj.github.io/lab${i}-student\"; done",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "✅ Create Initial Commit",
+      "type": "shell",
+      "command": "git add . && git commit -m 'Initial commit: All 10 labs with auto-deployment'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🔗 Connect to GitHub (First Time Setup)",
+      "type": "shell",
+      "command": "git remote add origin https://github.com/wxfreekj/esci240-labs.git && git branch -M main && git push -u origin main",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "📝 Quick Commit with Custom Message",
+      "type": "shell",
+      "command": "git add . && git commit",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}

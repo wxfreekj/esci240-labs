@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESCI 240 - Lab Exercises</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        font-size: 1.2em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .intro {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+      }
+
+      .labs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .lab-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+        display: block;
+      }
+
+      .lab-card:hover {
+        border-color: #667eea;
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+      }
+
+      .lab-card h3 {
+        color: #667eea;
+        font-size: 1.3em;
+        margin-bottom: 10px;
+      }
+
+      .lab-card p {
+        color: #666;
+        font-size: 0.95em;
+      }
+
+      .lab-number {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      footer {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🌡️ ESCI 240 Laboratory Exercises</h1>
+        <p>Introduction to Meteorology - Fall 2025</p>
+      </header>
+
+      <div class="content">
+        <div class="intro">
+          <h2 style="margin-bottom: 10px">Welcome to ESCI 240 Labs</h2>
+          <p>
+            These interactive lab exercises will help you explore fundamental
+            concepts in meteorology and atmospheric science. Each lab includes
+            hands-on activities, data analysis, and visualization tools.
+            Complete the exercises and export your answers to submit on Canvas.
+          </p>
+        </div>
+
+        <h2 style="margin-bottom: 15px">Available Laboratory Exercises</h2>
+
+        <div class="labs-grid">
+          <a href="lab01/index.html" class="lab-card">
+            <span class="lab-number">Lab 1</span>
+            <h3>Density</h3>
+            <p>
+              Explore the relationship between mass, volume, and density in
+              atmospheric science.
+            </p>
+          </a>
+
+          <a href="lab02/index.html" class="lab-card">
+            <span class="lab-number">Lab 2</span>
+            <h3>Energy Balance</h3>
+            <p>
+              Understand Earth's energy budget and the balance between incoming
+              and outgoing radiation.
+            </p>
+          </a>
+
+          <a href="lab03/index.html" class="lab-card">
+            <span class="lab-number">Lab 3</span>
+            <h3>Atmospheric Structure</h3>
+            <p>
+              Examine temperature, pressure, and density variations through the
+              atmosphere.
+            </p>
+          </a>
+
+          <a href="lab04/index.html" class="lab-card">
+            <span class="lab-number">Lab 4</span>
+            <h3>Moisture & Stability</h3>
+            <p>
+              Analyze humidity, saturation, and atmospheric stability using
+              thermodynamic diagrams.
+            </p>
+          </a>
+
+          <a href="lab05/index.html" class="lab-card">
+            <span class="lab-number">Lab 5</span>
+            <h3>Surface Observations</h3>
+            <p>
+              Learn to decode surface weather observations and plot station
+              models.
+            </p>
+          </a>
+
+          <a href="lab06/index.html" class="lab-card">
+            <span class="lab-number">Lab 6</span>
+            <h3>Upper Air Analysis</h3>
+            <p>
+              Analyze upper-level atmospheric conditions using constant pressure
+              charts.
+            </p>
+          </a>
+
+          <a href="lab07/index.html" class="lab-card">
+            <span class="lab-number">Lab 7</span>
+            <h3>Air Masses & Fronts</h3>
+            <p>
+              Identify air masses and frontal boundaries on surface weather
+              maps.
+            </p>
+          </a>
+
+          <a href="lab08/index.html" class="lab-card">
+            <span class="lab-number">Lab 8</span>
+            <h3>Mid-Latitude Cyclones</h3>
+            <p>Study the structure and evolution of extratropical cyclones.</p>
+          </a>
+
+          <a href="lab09/index.html" class="lab-card">
+            <span class="lab-number">Lab 9</span>
+            <h3>Severe Weather</h3>
+            <p>
+              Examine conditions favorable for thunderstorms, tornadoes, and
+              severe weather.
+            </p>
+          </a>
+
+          <a href="lab10/index.html" class="lab-card">
+            <span class="lab-number">Lab 10</span>
+            <h3>Tropical Cyclones</h3>
+            <p>
+              Analyze the formation, structure, and forecasting of hurricanes
+              and typhoons.
+            </p>
+          </a>
+        </div>
+      </div>
+
+      <footer>
+        <p>© 2025 ESCI 240 - Introduction to Meteorology</p>
+        <p style="margin-top: 5px">
+          Complete all exercises and export your answers to Canvas for grading.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 5: Surface Map Analysis</title>
+    <link href="../shared/styles/common.css" rel="stylesheet" />
+    <link href="../shared/styles/lab-styles.css" rel="stylesheet" />
+    <link href="../shared/styles/canvas-tools.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div
+      class="progress-indicator"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+      "
+    >
+      <div
+        class="progress-bar"
+        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
+      >
+        <div
+          class="progress-fill"
+          id="progressBar"
+          style="
+            height: 8px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: block;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="header">
+        <h1>🌦️ Lab 5: Surface Map Analysis</h1>
+        <p>Understanding Station Models and Weather Maps (30 Points)</p>
+      </div>
+
+      <div class="content">
+        <!-- Introduction Section -->
+        <div class="section">
+          <h2>📚 Introduction</h2>
+          <div class="intro-box">
+            <p>
+              Every hour weather data is collected at more than 10,000 surface
+              weather stations around the world and disseminated to one of three
+              <strong>World Meteorological Centers</strong>, in Melbourne,
+              Australia; Moscow, Russia; or Washington, D.C. where
+              synoptic-scale maps are generated. <strong>Synoptic</strong> means
+              coincident in time, and a synoptic map is a map of weather
+              conditions for a specific time.
+            </p>
+
+            <p>
+              Traditionally, time printed on many weather maps is
+              <strong>Greenwich Mean Time (GMT)</strong>, also called
+              Coordinated Universal Time, the time at the prime meridian.
+              Meteorologists often call this <strong>Zulu or z time</strong>.
+              Thus, a map labeled 1200z shows conditions at noon in London,
+              which is 7:00 A.M. EST in New York.
+            </p>
+
+            <p>
+              In the United States an automated weather network collects hourly
+              surface data. Since each station collects data for many weather
+              elements (moisture, visibility, clouds, temperature, etc.),
+              symbols must be used to include all this information on a single
+              weather map. The <strong>station model</strong>, developed by the
+              World Meteorological Organization, is the standard format for
+              symbolizing weather characteristics.
+            </p>
+          </div>
+
+          <div class="info-box">
+            <strong>🔗 Additional Resources:</strong> More surface plot info can
+            be found at:
+            <a
+              href="https://www.wpc.ncep.noaa.gov/html/stationplot.shtml"
+              target="_blank"
+              >https://www.wpc.ncep.noaa.gov/html/stationplot.shtml</a
+            >
+          </div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="section">
+          <h2>Section 1: Decoding Station Models</h2>
+
+          <div class="intro-box">
+            <p>
+              The <strong>station model</strong> is a standardized way to
+              display multiple weather observations from a single location on a
+              weather map. Below is a station model that you need to decode.
+            </p>
+          </div>
+
+          <h3>Question 1: Decode Station Model (4 pts)</h3>
+          <p>
+            <strong>Instructions:</strong> Decode the station model in Figure 1
+            below by selecting the correct values for each weather parameter.
+          </p>
+
+          <div class="diagram-container">
+            <img src="Fig1.png" alt="Station Model" />
+            <p class="image-caption">Figure 1: Station Model Diagram</p>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="50%">Parameter</th>
+                  <th width="50%">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sea-level Pressure:</td>
+                  <td>
+                    <select id="q1_pressure">
+                      <option value="">Select...</option>
+                      <option value="1024">1024</option>
+                      <option value="102.4">102.4</option>
+                      <option value="1002.4">1002.4</option>
+                      <option value="37">37</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Temperature:</td>
+                  <td>
+                    <select id="q1_temp">
+                      <option value="">Select...</option>
+                      <option value="37">37</option>
+                      <option value="21">21</option>
+                      <option value="24">24</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dew-point Temperature:</td>
+                  <td>
+                    <select id="q1_dewpoint">
+                      <option value="">Select...</option>
+                      <option value="37">37</option>
+                      <option value="21">21</option>
+                      <option value="24">24</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sky Coverage:</td>
+                  <td>
+                    <select id="q1_sky">
+                      <option value="">Select...</option>
+                      <option value="clear">Clear</option>
+                      <option value="scattered">Scattered</option>
+                      <option value="broken">Broken</option>
+                      <option value="overcast">Overcast</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="section">
+          <h3>Question 2: Advanced Station Model Decoding (8 pts)</h3>
+          <p>
+            <strong>Instructions:</strong> This station model includes
+            additional weather elements beyond the basic temperature and
+            pressure data. Decode all the information displayed.
+          </p>
+
+          <div class="diagram-container">
+            <img src="Fig2.png" alt="Station Model" />
+            <p class="image-caption">Figure 2: Station Model Diagram</p>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="50%">Parameter</th>
+                  <th width="50%">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Current Weather:</td>
+                  <td>
+                    <select id="q2_weather">
+                      <option value="">Select...</option>
+                      <option value="snow-light">Light Snow</option>
+                      <option value="rain-moderate">Moderate Rain</option>
+                      <option value="snow-moderate">Moderate Snow</option>
+                      <option value="none">None</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sea-level Pressure:</td>
+                  <td>
+                    <select id="q2_pressure">
+                      <option value="">Select...</option>
+                      <option value="997">997</option>
+                      <option value="999.7">999.7</option>
+                      <option value="1999.7">1999.7</option>
+                      <option value="1013">1013</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Temperature:</td>
+                  <td>
+                    <select id="q2_temp">
+                      <option value="">Select...</option>
+                      <option value="31">31</option>
+                      <option value="27">27</option>
+                      <option value="24">24</option>
+                      <option value="32">32</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dew-point Temperature:</td>
+                  <td>
+                    <select id="q2_dewpoint">
+                      <option value="">Select...</option>
+                      <option value="18">18</option>
+                      <option value="24">24</option>
+                      <option value="21">21</option>
+                      <option value="27">27</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sky Coverage:</td>
+                  <td>
+                    <select id="q2_sky">
+                      <option value="">Select...</option>
+                      <option value="Few">Few</option>
+                      <option value="Overcast">Overcast</option>
+                      <option value="Clear">Clear</option>
+                      <option value="Scattered">Scattered</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Wind Speed:</td>
+                  <td>
+                    <select id="q2_windspeed">
+                      <option value="">Select...</option>
+                      <option value="25">25</option>
+                      <option value="12.5">12.5</option>
+                      <option value="20">20</option>
+                      <option value="30">30</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Wind Direction:</td>
+                  <td>
+                    <select id="q2_winddir">
+                      <option value="">Select...</option>
+                      <option value="N">N</option>
+                      <option value="NE">NE</option>
+                      <option value="E">E</option>
+                      <option value="SE">SE</option>
+                      <option value="S">S</option>
+                      <option value="SW">SW</option>
+                      <option value="W">W</option>
+                      <option value="NW">NW</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pressure change in last 3 hrs:</td>
+                  <td>
+                    <select id="q2_pressurechange">
+                      <option value="">Select...</option>
+                      <option value="-1.1">-1.1</option>
+                      <option value="+2">+2</option>
+                      <option value="0">0</option>
+                      <option value="-0.11">-0.11</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Precipitation Amount:</td>
+                  <td>
+                    <select id="q2_precipamount">
+                      <option value="">Select...</option>
+                      <option value="3.1">3.1</option>
+                      <option value="0.11">0.11</option>
+                      <option value="0.31">0.31</option>
+                      <option value="0.41">0.41</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Question 3: Station Model Builder -->
+        <div class="section">
+          <h2>Section 2: Create a Station Model</h2>
+
+          <p>
+            <strong>Instructions:</strong> Use the data below to construct a
+            complete station model using the drag-and-drop tool.
+          </p>
+
+          <div class="intro-box">
+            <h3>Given Data:</h3>
+            <ul>
+              <li><strong>Current Weather:</strong> Continuous light rain</li>
+              <li><strong>Sea-level Pressure:</strong> 1004.5 mb</li>
+              <li><strong>Temperature:</strong> 53°F</li>
+              <li><strong>Dew-point Temperature:</strong> 51°F</li>
+              <li><strong>Sky Coverage:</strong> Completely overcast</li>
+              <li><strong>Wind Speed:</strong> 15 knots</li>
+              <li><strong>Wind Direction:</strong> NE</li>
+            </ul>
+          </div>
+
+          <h3>Question 3: Build Station Model (6 pts)</h3>
+
+          <div id="station-model-builder-container"></div>
+        </div>
+
+        <!-- Isolines Information -->
+        <div class="section">
+          <h2>📈 Understanding Isolines</h2>
+
+          <div class="intro-box">
+            <p>
+              Weather maps are most useful when their information is analyzed in
+              some fashion. Highlighting the spatial patterns of specific
+              variables—such as temperature, dew point, pressure, and winds—is a
+              first step in weather analysis. We often use
+              <strong>isolines</strong> (lines of constant value) for this
+              purpose.
+            </p>
+
+            <h3>Types of Isolines:</h3>
+            <ul>
+              <li><strong>Isotherms:</strong> Lines of constant temperature</li>
+              <li>
+                <strong>Isobars:</strong> Lines of constant barometric pressure
+              </li>
+              <li>
+                <strong>Isodrosotherms:</strong> Lines of constant dew point
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <strong>📏 Standards for Constructing Isolines:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px">
+              <li>
+                Because isolines are lines of constant value, they do not cross.
+              </li>
+              <li>
+                Isolines should be relatively smooth. Sharp breaks are rare.
+              </li>
+              <li>
+                They should be drawn at fixed intervals. Meteorologists
+                traditionally use 4-mb intervals, centered on 1000 mb, for
+                barometric pressure (e.g., 996 mb, 1000 mb, 1004 mb, etc.).
+              </li>
+              <li>
+                For temperature and dew point, intervals of 5°F are commonly
+                used.
+              </li>
+              <li>
+                Isolines should be labeled near the edge of the map. When they
+                form a closed figure, the label is inserted in a small break in
+                the line.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Question 4: Single Isodrosotherm -->
+        <div class="section">
+          <h3>Question 4: Drawing Isodrosotherms (4 pts)</h3>
+
+          <p>
+            <strong>Instructions:</strong> Annotate the image below by drawing
+            the <strong>45°F isodrosotherm</strong>. Use interpolation to
+            determine where the line should be drawn based on the dew point
+            values at each station.
+          </p>
+
+          <div class="curve-widget-wrapper">
+            <h2>Draw Your 45°F Isodrosotherm Curve</h2>
+            <div class="stage">
+              <img
+                id="bg-img-single"
+                src="Lab-5 Isodrosotherm blank.png"
+                alt="Map with dew point data"
+              />
+              <canvas id="draw-canvas-single"></canvas>
+            </div>
+            <p class="hint">
+              Click to add points, drag dots to move, and right-click to remove.
+              'Save' will merge your line onto the map image.
+            </p>
+            <div class="controls">
+              <button id="undo-last-btn-single" class="btn">
+                Undo Last Point
+              </button>
+              <button id="undo-all-btn-single" class="btn">
+                Clear All Points
+              </button>
+              <button id="save-btn-single" class="btn-save">Save as PNG</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 5: Multiple Isotherms -->
+        <div class="section">
+          <h3>Question 5: Drawing Multiple Isotherms (8 pts)</h3>
+
+          <p>
+            <strong>Instructions:</strong> Using the surface map below, draw the
+            <strong>35°F, 40°F, and 45°F isotherms</strong>. Remember to label
+            each isotherm clearly and use smooth lines that follow the
+            temperature gradient.
+          </p>
+
+          <div class="curve-widget-wrapper">
+            <h2>Click to Draw and Edit Your Lines</h2>
+            <div class="stage">
+              <img
+                id="bg-img-multi"
+                src="BlankAnalysis.png"
+                alt="Background analysis map"
+              />
+              <canvas id="draw-canvas-multi"></canvas>
+            </div>
+            <p class="hint">
+              Click to add points and define your line. Drag dots to move.
+              Right-click a dot to remove. "Save" merges your lines with the
+              image.
+            </p>
+            <div class="controls">
+              <label for="line-select-multi">Edit Line:</label>
+              <select id="line-select-multi">
+                <option value="0" selected>35° T</option>
+                <option value="1">40° T</option>
+                <option value="2">45° T</option>
+                <option value="3">45° Td</option>
+              </select>
+              <button id="undo-last-btn-multi" class="btn">Undo Last</button>
+              <button id="undo-all-btn-multi" class="btn">Undo All</button>
+              <button id="save-btn-multi" class="btn-save">Save as PNG</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="button-container">
+          <button class="download-btn" onclick="exportAnswers()">
+            📥 Export Answers for Canvas
+          </button>
+          <button class="clear-btn" onclick="clearForm()">
+            🗑️ Clear All Answers
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script type="module" src="lab05-main.js"></script>
+  </body>
+</html>

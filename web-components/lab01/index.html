@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 1: Nature of Science</title>
+    <link rel="stylesheet" href="../shared/styles/common.css" />
+    <link rel="stylesheet" href="../shared/styles/lab-styles.css" />
+  </head>
+  <body>
+    <!-- Progress Indicator -->
+    <div
+      class="progress-indicator"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+      "
+    >
+      <div
+        class="progress-bar"
+        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
+      >
+        <div
+          class="progress-fill"
+          id="progressFill"
+          style="
+            height: 8px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: block;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="header">
+        <h1>Lab 1: The Nature of Science</h1>
+        <p>ESCI 240 - Fall 2025</p>
+      </div>
+
+      <div class="content">
+        <div class="intro-box">
+          <h3>?? Required Reading</h3>
+          <p>Please read the chapter before answering the questions:</p>
+          <a
+            href="http://www.project2061.org/publications/sfaa/online/chap1.htm"
+            target="_blank"
+          >
+            http://www.project2061.org/publications/sfaa/online/chap1.htm
+          </a>
+        </div>
+
+        <form id="questionForm">
+          <div class="section">
+            <h3>Question 1: Assumptions in Science (3 pts)</h3>
+            <div class="form-group">
+              <label for="q1">List two assumptions in science.</label>
+              <textarea
+                id="q1"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Question 2: Scientific Method (3 pts)</h3>
+            <div class="form-group">
+              <label for="q2"
+                >What are the fixed steps of science that scientists always
+                follow?</label
+              >
+              <textarea
+                id="q2"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Question 3: Testing Past Events (4 pts)</h3>
+            <div class="form-group">
+              <label for="q3"
+                >Since scientific ideas are often validated by making
+                predictions about future events, how can scientists test or
+                validate ideas about events that happened in the past?</label
+              >
+              <textarea
+                id="q3"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Question 4: Minimizing Bias (3 pts)</h3>
+            <div class="form-group">
+              <label for="q4"
+                >What strategies can scientists use to minimize or prevent
+                personal bias in their research?</label
+              >
+              <textarea
+                id="q4"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Question 5: Science and Authority (4 pts)</h3>
+            <div class="form-group">
+              <label for="q5"
+                >What does it mean to say that science is not based on
+                authority, and how does this affect the way scientific knowledge
+                is accepted or challenged?</label
+              >
+              <textarea
+                id="q5"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Question 6: Ethical Challenges (3 pts)</h3>
+            <div class="form-group">
+              <label for="q6"
+                >Identify and briefly explain two common ethical challenges that
+                scientists may face in their work.</label
+              >
+              <textarea
+                id="q6"
+                placeholder="Enter your answer here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button
+              type="button"
+              class="download-btn"
+              onclick="downloadAnswers()"
+            >
+              ?? Download Answers as Text File
+            </button>
+            <button type="button" class="clear-btn" onclick="clearForm()">
+              ??? Clear All Answers
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="footer">
+        <p>
+          Save your answers by downloading the text file. Your answers are
+          stored locally in your browser.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Update progress indicator based on points
+      function updateProgress() {
+        let earnedPoints = 0;
+        const totalPoints = 20; // 3+3+4+3+4+3
+        const questionPoints = [3, 3, 4, 3, 4, 3]; // Points for each question
+
+        for (let i = 1; i <= 6; i++) {
+          const answer = document.getElementById("q" + i).value.trim();
+          if (answer) {
+            earnedPoints += questionPoints[i - 1];
+          }
+        }
+
+        const percentage = (earnedPoints / totalPoints) * 100;
+
+        const progressFillElement = document.getElementById("progressFill");
+
+        if (progressFillElement) {
+          progressFillElement.style.width = percentage + "%";
+        }
+      }
+
+      // Load saved answers from localStorage when page loads
+      window.addEventListener("load", function () {
+        for (let i = 1; i <= 6; i++) {
+          const saved = localStorage.getItem("q" + i);
+          if (saved) {
+            document.getElementById("q" + i).value = saved;
+          }
+        }
+        // Update progress after loading saved values
+        updateProgress();
+      });
+
+      // Save answers to localStorage as user types
+      document.querySelectorAll("textarea").forEach((textarea) => {
+        textarea.addEventListener("input", function () {
+          localStorage.setItem(this.id, this.value);
+          updateProgress();
+        });
+
+        // Add validation on blur
+        textarea.addEventListener("blur", function () {
+          validateTextarea(this);
+        });
+      });
+
+      function validateTextarea(textarea) {
+        const minLength = 20;
+        const value = textarea.value.trim();
+
+        // Clear previous errors
+        const existingError =
+          textarea.parentElement.querySelector(".validation-error");
+        if (existingError) {
+          existingError.remove();
+        }
+        textarea.style.borderColor = "";
+        textarea.style.backgroundColor = "";
+
+        if (value && value.length < minLength) {
+          textarea.style.borderColor = "#dc2626";
+          textarea.style.backgroundColor = "#fef2f2";
+
+          const errorDiv = document.createElement("div");
+          errorDiv.className = "validation-error";
+          errorDiv.style.color = "#dc2626";
+          errorDiv.style.fontSize = "0.875rem";
+          errorDiv.style.marginTop = "0.25rem";
+          errorDiv.textContent =
+            "? Please provide more detail (at least " +
+            minLength +
+            " characters)";
+
+          textarea.parentElement.appendChild(errorDiv);
+          return false;
+        }
+        return true;
+      }
+
+      function downloadAnswers() {
+        // Validate all answers before downloading
+        let allValid = true;
+        const emptyQuestions = [];
+        const shortQuestions = [];
+
+        for (let i = 1; i <= 6; i++) {
+          const textarea = document.getElementById("q" + i);
+          const value = textarea.value.trim();
+
+          if (!value) {
+            emptyQuestions.push(i);
+            allValid = false;
+          } else if (!validateTextarea(textarea)) {
+            shortQuestions.push(i);
+            allValid = false;
+          }
+        }
+
+        if (!allValid) {
+          let message = "Please complete the following before downloading:\n\n";
+          if (emptyQuestions.length > 0) {
+            message += "Empty questions: " + emptyQuestions.join(", ") + "\n";
+          }
+          if (shortQuestions.length > 0) {
+            message +=
+              "Questions needing more detail: " + shortQuestions.join(", ");
+          }
+          alert(message);
+
+          // Scroll to first error
+          const firstError = document.getElementById(
+            "q" + (emptyQuestions[0] || shortQuestions[0])
+          );
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          return;
+        }
+
+        const answers = [];
+        answers.push("THE NATURE OF SCIENCE - ANSWERS");
+        answers.push("=".repeat(50));
+        answers.push("");
+        answers.push(
+          "Reading Source: http://www.project2061.org/publications/sfaa/online/chap1.htm"
+        );
+        answers.push("Date: " + new Date().toLocaleDateString());
+        answers.push("");
+        answers.push("=".repeat(50));
+        answers.push("");
+
+        for (let i = 1; i <= 6; i++) {
+          const answer = document.getElementById("q" + i).value.trim();
+          const questions = [
+            "List two assumptions in science.",
+            "What are the fixed steps of science that scientists always follow?",
+            "Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?",
+            "What strategies can scientists use to minimize or prevent personal bias in their research?",
+            "What does it mean to say that science is not based on authority, and how does this affect the way scientific knowledge is accepted or challenged?",
+            "Identify and briefly explain two common ethical challenges that scientists may face in their work.",
+          ];
+
+          answers.push("QUESTION " + i + ":");
+          answers.push(questions[i - 1]);
+          answers.push("");
+          answers.push("ANSWER:");
+          answers.push(answer || "[No answer provided]");
+          answers.push("");
+          answers.push("-".repeat(50));
+          answers.push("");
+        }
+
+        const blob = new Blob([answers.join("\n")], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "nature_of_science_answers.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        alert("Your answers have been downloaded as a text file!");
+      }
+
+      function clearForm() {
+        if (
+          confirm(
+            "Are you sure you want to clear all answers? This cannot be undone."
+          )
+        ) {
+          for (let i = 1; i <= 6; i++) {
+            document.getElementById("q" + i).value = "";
+            localStorage.removeItem("q" + i);
+          }
+          updateProgress();
+          alert("All answers have been cleared.");
+        }
+      }
+    </script>
+  </body>
+</html>

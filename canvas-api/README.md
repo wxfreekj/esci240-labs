@@ -93,6 +93,7 @@ LAB03_ASSIGNMENT_ID=789014
 ### 1. Verify Configuration
 
 Make sure your `.env` file has:
+
 - `CANVAS_API_TOKEN`
 - `CANVAS_DOMAIN`
 - `CANVAS_COURSE_ID`
@@ -106,20 +107,41 @@ python download_lab01_submissions.py
 
 ### 3. Check the Output
 
-Submissions will be downloaded to:
+Submissions will be downloaded to organized directories:
 
 ```
-./lab01_submissions/
-├── John_Doe_12345/
-│   └── Lab01_NatureOfScience.txt
-├── Jane_Smith_67890/
-│   └── Lab01_NatureOfScience.txt
-└── submissions_metadata.json
+canvas-api/
+├── submissions/           # All downloaded submissions
+│   └── lab01_submissions/
+│       ├── John_Doe_12345/
+│       │   └── Lab01_NatureOfScience.txt
+│       ├── Jane_Smith_67890/
+│       │   └── Lab01_NatureOfScience.txt
+│       └── submissions_metadata.json
+└── output/               # API query results
+    └── assignments_list.json
 ```
 
 Each student gets their own folder named: `FirstName_LastName_StudentID`
 
 ## 📊 Output Structure
+
+### Directory Organization
+
+```
+canvas-api/
+├── submissions/          # Downloaded student submissions
+│   ├── lab01_submissions/
+│   ├── lab02_submissions/
+│   └── ... (lab03-10)
+├── output/              # API metadata and lists
+│   └── assignments_list.json
+├── download_lab01_submissions.py
+├── list_assignments.py
+├── config.py
+├── .env                 # Your credentials (not in Git)
+└── .env.example         # Template
+```
 
 ### Student Folders
 

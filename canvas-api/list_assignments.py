@@ -8,7 +8,7 @@ import json
 
 # Load configuration from .env file
 try:
-    from config import CANVAS_API_TOKEN, CANVAS_DOMAIN, COURSE_ID
+    from config import CANVAS_API_TOKEN, CANVAS_DOMAIN, COURSE_ID, ASSIGNMENTS_OUTPUT_FILE
 except ImportError as e:
     print("\n❌ Configuration Error!")
     print("\n📝 Setup Instructions:")
@@ -84,19 +84,18 @@ def list_assignments(domain, token, course_id):
             print(f"   Points: {assignment.get('points_possible', 'N/A')}")
 
     print("\n" + "=" * 80)
-    print("\n💡 Copy the assignment ID and paste it into download_lab01_submissions.py")
+    print("\n💡 Copy the assignment ID and add it to your .env file")
 
-    # Save to JSON file
-    output_file = "assignments_list.json"
-    with open(output_file, "w", encoding="utf-8") as f:
+    # Save to JSON file in output directory
+    with open(ASSIGNMENTS_OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(assignments, f, indent=2)
-    print(f"\n✅ Full assignment list saved to: {output_file}")
+    print(f"\n✅ Full assignment list saved to: {ASSIGNMENTS_OUTPUT_FILE}")
 
 
 def main():
     # Configuration is loaded from .env via config.py
     # No additional validation needed here since config.py handles it
-    
+
     try:
         list_assignments(CANVAS_DOMAIN, CANVAS_API_TOKEN, COURSE_ID)
     except requests.exceptions.RequestException as e:

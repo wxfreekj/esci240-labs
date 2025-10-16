@@ -4,144 +4,50 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lab 2 - Weather Forecasting Tools</title>
+
+    <!-- Optional shared styles (keep if you use them) -->
     <link rel="stylesheet" href="shared/styles/common.css" />
     <link rel="stylesheet" href="shared/styles/lab-styles.css" />
+
     <style>
-      /* Lab 2 specific styles */
-      .resources-section {
-        background: #f0f4ff;
-        border: 2px solid #667eea;
-        border-radius: 10px;
-        padding: 25px;
-        margin-bottom: 30px;
+      :root {
+        --indigo: #667eea;
+        --indigo-dark: #5a67d8;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --surface-2: #e8f0fe;
+        --ink-900: #222;
+        --ink-700: #444;
+        --ink-500: #666;
+        --danger: #dc2626;
+        --radius: 10px;
       }
 
-      .resource-category {
-        margin-bottom: 20px;
+      /* Page chrome */
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink-700);
+        background: #fff;
       }
-
-      .resource-category h3 {
-        color: #444;
-        font-size: 1em;
-        margin-bottom: 10px;
+      .container {
+        max-width: 960px;
+        margin: 80px auto 64px;
+        padding: 0 16px;
+      }
+      .header h1 {
+        margin: 0 0 6px 0;
+      }
+      .header p {
+        margin: 0;
+        color: #3b5baa;
         font-weight: 600;
       }
 
-      .resources-section ul {
-        list-style: none;
-        padding-left: 0;
-        margin-left: 20px;
-      }
-
-      .resources-section li {
-        margin-bottom: 8px;
-        position: relative;
-        padding-left: 20px;
-      }
-
-      .resources-section li:before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: #667eea;
-        font-weight: bold;
-      }
-
-      .resources-section a {
-        color: #667eea;
-        text-decoration: none;
-        transition: color 0.3s ease;
-        font-weight: 500;
-      }
-
-      .resources-section a:hover {
-        color: #764ba2;
-        text-decoration: underline;
-      }
-
-      .quick-links {
-        background: #e8f0fe;
-        border-left: 3px solid #4285f4;
-        padding: 10px 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-      }
-
-      .quick-links-title {
-        font-weight: 600;
-        color: #333;
-        font-size: 0.9em;
-        margin-bottom: 8px;
-        display: block;
-      }
-
-      .quick-link-btn {
-        display: inline-flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #4285f4 0%, #667eea 100%);
-        color: white;
-        padding: 12px 16px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-size: 0.85em;
-        font-weight: 500;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        line-height: 1.3;
-        min-width: 120px;
-        text-align: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
-        border: none;
-        cursor: pointer;
-      }
-
-      .quick-link-btn .hint-text {
-        display: block;
-        font-size: 0.75em;
-        font-style: italic;
-        opacity: 0.9;
-        margin-top: 4px;
-        font-weight: 400;
-      }
-
-      .quick-link-btn:hover {
-        background: linear-gradient(135deg, #357ae8 0%, #5a67d8 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
-      }
-
-      .quick-link-btn:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(66, 133, 244, 0.2);
-      }
-
-      .url-input-group {
-        margin-bottom: 10px;
-        margin-left: 10px;
-      }
-
-      .subtitle {
-        text-align: center;
-        color: #666;
-        margin-bottom: 30px;
-        font-size: 0.95em;
-        line-height: 1.6;
-      }
-
-      /* Make URL input boxes wider for better visibility */
-      input[type="url"] {
-        max-width: 100%;
-        width: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      class="progress-indicator"
-      style="
+      /* Top progress bar */
+      .progress-indicator {
         position: fixed;
         top: 0;
         left: 0;
@@ -150,23 +56,285 @@
         background: rgba(255, 255, 255, 0.98);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         padding: 8px 0;
-      "
-    >
-      <div
-        class="progress-bar"
-        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
-      >
-        <div
-          class="progress-fill"
-          id="progressFill"
-          style="
-            height: 8px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            display: block;
-          "
-        ></div>
+      }
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        width: 0%;
+        transition: width 0.3s ease;
+        display: block;
+      }
+
+      /* Section wrapper */
+      .section {
+        margin: 0 0 16px 0;
+      }
+
+      /* Collapsible blocks (cards) */
+      .collapsible-container {
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 0 0 20px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
+      }
+
+      /* “Flat” section headers with underline (no curls) */
+      .section-title {
+        margin: 0;
+        padding: 14px 6px 10px 0;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #1f3b82;
+        border: none;
+        border-bottom: 2px solid var(--indigo);
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: transparent;
+        display: block;
+        width: 100%;
+      }
+
+      /* Collapsible headers inside cards */
+      .collapsible-header {
+        margin: 0;
+        padding: 14px 48px 14px 16px;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 700;
+        color: #1f3b82;
+        background: var(--surface);
+      }
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.9em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease;
+      }
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+      }
+
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: 18px 20px;
+        border-top: 1px solid #e5ecff;
+      }
+      .collapsible-content.is-collapsed {
+        display: none;
+      }
+
+      /* Variant stripes for quick recognition */
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+
+      /* Quick links bar */
+      .quick-links {
+        background: var(--surface-2);
+        border-left: 3px solid var(--google-blue);
+        padding: 12px 14px;
+        margin: 8px 0;
+        border-radius: 6px;
+      }
+      .quick-links-title {
+        font-weight: 700;
+        color: #333;
+        font-size: 0.95em;
+        margin: 0 0 8px 0;
+        display: block;
+      }
+
+      .quick-link-btn {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--google-blue) 0%,
+          var(--indigo) 100%
+        );
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin: 0 8px 8px 0;
+        line-height: 1.3;
+        min-width: 120px;
+        text-align: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+        border: none;
+      }
+      .quick-link-btn .hint-text {
+        display: block;
+        font-size: 0.75em;
+        font-style: italic;
+        opacity: 0.95;
+        margin-top: 4px;
+        font-weight: 400;
+      }
+      .quick-link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(66, 133, 244, 0.28);
+      }
+      .quick-link-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(66, 133, 244, 0.2);
+      }
+
+      /* Lists inside resource sections */
+      .resources-section {
+        background: var(--surface);
+        padding: 20px;
+      }
+      .resources-section h2 {
+        color: #333;
+        margin: 8px 0 12px 0;
+        font-size: 1.25rem;
+      }
+      .resource-category {
+        margin-bottom: 16px;
+      }
+      .resource-category h3 {
+        color: #444;
+        font-size: 1rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+      }
+      .resources-section ul {
+        list-style: none;
+        padding-left: 0;
+        margin-left: 18px;
+      }
+      .resources-section li {
+        margin-bottom: 8px;
+        position: relative;
+        padding-left: 18px;
+      }
+      .resources-section li:before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--indigo);
+        font-weight: 900;
+      }
+      .resources-section a {
+        color: var(--indigo);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .resources-section a:hover {
+        text-decoration: underline;
+        color: var(--indigo-dark);
+      }
+
+      /* Inputs */
+      input[type="url"],
+      textarea {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #c9d4ff;
+        border-radius: 8px;
+        font: inherit;
+        box-sizing: border-box;
+        background: #fff;
+      }
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      .is-invalid {
+        border-color: var(--danger) !important;
+        background: #fef2f2 !important;
+      }
+
+      /* Bottom buttons */
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 28px 0;
+      }
+      .btn {
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        min-width: 220px;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      }
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        color: #fff;
+      }
+      .btn-ghost {
+        background: #f7f7ff;
+        border: 1px solid #d9dfff;
+        color: #2b2c65;
+      }
+
+      /* Utility spacing for small paragraphs under lists */
+      .muted {
+        font-size: 0.95em;
+        color: #555;
+        margin: 14px 0 0 0;
+      }
+
+      /* Flat rule under the “For This Lab” title (no curls) */
+      .flat-rule {
+        border: none;
+        border-bottom: 2px solid var(--indigo);
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 0 0 10px 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- progress -->
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
       </div>
     </div>
 
@@ -176,464 +344,688 @@
         <p>Exploring Current Weather Resources and Data (30 Points)</p>
       </div>
 
-      <div class="content">
-        <!-- For This Lab Section -->
-        <div class="section">
-          <h2>📋 For This Lab</h2>
-          <div class="info-box" style="background: #e3f2fd; border-left: 4px solid #2196F3; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-            <h3 style="margin-top: 0; margin-bottom: 15px; color: #1976d2; font-size: 1.1em;">Instructions</h3>
-            <ol style="margin: 0; padding-left: 25px; line-height: 2;">
-              <li>Explore the various weather forecasting websites and tools</li>
+      <!-- For This Lab (collapsible) -->
+      <div class="section">
+        <div class="collapsible-container">
+          <h2 class="section-title">📋 For This Lab</h2>
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            Show / Hide Instructions
+          </div>
+          <div class="collapsible-content">
+            <ol style="margin: 0; padding-left: 22px; line-height: 2">
+              <li>
+                Explore the various weather forecasting websites and tools
+              </li>
               <li>Complete all URL collection and analysis sections</li>
-              <li>Monitor your progress using the progress bar at the top of the page</li>
+              <li>
+                Monitor your progress using the progress bar at the top of the
+                page
+              </li>
               <li>Your work is automatically saved as you type</li>
-              <li>When complete, click <strong>"Download file for Canvas Submission"</strong></li>
-              <li>Locate the downloaded file (<em>Lab02_WeatherData.txt</em>) and upload it to Canvas</li>
+              <li>
+                When complete, click
+                <strong>"Download file for Canvas Submission"</strong>
+              </li>
+              <li>
+                Locate <em>Lab02_WeatherData.txt</em> and upload it to Canvas
+              </li>
             </ol>
-            <p style="margin-top: 15px; margin-bottom: 0; font-size: 0.95em; color: #555;">
-              <strong>💡 Tip:</strong> Take time to explore each weather resource thoroughly. Understanding these tools is essential for meteorology.
+            <p class="muted">
+              <strong>💡 Tip:</strong> Take time to explore each weather
+              resource thoroughly. Understanding these tools is essential for
+              meteorology.
             </p>
           </div>
         </div>
+      </div>
 
-        <!-- Introduction Section -->
-        <div class="section">
-          <h2>📚 Introduction</h2>
-          <div class="intro-box">
+      <!-- Introduction -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            📚 Introduction
+          </div>
+          <div class="collapsible-content">
             <p>
-              Modern weather forecasting relies on a vast network of observations,
-              satellite imagery, computer models, and real-time data analysis.
-              Understanding how to access and interpret these resources is essential
-              for any student of atmospheric science.
+              Modern weather forecasting relies on a vast network of
+              observations, satellite imagery, computer models, and real-time
+              data analysis. Understanding how to access and interpret these
+              resources is essential for any student of atmospheric science.
             </p>
             <p>
-              In this lab, you will explore various weather forecasting tools and
-              resources available online. You'll learn to navigate professional
-              weather websites, interpret different types of weather data, and
-              understand how meteorologists use these tools to make predictions.
+              In this lab, you will explore various weather forecasting tools
+              and resources available online. You'll learn to navigate
+              professional weather websites, interpret different types of
+              weather data, and understand how meteorologists use these tools to
+              make predictions.
             </p>
             <p>
               By the end of this lab, you should feel comfortable using key
               weather websites and resources to gather information about current
               weather conditions and forecasts.
-              <p>
+            </p>
           </div>
         </div>
+      </div>
 
-      <div class="content">
-<div class="section">
-          <h2>📚 Resources</h2><div></div>
-        <div class="resources-section">
-          <h2 style="color: #333; margin-bottom: 15px; font-size: 1.3em">
-            🌦️ Weather Forecasting Sites
-          </h2>
-
-          <div class="resource-category">
-            <h3>
-              Websites with Various Data Types (Radar, Satellites, Models,
-              etc.):
-            </h3>
-            <ul>
-              <li>
-                <a
-                  href="https://weather.rap.ucar.edu/"
-                  target="_blank"
-                  rel="noopener"
-                  >RAP Weather Data – UCAR</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://weather.cod.edu/"
-                  target="_blank"
-                  rel="noopener"
-                  >College of DuPage NexLab</a
-                >
-              </li>
-            </ul>
+      <!-- Resources -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            📚 Resources
           </div>
+          <div class="collapsible-content resources-section">
+            <h2>🌦️ Weather Forecasting Sites</h2>
 
-          <div class="resource-category">
-            <h3>Forecasts with Human Input:</h3>
-            <ul>
-              <li>
-                <a
-                  href="https://www.weather.gov/"
-                  target="_blank"
-                  rel="noopener"
-                  >National Weather Service (NWS)</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.spc.noaa.gov/"
-                  target="_blank"
-                  rel="noopener"
-                  >Storm Prediction Center (SPC) – Severe Weather</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.wpc.ncep.noaa.gov/"
-                  target="_blank"
-                  rel="noopener"
-                  >Weather Prediction Center (WPC) – Winter/Precipitation</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.nhc.noaa.gov/"
-                  target="_blank"
-                  rel="noopener"
-                  >National Hurricane Center (NHC) – Tropical</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div class="resource-category">
-            <h3>Numerical Weather Model Forecasts:</h3>
-            <ul>
-              <li>
-                <a
-                  href="https://mag.ncep.noaa.gov/"
-                  target="_blank"
-                  rel="noopener"
-                  >Model Analyses and Guidance – NOAA</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.spc.noaa.gov/exper/sref/"
-                  target="_blank"
-                  rel="noopener"
-                  >SPC Short-Range Ensemble Forecasts (SREF)</a
-                >
-              </li>
-              <li>
-                <a
-                  href="http://www.twisterdata.com/"
-                  target="_blank"
-                  rel="noopener"
-                  >TwisterData – Weather Model Visualizations</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <h2 style="color: #333; margin: 25px 0 15px 0; font-size: 1.3em">
-            🌡️ Climate Resources
-          </h2>
-          <ul>
-            <li>
-              <a
-                href="https://www.cpc.ncep.noaa.gov/"
-                target="_blank"
-                rel="noopener"
-                >Climate Prediction Center (CPC)</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://droughtmonitor.unl.edu/"
-                target="_blank"
-                rel="noopener"
-                >U.S. Drought Monitor</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://www.nhc.noaa.gov/climo/"
-                target="_blank"
-                rel="noopener"
-                >NHC Hurricane Climatology</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://www.spc.noaa.gov/climo/"
-                target="_blank"
-                rel="noopener"
-                >SPC Severe Weather Climatology</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://www.nssl.noaa.gov/hazard/"
-                target="_blank"
-                rel="noopener"
-                >NSSL Hazardous Weather Climatology</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://www.spc.noaa.gov/new/SVRclimo/climo.php?parm=anySvr"
-                target="_blank"
-                rel="noopener"
-                >SPC Severe Weather Climatology Maps</a
-              >
-            </li>
-          </ul>
-
-          <h2 style="color: #333; margin: 25px 0 15px 0; font-size: 1.3em">
-            📍 Omaha Area Climatology
-          </h2>
-          <ul>
-            <li>
-              <a
-                href="https://www.weather.gov/oax/climate"
-                target="_blank"
-                rel="noopener"
-                >NWS Omaha/Valley Climate Data</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div class="info-box">
-          <h3 style="text-align: left;">Lab Overview</h3>
-                    <strong> This lab introduces weather analysis and forecasting tools available
-          on the internet. I expect you'll need to click around and dig into each source to find what you need.
-        </strong>
-</div>
-        </p>
-
-        <form id="weatherForm" style="padding: 10px;">
-          <!-- Item 1 -->
-          <div class="section">
-            <h3>Question 1: Satellite Image (3 pts)</h3>
-            <div>
-              <strong>Instructions:</strong> Find a current satellite image over an interesting weather event/phenomenon.
-              A visible or infrared satellite product is acceptable. In the text box, paste a link to the image or product.
-              In the second text box, provide a brief description of the product and what is interesting about the image selected.
-
+            <div class="resource-category">
+              <h3>
+                Websites with Various Data Types (Radar, Satellites, Models,
+                etc.)
+              </h3>
+              <ul>
+                <li>
+                  <a
+                    href="https://weather.rap.ucar.edu/"
+                    target="_blank"
+                    rel="noopener"
+                    >RAP Weather Data – UCAR</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://weather.cod.edu/"
+                    target="_blank"
+                    rel="noopener"
+                    >College of DuPage NexLab</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.goes.noaa.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >GOES Imagery</a
+                  >
+                </li>
+              </ul>
             </div>
+
+            <div class="resource-category">
+              <h3>Forecasts with Human Input</h3>
+              <ul>
+                <li>
+                  <a
+                    href="https://www.weather.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >National Weather Service (NWS)</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.spc.noaa.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >Storm Prediction Center (SPC) – Severe Weather</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.wpc.ncep.noaa.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >Weather Prediction Center (WPC) – Winter/Precipitation</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.nhc.noaa.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >National Hurricane Center (NHC) – Tropical</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div class="resource-category">
+              <h3>Numerical Weather Model Forecasts</h3>
+              <ul>
+                <li>
+                  <a
+                    href="https://mag.ncep.noaa.gov/"
+                    target="_blank"
+                    rel="noopener"
+                    >Model Analyses and Guidance – NOAA</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.spc.noaa.gov/exper/sref/"
+                    target="_blank"
+                    rel="noopener"
+                    >SPC Short-Range Ensemble Forecasts (SREF)</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="http://www.twisterdata.com/"
+                    target="_blank"
+                    rel="noopener"
+                    >TwisterData – Weather Model Visualizations</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <h2 style="margin-top: 18px">🌡️ Climate Resources</h2>
+            <ul>
+              <li>
+                <a
+                  href="https://www.cpc.ncep.noaa.gov/"
+                  target="_blank"
+                  rel="noopener"
+                  >Climate Prediction Center (CPC)</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://droughtmonitor.unl.edu/"
+                  target="_blank"
+                  rel="noopener"
+                  >U.S. Drought Monitor</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.nhc.noaa.gov/climo/"
+                  target="_blank"
+                  rel="noopener"
+                  >NHC Hurricane Climatology</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.spc.noaa.gov/climo/"
+                  target="_blank"
+                  rel="noopener"
+                  >SPC Severe Weather Climatology</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.nssl.noaa.gov/hazard/"
+                  target="_blank"
+                  rel="noopener"
+                  >NSSL Hazardous Weather Climatology</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://www.spc.noaa.gov/new/SVRclimo/climo.php?parm=anySvr"
+                  target="_blank"
+                  rel="noopener"
+                  >SPC Severe Weather Climatology Maps</a
+                >
+              </li>
+            </ul>
+
+            <h2 style="margin-top: 18px">📍 Omaha Area Climatology</h2>
+            <ul>
+              <li>
+                <a
+                  href="https://www.weather.gov/oax/climate"
+                  target="_blank"
+                  rel="noopener"
+                  >NWS Omaha/Valley Climate Data</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lab Overview -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            Lab Overview
+          </div>
+          <div class="collapsible-content">
+            <strong
+              >This lab introduces weather analysis and forecasting tools
+              available on the internet. I expect you'll need to click around
+              and dig into each source to find what you need.</strong
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Box: Why imagery matters -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            🌦️ Why Different Weather Imagery Matters to Forecasters
+          </div>
+          <div class="collapsible-content">
+            <div style="display: grid; gap: 14px">
+              <div
+                style="
+                  border-left: 3px solid var(--google-blue);
+                  padding-left: 12px;
+                "
+              >
+                <strong>📡 Satellite Imagery:</strong>
+                <ul style="margin: 6px 0 0 18px; line-height: 1.6">
+                  <li>
+                    <strong>Infrared:</strong> Shows cloud-top temperatures,
+                    helping identify storm intensity and height
+                  </li>
+                  <li>
+                    <strong>Visible:</strong> Reveals cloud textures and
+                    structures only visible during daylight
+                  </li>
+                  <li>
+                    <strong>Water Vapor:</strong> Tracks atmospheric moisture
+                    and jet stream patterns
+                  </li>
+                </ul>
+              </div>
+
+              <div style="border-left: 3px solid #34a853; padding-left: 12px">
+                <strong>📊 Radar Data:</strong>
+                <ul style="margin: 6px 0 0 18px; line-height: 1.6">
+                  <li>
+                    <strong>Base Reflectivity:</strong> Shows precipitation
+                    intensity and storm structure
+                  </li>
+                  <li>
+                    <strong>Velocity:</strong> Reveals wind patterns and
+                    rotation within storms
+                  </li>
+                  <li>
+                    <strong>Dual-Pol:</strong> Identifies precipitation type
+                    (rain, snow, hail)
+                  </li>
+                </ul>
+              </div>
+
+              <div style="border-left: 3px solid #ea4335; padding-left: 12px">
+                <strong>🌡️ Surface Observations:</strong>
+                <ul style="margin: 6px 0 0 18px; line-height: 1.6">
+                  <li>
+                    <strong>Station Models:</strong> Provide real-time
+                    temperature, pressure, and wind data
+                  </li>
+                  <li>
+                    <strong>Weather Patterns:</strong> Help identify fronts,
+                    pressure systems, and local conditions
+                  </li>
+                  <li>
+                    <strong>Verification:</strong> Allow forecasters to verify
+                    model accuracy
+                  </li>
+                </ul>
+              </div>
+
+              <div style="border-left: 3px solid #fbbc04; padding-left: 12px">
+                <strong>🔮 Model Forecasts:</strong>
+                <ul style="margin: 6px 0 0 18px; line-height: 1.6">
+                  <li>
+                    <strong>Numerical Models:</strong> Predict future weather
+                    conditions using complex algorithms
+                  </li>
+                  <li>
+                    <strong>Ensemble Forecasts:</strong> Show probability and
+                    uncertainty in predictions
+                  </li>
+                  <li>
+                    <strong>Upper-Air Data:</strong> Reveal atmospheric patterns
+                    that drive surface weather
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="quick-links" style="margin-top: 14px">
+              <strong>💡 Professional Tip:</strong> Meteorologists never rely on
+              just one data source. They combine satellite, radar, surface
+              observations, and model data to create the most accurate forecast
+              possible. Each tells a different part of the atmospheric story!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form id="weatherForm">
+        <!-- Helper: make one function create a question block? Keeping content explicit for clarity -->
+        <!-- Q1 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 1: Satellite Image (3 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="quick-links">
-              
-              
-              
               <span class="quick-links-title">🔗 Recommended Sources:</span>
+              <a
+                href="https://pivotalweather.com"
+                target="_blank"
+                class="quick-link-btn"
+                >Pivotal Weather<span class="hint-text">GOES Satellite</span></a
+              >
+              <a
+                href="https://weather.cod.edu/"
+                target="_blank"
+                class="quick-link-btn"
+                >College of DuPage<span class="hint-text"
+                  >Satellite & Radar</span
+                ></a
+              >
+              <a
+                href="https://www.goes.noaa.gov/"
+                target="_blank"
+                class="quick-link-btn"
+                >GOES Imagery<span class="hint-text">Menu on Left</span></a
+              >
+            </div>
 
-<a href="https://pivotalweather.com" target="_blank" class="quick-link-btn">
-  Pivotal Weather
-  <span class="hint-text">Click: GOES Satellite</span>
-</a>
-<a href="https://weather.cod.edu/" target="_blank" class="quick-link-btn">
-  College of DuPage
-  <span class="hint-text">Click: Satellite & Radar</span>
-</a>
-<a href="https://star.nesdis.noaa.gov" target="_blank" class="quick-link-btn">
-  NOAA STAR
-  <span class="hint-text">Click: NOAA STAR</span>
-</a>
-
-
-
-            
-            <div class="form-group">
-              
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link1"
                 name="link1"
-              
-                placeholder="Link to image"
-                
+                placeholder="Paste a link to the image"
               />
             </div>
-            <div class="form-group" style="padding-top: 10px;">
-            
+            <div style="padding: 6px 0">
               <textarea
                 id="caption1"
                 name="caption1"
-                placeholder="Describe what the image shows..." 
-                
+                placeholder="Describe the infrared satellite image: What does an infrared satellite image see? What is interesting about this picture?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 2 -->
-          <div class="section">
-            <h3>Question 2: Radar Image (3 pts)</h3>
-            
-              <div style="padding-bottom: 10px;">
-                <strong>Instructions:</strong> Locate a recent weather radar image over an interesting weather event/phenomenon.
-              A base reflectivity product is preferred. In the text box, paste a link to the image or product.
-              In the second text box, provide a brief description of the product and what is interesting about the image selected.
-              </div>
-            
+        <!-- Q2 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 2: Radar Image (3 pts)
+          </div>
+          <div class="collapsible-content">
+            <div style="padding-bottom: 8px">
+              <strong>Instructions:</strong> Locate a recent weather radar image
+              over an interesting weather event/phenomenon. A base reflectivity
+              product is preferred.
+            </div>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
+              <a
+                href="https://pivotalweather.com"
+                target="_blank"
+                class="quick-link-btn"
+                >Pivotal Weather<span class="hint-text">NWS Radar</span></a
+              >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text">NEXRAD</span></a
               >
               <a
-                href="https://weather.rap.ucar.edu/"
+                href="https://radar.weather.gov"
                 target="_blank"
                 class="quick-link-btn"
-                >RAP Weather Data</a
+                >NWS Official Radar</a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link2"
                 name="link2"
-                placeholder="https://example.com/radar-image"
+                placeholder="Paste a link to the image"
               />
             </div>
-            <div class="form-group">
-                            <textarea
+            <div style="padding: 6px 0">
+              <textarea
                 id="caption2"
                 name="caption2"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the radar image: What type of precipitation is shown? What weather patterns or storm structures do you observe? What time period does this cover?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 3 -->
-          <div class="section">
-            <h3>Question 3: Surface Observations – Kansas (3 pts)</h3>
+        <!-- Q3 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 3: Surface Observations – Kansas (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Submit a surface weather map
-              showing observations over <b>Kansas</b>. Look for maps that include
-              temperatures, wind barbs, and circles that are filled in to a
-              varying degree.
+              showing observations over <b>Kansas</b>. Look for maps that
+              include temperatures, wind barbs, and circles that are filled in
+              to a varying degree.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
+              <a
+                href="https://pivotalweather.com"
+                target="_blank"
+                class="quick-link-btn"
+                >Pivotal Weather<span class="hint-text"
+                  >Surface Analysis</span
+                ></a
+              >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text">Surface Data</span></a
               >
               <a
-                href="https://weather.rap.ucar.edu/"
+                href="https://weather.gov"
                 target="_blank"
                 class="quick-link-btn"
-                >RAP Weather Data</a
+                >Local Observations</a
               >
             </div>
-            <div class="form-group">
-              
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link3"
                 name="link3"
-                placeholder="https://example.com/surface-map"
+                placeholder="Paste a link to the image"
               />
             </div>
-            <div class="form-group">
-              
+            <div style="padding: 6px 0">
               <textarea
                 id="caption3"
                 name="caption3"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the surface observations: What are the temperature patterns across Kansas? What do the wind barbs show about wind direction and speed? How do the station model symbols indicate current weather conditions?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 4 -->
-          <div class="section">
-            <h3>Question 4: 7-Day Forecast – Fargo, ND (3 pts)</h3>
+        <!-- Q4 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 4: 7-Day Forecast - Your hometown (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Copy the full text of the 7-day
-              National Weather Service forecast for Fargo, North Dakota. Be sure
-              to include all seven days.
+              National Weather Service forecast for your hometown. Be sure to
+              include all seven days.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Source:</span>
               <a
-                href="https://www.weather.gov/"
+                href="https://forecast.weather.gov"
                 target="_blank"
                 class="quick-link-btn"
-                >National Weather Service</a
+                >NWS Official Forecast<span class="hint-text"
+                  >Type location → Scroll down</span
+                ></a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link4"
                 name="link4"
-                placeholder="Paste link to National Weather Service 7-day forecast for Fargo, ND..."
+                placeholder="Paste link to National Weather Service 7-day forecast for…"
               />
             </div>
-            <div class="form-group">
-              
+            <div style="padding: 6px 0">
               <textarea
                 id="caption4"
                 name="caption4"
-                placeholder="Copy and paste the complete 7-day National Weather Service forecast for Fargo, North Dakota (include all seven days)..."
                 rows="6"
+                placeholder="Copy and paste the complete 7-day National Weather Service forecast for your hometown (include all seven days)…"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 5 -->
-          <div class="section">
-            <h3>Question 5: SPC Day 2 Outlook (3 pts)</h3>
+        <!-- Q5 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 5: SPC Day 2 Outlook (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Provide an image of the Storm
               Prediction Center's Day 2 Convective Outlook map. This shows areas
               at risk for severe weather tomorrow.
             </p>
+
             <div class="quick-links">
-              <span class="quick-links-title">🔗 Recommended Source:</span>
+              <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
-                href="https://www.spc.noaa.gov/"
+                href="https://pivotalweather.com"
                 target="_blank"
                 class="quick-link-btn"
-                >Storm Prediction Center</a
+                >Pivotal Weather<span class="hint-text">SPC Outlooks</span></a
+              >
+              <a
+                href="https://weather.cod.edu/"
+                target="_blank"
+                class="quick-link-btn"
+                >College of DuPage<span class="hint-text">SPC Outlooks</span></a
+              >
+              <a
+                href="https://spc.noaa.gov"
+                target="_blank"
+                class="quick-link-btn"
+                >SPC Official Outlook</a
               >
             </div>
-            <div class="form-group">
-              
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link5"
                 name="link5"
-                placeholder="https://example.com/spc-outlook"
+                placeholder="Paste link to SPC Day 2 Outlook…"
               />
             </div>
-            <div class="form-group">
-              
+            <div style="padding: 6px 0">
               <textarea
                 id="caption5"
                 name="caption5"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the SPC Day 2 Outlook: What severe weather risks are forecast? Which areas have the highest probability? What types of severe weather (tornadoes, damaging winds, large hail) are most likely?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 6 -->
-          <div class="section">
-            <h3>Question 6: WPC QPF Forecast (3 pts)</h3>
+        <!-- Q6 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 6: WPC QPF Forecast (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Link to a Weather Prediction Center
               Quantitative Precipitation Forecast (QPF) map for any time period
               (e.g., 6-hr, 24-hr, or 7-day total).
             </p>
+
             <div class="quick-links">
-              <span class="quick-links-title">🔗 Recommended Source:</span>
+              <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
-                href="https://www.wpc.ncep.noaa.gov/"
+                href="https://pivotalweather.com"
                 target="_blank"
                 class="quick-link-btn"
-                >Weather Prediction Center</a
+                >Pivotal Weather<span class="hint-text">WPC QPF</span></a
+              >
+              <a
+                href="https://weather.cod.edu/"
+                target="_blank"
+                class="quick-link-btn"
+                >College of DuPage<span class="hint-text">WPC QPF</span></a
+              >
+              <a
+                href="https://wpc.ncep.noaa.gov"
+                target="_blank"
+                class="quick-link-btn"
+                >WPC Official QPF</a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link6"
                 name="link6"
-                placeholder="Paste link to Weather Prediction Center QPF forecast map (6-hr, 24-hr, or 7-day total)..."
+                placeholder="Paste link to WPC QPF forecast map (6-hr, 24-hr, or 7-day total)…"
               />
             </div>
-            <div class="form-group">
+            <div style="padding: 6px 0">
               <textarea
                 id="caption6"
                 name="caption6"
@@ -641,39 +1033,50 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 7 -->
-          <div class="section">
-            <h3>Question 7: Ensemble Forecast Probability (3 pts)</h3>
+        <!-- Q7 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 7: Ensemble Forecast Probability (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Find an ensemble model forecast map
               showing the probability of snowfall or precipitation for a region
               in the U.S.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
-                href="https://www.spc.noaa.gov/exper/sref/"
+                href="https://pivotalweather.com"
                 target="_blank"
                 class="quick-link-btn"
-                >SPC SREF</a
+                >Pivotal Weather<span class="hint-text">GEFS Models</span></a
               >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text"
+                  >Weather Data → Numerical Models</span
+                ></a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link7"
                 name="link7"
-                placeholder="Paste link to ensemble model forecast showing probability of snowfall or precipitation..."
+                placeholder="Paste link to ensemble model forecast showing probability of snowfall or precipitation…"
               />
             </div>
-            <div class="form-group">
+            <div style="padding: 6px 0">
               <textarea
                 id="caption7"
                 name="caption7"
@@ -681,45 +1084,50 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 8 -->
-          <div class="section">
-            <h3>Question 8: Model Precipitation Forecast (3 pts)</h3>
+        <!-- Q8 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 8: Model Precipitation Forecast (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Submit a precipitation forecast map
               from any weather model (e.g., GFS, NAM, ECMWF) for any region/time
               period.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
-                href="https://mag.ncep.noaa.gov/"
+                href="https://pivotalweather.com"
                 target="_blank"
                 class="quick-link-btn"
-                >NOAA Model Guidance</a
-              >
-              <a
-                href="http://www.twisterdata.com/"
-                target="_blank"
-                class="quick-link-btn"
-                >TwisterData</a
+                >Pivotal Weather<span class="hint-text">HRRR Model</span></a
               >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text"
+                  >Weather Data → Numerical Models</span
+                ></a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link8"
                 name="link8"
-                placeholder="Paste link to weather model precipitation forecast (GFS, NAM, ECMWF, etc.)..."
+                placeholder="Paste link to weather model precipitation forecast (GFS, NAM, ECMWF, etc.)…"
               />
             </div>
-            <div class="form-group">
+            <div style="padding: 6px 0">
               <textarea
                 id="caption8"
                 name="caption8"
@@ -727,45 +1135,54 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 9 -->
-          <div class="section">
-            <h3>Question 9: 500 mb Heights and Winds – Central U.S. (3 pts)</h3>
+        <!-- Q9 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 9: 500 mb Heights and Winds – Central U.S. (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
               <strong>Instructions:</strong> Find a forecast map of 500 mb
               heights and winds covering the central U.S. Look for color
               contours and wind barbs.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
-                href="https://mag.ncep.noaa.gov/"
+                href="https://pivotalweather.com"
                 target="_blank"
                 class="quick-link-btn"
-                >NOAA Model Guidance</a
+                >Pivotal Weather<span class="hint-text">GFS Model</span></a
               >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text">Upper Air</span></a
               >
               <a
-                href="http://www.twisterdata.com/"
+                href="https://mag.ncep.noaa.gov"
                 target="_blank"
                 class="quick-link-btn"
-                >TwisterData</a
+                >Model Analysis</a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link9"
                 name="link9"
-                placeholder="Paste link to 500 mb heights and winds forecast map covering the central U.S..."
+                placeholder="Paste link to 500 mb heights and winds forecast map covering the central U.S.…"
               />
             </div>
-            <div class="form-group">
+            <div style="padding: 6px 0">
               <textarea
                 id="caption9"
                 name="caption9"
@@ -773,140 +1190,175 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <!-- Item 10 -->
-          <div class="section">
-            <h3>Question 10: Visible Satellite – Southeast U.S. (3 pts)</h3>
+        <!-- Q10 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 10: Visible Satellite Imagery (3 pts)
+          </div>
+          <div class="collapsible-content">
             <p>
-              <strong>Instructions:</strong> Provide a daytime visible satellite
-              image over the southeastern U.S. Ensure the image is from a time
-              when the sun is up.
+              <strong>Instructions:</strong> Provide a daytime
+              <b>visible</b> satellite image over some interesting weather
+              feature or phenomenon. Ensure the image is from a time when the
+              sun is up.
             </p>
+
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
+              <a
+                href="https://pivotalweather.com"
+                target="_blank"
+                class="quick-link-btn"
+                >Pivotal Weather<span class="hint-text">GOES Satellite</span></a
+              >
               <a
                 href="https://weather.cod.edu/"
                 target="_blank"
                 class="quick-link-btn"
-                >College of DuPage</a
+                >College of DuPage<span class="hint-text"
+                  >Satellite & Radar</span
+                ></a
               >
               <a
-                href="https://weather.rap.ucar.edu/"
+                href="https://star.nesdis.noaa.gov"
                 target="_blank"
                 class="quick-link-btn"
-                >RAP Weather Data</a
+                >NOAA STAR</a
               >
             </div>
-            <div class="form-group">
+
+            <div style="padding: 6px 0">
               <input
                 type="url"
                 id="link10"
                 name="link10"
-                placeholder="Paste link to current visible satellite image of the southeastern United States..."
+                placeholder="Paste link to current visible satellite image…"
               />
             </div>
-            <div class="form-group">
+            <div style="padding: 6px 0">
               <textarea
                 id="caption10"
                 name="caption10"
-                placeholder="Describe the visible satellite image: What weather features are visible over the southeastern U.S.? What cloud patterns do you observe? Can you identify any storms, cloud types, or clear areas?"
+                placeholder="Describe the visible satellite image: What weather features are visible? What cloud patterns do you observe? Can you identify any storms, cloud types, or clear areas?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="button-container" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 30px;">
-            <button type="button" class="download-btn" id="downloadBtn" style="flex: 1; min-width: 200px;">
-              📥 Download file for Canvas Submission
-            </button>
-            <button type="button" class="clear-btn" id="clearBtn" style="flex: 1; min-width: 200px;">
-              🗑️ Clear All Answers
-            </button>
-            <button
-              type="button"
-              class="help-btn"
-              onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 2 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 2:%0D%0A%0D%0A'"
-              style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;"
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(102, 126, 234, 0.4)'"
-              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)'"
-            >
-              ❓ Questions, concerns, feedback, or need help?
-            </button>
-          </div>
-        </form>
-      </div>
+        <!-- Buttons -->
+        <div class="button-row">
+          <button type="button" class="btn btn-primary" id="downloadBtn">
+            📥 Download file for Canvas Submission
+          </button>
+          <button type="button" class="btn btn-ghost" id="clearBtn">
+            🗑️ Clear All Answers
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 2 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 2:%0D%0A%0D%0A'"
+          >
+            ❓ Questions, concerns, feedback, or need help?
+          </button>
+        </div>
+      </form>
     </div>
 
     <script>
-      // Update progress indicator
-      // Update progress indicator based on points
+      /* ---------- Progress ---------- */
       function updateProgress() {
-        let earnedPoints = 0;
-        const totalPoints = 30; // 10 questions × 3 pts each
-        const pointsPerQuestion = 3;
-
+        let earned = 0,
+          total = 30,
+          per = 3;
         for (let i = 1; i <= 10; i++) {
           const link = document.getElementById(`link${i}`).value.trim();
           const caption = document.getElementById(`caption${i}`).value.trim();
-          if (link && caption) {
-            earnedPoints += pointsPerQuestion;
+          if (link && caption) earned += per;
+        }
+        document.getElementById("progressFill").style.width =
+          (earned / total) * 100 + "%";
+      }
+      document
+        .querySelectorAll("input,textarea")
+        .forEach((el) => el.addEventListener("input", updateProgress));
+
+      /* ---------- Validation ---------- */
+      function validateAllInputs() {
+        const urlRx = /^https?:\/\/.+/i;
+        let ok = true,
+          firstBad = null;
+        const emptyL = [],
+          badL = [],
+          emptyC = [],
+          shortC = [];
+        const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        items.forEach((n) => {
+          const link = document.getElementById(`link${n}`);
+          const cap = document.getElementById(`caption${n}`);
+          const lv = link.value.trim(),
+            cv = cap.value.trim();
+
+          // clear classes
+          link.classList.remove("is-invalid");
+          cap.classList.remove("is-invalid");
+
+          if (!lv) {
+            emptyL.push(n);
+            link.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = link;
+          } else if (!urlRx.test(lv)) {
+            badL.push(n);
+            link.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = link;
+          }
+
+          if (!cv) {
+            emptyC.push(n);
+            cap.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = cap;
+          } else if (cv.length < 20) {
+            shortC.push(n);
+            cap.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = cap;
+          }
+        });
+
+        if (!ok) {
+          let msg = "Please complete the following before downloading:\n\n";
+          if (emptyL.length)
+            msg += `Missing links for item(s): ${emptyL.join(", ")}\n`;
+          if (badL.length)
+            msg += `Invalid URL format for item(s): ${badL.join(
+              ", "
+            )} (must start with http:// or https://)\n`;
+          if (emptyC.length)
+            msg += `Missing captions for item(s): ${emptyC.join(", ")}\n`;
+          if (shortC.length)
+            msg += `Caption(s) too short (need at least 20 characters) for item(s): ${shortC.join(
+              ", "
+            )}\n`;
+          alert(msg);
+          if (firstBad) {
+            firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstBad.focus();
           }
         }
-
-        const percentage = (earnedPoints / totalPoints) * 100;
-        document.getElementById("progressFill").style.width = percentage + "%";
+        return ok;
       }
 
-      // Add event listeners to all inputs
-      document.querySelectorAll("input, textarea").forEach((element) => {
-        element.addEventListener("input", updateProgress);
-      });
-
-      // Validation functions
-      function validateUrl(input) {
-        const value = input.value.trim();
-        const urlPattern = /^https?:\/\/.+/i;
-
-        if (!value) {
-          input.style.borderColor = "#dc2626";
-          input.style.backgroundColor = "#fef2f2";
-          return false;
-        } else if (!urlPattern.test(value)) {
-          input.style.borderColor = "#dc2626";
-          input.style.backgroundColor = "#fef2f2";
-          return false;
-        } else {
-          input.style.borderColor = "";
-          input.style.backgroundColor = "";
-          return true;
-        }
-      }
-
-      function validateTextarea(textarea) {
-        const value = textarea.value.trim();
-        const minLength = 20;
-
-        if (!value) {
-          textarea.style.borderColor = "#dc2626";
-          textarea.style.backgroundColor = "#fef2f2";
-          return false;
-        } else if (value.length < minLength) {
-          textarea.style.borderColor = "#dc2626";
-          textarea.style.backgroundColor = "#fef2f2";
-          return false;
-        } else {
-          textarea.style.borderColor = "";
-          textarea.style.backgroundColor = "";
-          return true;
-        }
-      }
-
-      function validateAllInputs() {
-        let isValid = true;
-        let firstInvalid = null;
-        const emptyLinks = [];
-        const invalidLinks = [];
-        const emptyCaptions = [];
-        const shortCaptions = [];
+      /* ---------- Download ---------- */
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        if (!validateAllInputs()) return;
 
         const items = [
           { title: "Satellite Image – Minnesota", num: 1 },
@@ -921,162 +1373,67 @@
           { title: "Visible Satellite – Southeast U.S.", num: 10 },
         ];
 
+        let content = "LAB 2: WEATHER FORECASTING TOOLS\n";
+        content += "====================================================\n\n";
+        content += "Date: " + new Date().toLocaleDateString() + "\n\n";
+        content += "====================================================\n\n";
+
         items.forEach((item) => {
-          const linkInput = document.getElementById(`link${item.num}`);
-          const captionTextarea = document.getElementById(`caption${item.num}`);
-          const urlPattern = /^https?:\/\/.+/i;
-
-          // Validate link
-          const linkValue = linkInput.value.trim();
-          if (!linkValue) {
-            emptyLinks.push(item.num);
-            linkInput.style.borderColor = "#dc2626";
-            linkInput.style.backgroundColor = "#fef2f2";
-            isValid = false;
-            if (!firstInvalid) firstInvalid = linkInput;
-          } else if (!urlPattern.test(linkValue)) {
-            invalidLinks.push(item.num);
-            linkInput.style.borderColor = "#dc2626";
-            linkInput.style.backgroundColor = "#fef2f2";
-            isValid = false;
-            if (!firstInvalid) firstInvalid = linkInput;
-          } else {
-            linkInput.style.borderColor = "";
-            linkInput.style.backgroundColor = "";
-          }
-
-          // Validate caption
-          const captionValue = captionTextarea.value.trim();
-          if (!captionValue) {
-            emptyCaptions.push(item.num);
-            captionTextarea.style.borderColor = "#dc2626";
-            captionTextarea.style.backgroundColor = "#fef2f2";
-            isValid = false;
-            if (!firstInvalid) firstInvalid = captionTextarea;
-          } else if (captionValue.length < 20) {
-            shortCaptions.push(item.num);
-            captionTextarea.style.borderColor = "#dc2626";
-            captionTextarea.style.backgroundColor = "#fef2f2";
-            isValid = false;
-            if (!firstInvalid) firstInvalid = captionTextarea;
-          } else {
-            captionTextarea.style.borderColor = "";
-            captionTextarea.style.backgroundColor = "";
-          }
+          const link = document.getElementById(`link${item.num}`).value.trim();
+          const cap = document
+            .getElementById(`caption${item.num}`)
+            .value.trim();
+          content += `${item.num}. ${item.title}\n`;
+          content += "-".repeat(50) + "\n";
+          content += `Link: ${link || "[NOT PROVIDED]"}\n\n`;
+          content += `Caption:\n${cap || "[NOT PROVIDED]"}\n\n`;
+          content += "====================================================\n\n";
         });
 
-        if (!isValid) {
-          let message = "Please complete the following before downloading:\n\n";
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Lab02_WeatherData.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("✅ Assignment downloaded successfully!");
+      });
 
-          if (emptyLinks.length > 0) {
-            message +=
-              "Missing links for item(s): " + emptyLinks.join(", ") + "\n";
-          }
-          if (invalidLinks.length > 0) {
-            message +=
-              "Invalid URL format for item(s): " +
-              invalidLinks.join(", ") +
-              " (must start with http:// or https://)\n";
-          }
-          if (emptyCaptions.length > 0) {
-            message +=
-              "Missing captions for item(s): " +
-              emptyCaptions.join(", ") +
-              "\n";
-          }
-          if (shortCaptions.length > 0) {
-            message +=
-              "Caption(s) too short (need at least 20 characters) for item(s): " +
-              shortCaptions.join(", ") +
-              "\n";
-          }
-
-          alert(message);
-
-          if (firstInvalid) {
-            firstInvalid.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-            firstInvalid.focus();
-          }
+      /* ---------- Clear ---------- */
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        if (
+          confirm(
+            "Are you sure you want to clear all fields? This cannot be undone."
+          )
+        ) {
+          document.getElementById("weatherForm").reset();
+          updateProgress();
+          alert("🗑️ All fields have been cleared.");
         }
+      });
 
-        return isValid;
+      /* ---------- Collapsibles ---------- */
+      function toggleCollapsible(header) {
+        const content = header.nextElementSibling;
+        const collapsed = content.classList.toggle("is-collapsed");
+        header.classList.toggle("is-collapsed", collapsed);
       }
 
-      // Download functionality
-      document
-        .getElementById("downloadBtn")
-        .addEventListener("click", function () {
-          // Validate before downloading
-          if (!validateAllInputs()) {
-            return;
-          }
+      // Start with everything OPEN except you can change defaults here:
+      document.querySelectorAll(".collapsible-header").forEach((h) => {
+        // set to true to start closed:
+        const startClosed = false;
+        if (startClosed) {
+          h.classList.add("is-collapsed");
+          const c = h.nextElementSibling;
+          if (c) c.classList.add("is-collapsed");
+        }
+      });
 
-          const items = [
-            { title: "Satellite Image – Minnesota", num: 1 },
-            { title: "Radar Image – Chicago", num: 2 },
-            { title: "Surface Observations – Kansas", num: 3 },
-            { title: "7-Day Forecast – Fargo, ND", num: 4 },
-            { title: "SPC Day 2 Outlook", num: 5 },
-            { title: "WPC QPF Forecast", num: 6 },
-            { title: "Ensemble Forecast Probability", num: 7 },
-            { title: "Model Precipitation Forecast", num: 8 },
-            { title: "500 mb Heights and Winds – Central U.S.", num: 9 },
-            { title: "Visible Satellite – Southeast U.S.", num: 10 },
-          ];
-
-          let content = "LAB 2: WEATHER FORECASTING TOOLS\n";
-          content += "=" + "=".repeat(50) + "\n\n";
-          content += "Date: " + new Date().toLocaleDateString() + "\n\n";
-          content += "=" + "=".repeat(50) + "\n\n";
-
-          items.forEach((item) => {
-            const link = document
-              .getElementById(`link${item.num}`)
-              .value.trim();
-            const caption = document
-              .getElementById(`caption${item.num}`)
-              .value.trim();
-
-            content += `${item.num}. ${item.title}\n`;
-            content += "-".repeat(50) + "\n";
-            content += `Link: ${link || "[NOT PROVIDED]"}\n\n`;
-            content += `Caption:\n${caption || "[NOT PROVIDED]"}\n\n`;
-            content += "=" + "=".repeat(50) + "\n\n";
-          });
-
-          // Create and download file
-          const blob = new Blob([content], { type: "text/plain" });
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "Lab02_WeatherData.txt";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-
-          alert("✅ Assignment downloaded successfully!");
-        });
-
-      // Clear all fields
-      document
-        .getElementById("clearBtn")
-        .addEventListener("click", function () {
-          if (
-            confirm(
-              "Are you sure you want to clear all fields? This cannot be undone."
-            )
-          ) {
-            document.getElementById("weatherForm").reset();
-            updateProgress();
-            alert("🗑️ All fields have been cleared.");
-          }
-        });
-
-      // Initialize progress on page load
+      // Initialize progress
       updateProgress();
     </script>
   </body>

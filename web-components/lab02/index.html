@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lab 2 - Weather Forecasting Tools</title>
-    <link rel="stylesheet" href="../shared/styles/common.css" />
-    <link rel="stylesheet" href="../shared/styles/lab-styles.css" />
+    <link rel="stylesheet" href="shared/styles/common.css" />
+    <link rel="stylesheet" href="shared/styles/lab-styles.css" />
     <style>
       /* Lab 2 specific styles */
       .resources-section {
@@ -94,6 +94,7 @@
 
       .url-input-group {
         margin-bottom: 10px;
+        margin-left: 10px;
       }
 
       .subtitle {
@@ -185,24 +186,17 @@
               weather websites, interpret different types of weather data, and
               understand how meteorologists use these tools to make predictions.
             </p>
+            <p>
+              By the end of this lab, you should feel comfortable using key
+              weather websites and resources to gather information about current
+              weather conditions and forecasts.
+              <p>
           </div>
         </div>
 
       <div class="content">
-        <p class="subtitle">
-          This lab introduces weather analysis and forecasting tools available
-          on the internet. For each item below, paste a direct link to the
-          required weather product and add a brief caption. <br />
-          If you'd like to open the lab in it's own window, click here:
-          <a
-            href="https://wxfreekj.github.io/Lab2/"
-            target="_blank"
-            rel="noopener"
-            >Lab 2: Weather Forecasting Tools</a
-          >
-          (External link)
-        </p>
-
+<div class="section">
+          <h2>📚 Resources</h2><div></div>
         <div class="resources-section">
           <h2 style="color: #333; margin-bottom: 15px; font-size: 1.3em">
             🌦️ Weather Forecasting Sites
@@ -369,16 +363,24 @@
             </li>
           </ul>
         </div>
+        <div class="info-box">
+          <h3 style="text-align: left;">Lab Overview</h3>
+                    <strong> This lab introduces weather analysis and forecasting tools available
+          on the internet. I expect you'll need to click around and dig into each source to find what you need.
+        </strong>
+</div>
+        </p>
 
-        <form id="weatherForm">
+        <form id="weatherForm" style="padding: 10px;">
           <!-- Item 1 -->
           <div class="section">
-            <h3>Question 1: Satellite Image – Minnesota (3 pts)</h3>
-            <p>
-              <strong>Instructions:</strong> Find a recent satellite image
-              showing cloud cover centered on Minnesota. A visible or infrared
-              satellite product is acceptable.
-            </p>
+            <h3>Question 1: Satellite Image (3 pts)</h3>
+            <div>
+              <strong>Instructions:</strong> Find a current satellite image over an interesting weather event/phenomenon.
+              A visible or infrared satellite product is acceptable. In the text box, paste a link to the image or product.
+              In the second text box, provide a brief description of the product and what is interesting about the image selected.
+
+            </div>
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
@@ -393,34 +395,42 @@
                 class="quick-link-btn"
                 >RAP Weather Data</a
               >
+              <a href="https://pivotalweather.com" target="_blank" class="quick-link-btn">Pivotal Weather</a> <a href="https://weather.cod.edu/" target="_blank" class="quick-link-btn">College of DuPage</a> <a href="https://star.nesdis.noaa.gov" target="_blank" class="quick-link-btn">NOAA STAR</a>
+
             </div>
+            
             <div class="form-group">
-              <label for="link1">Image Link:</label>
+              
               <input
                 type="url"
                 id="link1"
                 name="link1"
-                placeholder="https://example.com/satellite-image"
+              
+                placeholder="Link to image"
+                
               />
             </div>
-            <div class="form-group">
-              <label for="caption1">Caption:</label>
+            <div class="form-group" style="padding-top: 10px;">
+            
               <textarea
                 id="caption1"
                 name="caption1"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe what the image shows..." 
+                
               ></textarea>
             </div>
           </div>
 
           <!-- Item 2 -->
           <div class="section">
-            <h3>Question 2: Radar Image – Chicago (3 pts)</h3>
-            <p>
-              <strong>Instructions:</strong> Locate a recent weather radar image
-              centered on Chicago, Illinois. A base reflectivity product is
-              preferred.
-            </p>
+            <h3>Question 2: Radar Image (3 pts)</h3>
+            
+              <div style="padding-bottom: 10px;">
+                <strong>Instructions:</strong> Locate a recent weather radar image over an interesting weather event/phenomenon.
+              A base reflectivity product is preferred. In the text box, paste a link to the image or product.
+              In the second text box, provide a brief description of the product and what is interesting about the image selected.
+              </div>
+            
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
               <a
@@ -437,7 +447,6 @@
               >
             </div>
             <div class="form-group">
-              <label for="link2">Image Link:</label>
               <input
                 type="url"
                 id="link2"
@@ -446,8 +455,7 @@
               />
             </div>
             <div class="form-group">
-              <label for="caption2">Caption:</label>
-              <textarea
+                            <textarea
                 id="caption2"
                 name="caption2"
                 placeholder="Describe what the image shows..."
@@ -460,7 +468,7 @@
             <h3>Question 3: Surface Observations – Kansas (3 pts)</h3>
             <p>
               <strong>Instructions:</strong> Submit a surface weather map
-              showing observations over Kansas. Look for maps that include
+              showing observations over <b>Kansas</b>. Look for maps that include
               temperatures, wind barbs, and circles that are filled in to a
               varying degree.
             </p>
@@ -480,7 +488,7 @@
               >
             </div>
             <div class="form-group">
-              <label for="link3">Image Link:</label>
+              
               <input
                 type="url"
                 id="link3"
@@ -489,7 +497,7 @@
               />
             </div>
             <div class="form-group">
-              <label for="caption3">Caption:</label>
+              
               <textarea
                 id="caption3"
                 name="caption3"
@@ -516,20 +524,19 @@
               >
             </div>
             <div class="form-group">
-              <label for="link4">Forecast Link:</label>
               <input
                 type="url"
                 id="link4"
                 name="link4"
-                placeholder="https://example.com/fargo-forecast"
+                placeholder="Paste link to National Weather Service 7-day forecast for Fargo, ND..."
               />
             </div>
             <div class="form-group">
-              <label for="caption4">7-Day Forecast Text:</label>
+              
               <textarea
                 id="caption4"
                 name="caption4"
-                placeholder="Paste the complete 7-day forecast here..."
+                placeholder="Copy and paste the complete 7-day National Weather Service forecast for Fargo, North Dakota (include all seven days)..."
                 rows="6"
               ></textarea>
             </div>
@@ -553,7 +560,7 @@
               >
             </div>
             <div class="form-group">
-              <label for="link5">Image Link:</label>
+              
               <input
                 type="url"
                 id="link5"
@@ -562,7 +569,7 @@
               />
             </div>
             <div class="form-group">
-              <label for="caption5">Caption:</label>
+              
               <textarea
                 id="caption5"
                 name="caption5"
@@ -589,20 +596,18 @@
               >
             </div>
             <div class="form-group">
-              <label for="link6">Image Link:</label>
               <input
                 type="url"
                 id="link6"
                 name="link6"
-                placeholder="https://example.com/qpf-forecast"
+                placeholder="Paste link to Weather Prediction Center QPF forecast map (6-hr, 24-hr, or 7-day total)..."
               />
             </div>
             <div class="form-group">
-              <label for="caption6">Caption:</label>
               <textarea
                 id="caption6"
                 name="caption6"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the QPF forecast: What time period does it cover? What precipitation amounts are predicted and where?"
               ></textarea>
             </div>
           </div>
@@ -631,20 +636,18 @@
               >
             </div>
             <div class="form-group">
-              <label for="link7">Image Link:</label>
               <input
                 type="url"
                 id="link7"
                 name="link7"
-                placeholder="https://example.com/ensemble-forecast"
+                placeholder="Paste link to ensemble model forecast showing probability of snowfall or precipitation..."
               />
             </div>
             <div class="form-group">
-              <label for="caption7">Caption:</label>
               <textarea
                 id="caption7"
                 name="caption7"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the ensemble forecast: What region and probability percentages are shown? Is this for snow or precipitation?"
               ></textarea>
             </div>
           </div>
@@ -679,20 +682,18 @@
               >
             </div>
             <div class="form-group">
-              <label for="link8">Image Link:</label>
               <input
                 type="url"
                 id="link8"
                 name="link8"
-                placeholder="https://example.com/model-precipitation"
+                placeholder="Paste link to weather model precipitation forecast (GFS, NAM, ECMWF, etc.)..."
               />
             </div>
             <div class="form-group">
-              <label for="caption8">Caption:</label>
               <textarea
                 id="caption8"
                 name="caption8"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the model forecast: Which weather model is this? What region and time period? What precipitation amounts are predicted?"
               ></textarea>
             </div>
           </div>
@@ -727,20 +728,18 @@
               >
             </div>
             <div class="form-group">
-              <label for="link9">Image Link:</label>
               <input
                 type="url"
                 id="link9"
                 name="link9"
-                placeholder="https://example.com/500mb-map"
+                placeholder="Paste link to 500 mb heights and winds forecast map covering the central U.S..."
               />
             </div>
             <div class="form-group">
-              <label for="caption9">Caption:</label>
               <textarea
                 id="caption9"
                 name="caption9"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the 500 mb map: What patterns do you see in the height contours? What are the wind speeds and directions shown by the wind barbs?"
               ></textarea>
             </div>
           </div>
@@ -769,20 +768,18 @@
               >
             </div>
             <div class="form-group">
-              <label for="link10">Image Link:</label>
               <input
                 type="url"
                 id="link10"
                 name="link10"
-                placeholder="https://example.com/visible-satellite"
+                placeholder="Paste link to current visible satellite image of the southeastern United States..."
               />
             </div>
             <div class="form-group">
-              <label for="caption10">Caption:</label>
               <textarea
                 id="caption10"
                 name="caption10"
-                placeholder="Describe what the image shows..."
+                placeholder="Describe the visible satellite image: What weather features are visible over the southeastern U.S.? What cloud patterns do you observe? Can you identify any storms, cloud types, or clear areas?"
               ></textarea>
             </div>
           </div>

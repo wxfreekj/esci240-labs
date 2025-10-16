@@ -5,11 +5,13 @@ Scripts to download student submissions from Canvas LMS for ESCI 240 labs.
 ## � Available Scripts
 
 ### Core Scripts
+
 - **`list_students.py`** - Get list of all enrolled students (Canvas IDs, names, emails)
 - **`list_assignments.py`** - Get list of all assignments with IDs and details
 - **`download_lab01_submissions.py`** - Download Lab 1 submissions from all students
 
 ### Utility Files
+
 - **`config.py`** - Configuration loader (reads from `.env`)
 - **`.env`** - Your Canvas credentials (create from `.env.example`)
 

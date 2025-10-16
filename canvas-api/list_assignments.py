@@ -8,7 +8,12 @@ import json
 
 # Load configuration from .env file
 try:
-    from config import CANVAS_API_TOKEN, CANVAS_DOMAIN, COURSE_ID, ASSIGNMENTS_OUTPUT_FILE
+    from config import (
+        CANVAS_API_TOKEN,
+        CANVAS_DOMAIN,
+        COURSE_ID,
+        ASSIGNMENTS_OUTPUT_FILE,
+    )
 except ImportError as e:
     print("\n❌ Configuration Error!")
     print("\n📝 Setup Instructions:")

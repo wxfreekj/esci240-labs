@@ -2,7 +2,18 @@
 
 Scripts to download student submissions from Canvas LMS for ESCI 240 labs.
 
-## 📋 Prerequisites
+## � Available Scripts
+
+### Core Scripts
+- **`list_students.py`** - Get list of all enrolled students (Canvas IDs, names, emails)
+- **`list_assignments.py`** - Get list of all assignments with IDs and details
+- **`download_lab01_submissions.py`** - Download Lab 1 submissions from all students
+
+### Utility Files
+- **`config.py`** - Configuration loader (reads from `.env`)
+- **`.env`** - Your Canvas credentials (create from `.env.example`)
+
+## �📋 Prerequisites
 
 - Python 3.7 or higher
 - Canvas LMS access with instructor/TA permissions
@@ -69,7 +80,26 @@ CANVAS_COURSE_ID=123456
    ```
 3. Copy the number after `courses/` and add it to `.env`
 
-### 6. Find Assignment IDs
+### 6. Get Student List (Optional but Recommended)
+
+Retrieve a list of all students enrolled in your course:
+
+```bash
+python list_students.py
+```
+
+This will create:
+
+- `output/students_list.json` - Full student data
+- `output/students_list.csv` - Easy-to-read spreadsheet format
+
+The student list is useful for:
+
+- Tracking who's enrolled
+- Cross-referencing submissions
+- Identifying missing submissions
+
+### 7. Find Assignment IDs
 
 Run the helper script to list all assignments:
 

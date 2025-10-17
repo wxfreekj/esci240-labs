@@ -2,331 +2,222 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>Lab 2 - Weather Forecasting Tools</title>
 
-    <!-- Optional shared styles (keep if you use them) -->
+    <!-- Optional shared styles (kept for your project structure) -->
     <link rel="stylesheet" href="shared/styles/common.css" />
     <link rel="stylesheet" href="shared/styles/lab-styles.css" />
 
     <style>
-      :root {
-        --indigo: #667eea;
-        --indigo-dark: #5a67d8;
-        --purple: #764ba2;
-        --google-blue: #4285f4;
-        --surface: #f0f4ff;
-        --surface-2: #e8f0fe;
-        --ink-900: #222;
-        --ink-700: #444;
-        --ink-500: #666;
-        --danger: #dc2626;
-        --radius: 10px;
+      :root{
+        --indigo:#667eea;
+        --indigo-dark:#5a67d8;
+        --purple:#764ba2;
+        --google-blue:#4285f4;
+        --surface:#f0f4ff;
+        --surface-2:#e8f0fe;
+        --ink-900:#1d263b;
+        --ink-800:#23335a;
+        --ink-700:#3a4a7a;
+        --ink-600:#4d5c8e;
+        --ink-500:#6a76a8;
+        --danger:#dc2626;
+        --radius:12px;
+
+        /* Mobile-first typography */
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-h2: clamp(1.05rem, 1.8vw + .9rem, 1.25rem);
+        --fs-body: clamp(.95rem, .7vw + .8rem, 1rem);
+        --fs-btn: clamp(.95rem, .7vw + .8rem, 1rem);
+
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px; /* touch target minimum */
       }
 
       /* Page chrome */
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
-          sans-serif;
-        color: var(--ink-700);
-        background: #fff;
+      html,body{height:100%}
+      body{
+        margin:0;
+        font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+        color:var(--ink-700);
+        background:#fff;
+        font-size:var(--fs-body);
+        line-height:1.5;
+        -webkit-tap-highlight-color: transparent;
       }
-      .container {
-        max-width: 960px;
-        margin: 80px auto 64px;
-        padding: 0 16px;
+
+      .container{
+        max-width:960px;
+        margin:80px auto 72px;
+        padding:0 16px;
       }
-      .header h1 {
-        margin: 0 0 6px 0;
+
+      .header h1{
+        margin:0 0 6px 0;
+        font-size:var(--fs-h1);
+        color:var(--ink-100);
       }
-      .header p {
-        margin: 0;
-        color: #3b5baa;
-        font-weight: 600;
+
+      .header p{
+        margin:0;
+        color:#c6c6c7;
+        font-weight:600;
+        font-size:.98em;
       }
 
       /* Top progress bar */
-      .progress-indicator {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 8px 0;
+      .progress-indicator{
+        position:fixed;top:0;left:0;right:0;z-index:1000;
+        background:rgba(255,255,255,.98);
+        backdrop-filter: saturate(120%) blur(4px);
+        box-shadow:0 2px 8px rgba(0,0,0,.1);
+        padding:8px 0;
+        padding-top: env(safe-area-inset-top);
       }
-      .progress-bar {
-        width: 100%;
-        height: 8px;
-        background: #e0e0e0;
-        overflow: hidden;
-      }
-      .progress-fill {
-        height: 8px;
-        background: linear-gradient(
-          90deg,
-          var(--indigo) 0%,
-          var(--purple) 100%
-        );
-        width: 0%;
-        transition: width 0.3s ease;
-        display: block;
-      }
+      .progress-bar{width:100%;height:8px;background:#e0e0e0;overflow:hidden}
+      .progress-fill{height:8px;background:linear-gradient(90deg,var(--indigo) 0%,var(--purple) 100%);width:0%;transition:width .3s ease;display:block}
 
       /* Section wrapper */
-      .section {
-        margin: 0 0 16px 0;
+      .section{margin:0 0 16px 0}
+
+      /* Flat section title with underline */
+      .section-title{
+        margin:0;
+        padding:0 0 10px 0;
+        font-size:var(--fs-h2);
+        font-weight:800;
+        color:#1f3b82;
+        border:none;border-bottom:2px solid var(--indigo);
+        border-radius:0 !important;box-shadow:none !important;background:transparent;display:block;width:100%;
       }
 
       /* Collapsible blocks (cards) */
-      .collapsible-container {
-        border-radius: 8px;
-        overflow: hidden;
-        margin: 0 0 20px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        background: var(--surface);
-        border: 1px solid #dfe7ff;
+      .collapsible-container{
+        border-radius:12px;
+        overflow:hidden;
+        margin:0 0 16px 0;
+        box-shadow:0 2px 6px rgba(0,0,0,.08);
+        background:var(--surface);
+        border:1px solid #dfe7ff;
       }
 
-      /* “Flat” section headers with underline (no curls) */
-      .section-title {
-        margin: 0;
-        padding: 14px 6px 10px 0;
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #1f3b82;
-        border: none;
-        border-bottom: 2px solid var(--indigo);
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        background: transparent;
-        display: block;
-        width: 100%;
+      .collapsible-header{
+        margin:0;
+        padding: max(var(--pad-header-y), 12px) 48px max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor:pointer; user-select:none; position:relative;
+        font-weight:800; color:#1f3b82; background:var(--surface);
+        min-height: var(--hit-area); display:flex; align-items:center;
+      }
+      .collapsible-header:hover{filter:brightness(.98)}
+      .collapsible-header::after{
+        content:"▼";
+        position:absolute; right:16px; top:50%;
+        transform:translateY(-50%);
+        font-size:.95em; color:#6a6a6a; transition:transform .2s ease;
+      }
+      .collapsible-header.is-collapsed::after{ transform:translateY(-50%) rotate(-90deg); }
+
+      .stripe-blue{border-left:4px solid var(--google-blue)}
+      .stripe-indigo{border-left:4px solid var(--indigo)}
+
+      .collapsible-content{
+        display:block; background:var(--surface);
+        padding: var(--pad-card);
+        border-top:1px solid #e5ecff;
+      }
+      .collapsible-content.is-collapsed{display:none}
+
+      /* Quick-links and buttons grid that reflows on mobile */
+      .quick-links{
+        background:var(--surface-2);
+        border-left:3px solid var(--google-blue);
+        padding:12px 14px; margin:8px 0; border-radius:10px;
+      }
+      .quick-links-title{font-weight:800;color:#333;font-size:.98em;margin:0 0 10px 0;display:block}
+
+      .link-grid{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap:10px;
       }
 
-      /* Collapsible headers inside cards */
-      .collapsible-header {
-        margin: 0;
-        padding: 14px 48px 14px 16px;
-        cursor: pointer;
-        user-select: none;
-        position: relative;
-        font-weight: 700;
-        color: #1f3b82;
-        background: var(--surface);
+      .quick-link-btn{
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        background:linear-gradient(135deg,var(--google-blue) 0%, var(--indigo) 100%);
+        color:#fff; padding:12px 14px; border-radius:12px; text-decoration:none;
+        font-size:.95em; font-weight:800; line-height:1.25; min-height:44px;
+        transition:transform .15s ease, box-shadow .15s ease;
+        box-shadow:0 2px 8px rgba(66,133,244,.2); border:none; text-align:center;
       }
-      .collapsible-header:hover {
-        filter: brightness(0.98);
-      }
-      .collapsible-header::after {
-        content: "▼";
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 0.9em;
-        color: #6a6a6a;
-        transition: transform 0.2s ease;
-      }
-      .collapsible-header.is-collapsed::after {
-        transform: translateY(-50%) rotate(-90deg);
-      }
+      .quick-link-btn .hint-text{display:block;font-size:.8em;font-style:italic;opacity:.95;margin-top:4px;font-weight:600}
+      .quick-link-btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(66,133,244,.28)}
+      .quick-link-btn:active{transform:translateY(0);box-shadow:0 2px 6px rgba(66,133,244,.2)}
 
-      .collapsible-content {
-        display: block;
-        background: var(--surface);
-        padding: 18px 20px;
-        border-top: 1px solid #e5ecff;
-      }
-      .collapsible-content.is-collapsed {
-        display: none;
-      }
+      /* Resource lists */
+      .resources-section{background:var(--surface)}
+      .resources-section h2{color:#333;margin:8px 0 12px 0;font-size:1.15rem}
+      .resource-category{margin-bottom:14px}
+      .resource-category h3{color:#444;font-size:1rem;margin:0 0 8px 0;font-weight:800}
+      .resources-section ul{list-style:none;padding-left:0;margin-left:18px}
+      .resources-section li{margin-bottom:8px;position:relative;padding-left:18px}
+      .resources-section li:before{content:"→";position:absolute;left:0;color:var(--indigo);font-weight:900}
+      .resources-section a{color:var(--indigo);text-decoration:none;font-weight:800}
+      .resources-section a:hover{text-decoration:underline;color:var(--indigo-dark)}
 
-      /* Variant stripes for quick recognition */
-      .stripe-blue {
-        border-left: 4px solid var(--google-blue);
+      /* Forms */
+      input[type="url"], textarea{
+        width:100%; max-width:100%;
+        padding:12px 14px; border:1px solid #c9d4ff; border-radius:10px;
+        font: 16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; /* 16px avoids iOS zoom */
+        box-sizing:border-box; background:#fff;
       }
-      .stripe-indigo {
-        border-left: 4px solid var(--indigo);
-      }
-
-      /* Quick links bar */
-      .quick-links {
-        background: var(--surface-2);
-        border-left: 3px solid var(--google-blue);
-        padding: 12px 14px;
-        margin: 8px 0;
-        border-radius: 6px;
-      }
-      .quick-links-title {
-        font-weight: 700;
-        color: #333;
-        font-size: 0.95em;
-        margin: 0 0 8px 0;
-        display: block;
-      }
-
-      .quick-link-btn {
-        display: inline-flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(
-          135deg,
-          var(--google-blue) 0%,
-          var(--indigo) 100%
-        );
-        color: #fff;
-        padding: 12px 16px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-size: 0.9em;
-        font-weight: 600;
-        margin: 0 8px 8px 0;
-        line-height: 1.3;
-        min-width: 120px;
-        text-align: center;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
-        border: none;
-      }
-      .quick-link-btn .hint-text {
-        display: block;
-        font-size: 0.75em;
-        font-style: italic;
-        opacity: 0.95;
-        margin-top: 4px;
-        font-weight: 400;
-      }
-      .quick-link-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(66, 133, 244, 0.28);
-      }
-      .quick-link-btn:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(66, 133, 244, 0.2);
-      }
-
-      /* Lists inside resource sections */
-      .resources-section {
-        background: var(--surface);
-        padding: 20px;
-      }
-      .resources-section h2 {
-        color: #333;
-        margin: 8px 0 12px 0;
-        font-size: 1.25rem;
-      }
-      .resource-category {
-        margin-bottom: 16px;
-      }
-      .resource-category h3 {
-        color: #444;
-        font-size: 1rem;
-        margin: 0 0 8px 0;
-        font-weight: 700;
-      }
-      .resources-section ul {
-        list-style: none;
-        padding-left: 0;
-        margin-left: 18px;
-      }
-      .resources-section li {
-        margin-bottom: 8px;
-        position: relative;
-        padding-left: 18px;
-      }
-      .resources-section li:before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: var(--indigo);
-        font-weight: 900;
-      }
-      .resources-section a {
-        color: var(--indigo);
-        text-decoration: none;
-        font-weight: 600;
-      }
-      .resources-section a:hover {
-        text-decoration: underline;
-        color: var(--indigo-dark);
-      }
-
-      /* Inputs */
-      input[type="url"],
-      textarea {
-        width: 100%;
-        max-width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #c9d4ff;
-        border-radius: 8px;
-        font: inherit;
-        box-sizing: border-box;
-        background: #fff;
-      }
-      textarea {
-        min-height: 110px;
-        resize: vertical;
-      }
-      .is-invalid {
-        border-color: var(--danger) !important;
-        background: #fef2f2 !important;
-      }
+      textarea{min-height:110px; resize:vertical}
+      .is-invalid{border-color:var(--danger) !important;background:#fef2f2 !important}
+      input:focus-visible, textarea:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
 
       /* Bottom buttons */
-      .button-row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 28px 0;
+      .button-row{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap:10px;
+        justify-content:center;
+        margin:28px 0;
       }
-      .btn {
-        padding: 12px 20px;
-        border-radius: 10px;
-        font-weight: 800;
-        font-size: 1rem;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-        min-width: 220px;
+      @media (min-width:700px){
+        .button-row{ grid-template-columns: repeat(3, minmax(220px,1fr)); }
       }
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      .btn{
+        padding:14px 18px; border-radius:12px; font-weight:900; font-size:var(--fs-btn);
+        border:none; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; min-height:44px;
       }
-      .btn-primary {
-        background: linear-gradient(
-          135deg,
-          var(--indigo) 0%,
-          var(--purple) 100%
-        );
-        color: #fff;
-      }
-      .btn-ghost {
-        background: #f7f7ff;
-        border: 1px solid #d9dfff;
-        color: #2b2c65;
+      .btn:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(0,0,0,.08)}
+      .btn-primary{background:linear-gradient(135deg,var(--indigo) 0%, var(--purple) 100%);color:#fff}
+      .btn-ghost{background:#f7f7ff;border:1px solid #d9dfff;color:#2b2c65}
+
+      .muted{font-size:.95em;color:#555;margin:14px 0 0 0}
+
+      /* Motion preferences */
+      @media (prefers-reduced-motion: reduce){
+        *{animation:none !important; transition:none !important}
       }
 
-      /* Utility spacing for small paragraphs under lists */
-      .muted {
-        font-size: 0.95em;
-        color: #555;
-        margin: 14px 0 0 0;
+      /* Responsive container spacing */
+      @media (max-width:900px){
+        .container{margin-top:76px}
       }
-
-      /* Flat rule under the “For This Lab” title (no curls) */
-      .flat-rule {
-        border: none;
-        border-bottom: 2px solid var(--indigo);
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        padding: 0 0 10px 0;
-        margin: 0;
+      @media (max-width:700px){
+        .container{padding:0 12px}
+        .collapsible-container{border-radius:10px}
+      }
+      @media (max-width:480px){
+        .container{margin-bottom:84px}
+        .collapsible-header{padding-left:14px;padding-right:42px}
+        .quick-link-btn{min-height:44px}
       }
     </style>
   </head>
@@ -347,15 +238,14 @@
       <!-- For This Lab (collapsible) -->
       <div class="section">
         <div class="collapsible-container">
-          <h2 class="section-title">📋 For This Lab</h2>
           <div
             class="collapsible-header stripe-indigo"
             onclick="toggleCollapsible(this)"
           >
-            Show / Hide Instructions
+            📋 For this Lab
           </div>
           <div class="collapsible-content">
-            <ol style="margin: 0; padding-left: 22px; line-height: 2">
+            <ol style="margin: 0; padding-left: 22px; line-height: 1.9">
               <li>
                 Explore the various weather forecasting websites and tools
               </li>
@@ -527,7 +417,7 @@
               </ul>
             </div>
 
-            <h2 style="margin-top: 18px">🌡️ Climate Resources</h2>
+            <h2 style="margin-top: 10px">🌡️ Climate Resources</h2>
             <ul>
               <li>
                 <a
@@ -579,7 +469,7 @@
               </li>
             </ul>
 
-            <h2 style="margin-top: 18px">📍 Omaha Area Climatology</h2>
+            <h2 style="margin-top: 10px">📍 Omaha Area Climatology</h2>
             <ul>
               <li>
                 <a
@@ -613,7 +503,7 @@
         </div>
       </div>
 
-      <!-- Info Box: Why imagery matters -->
+      <!-- Info Box -->
       <div class="section">
         <div class="collapsible-container">
           <div
@@ -714,7 +604,9 @@
 
       <!-- FORM -->
       <form id="weatherForm">
-        <!-- Helper: make one function create a question block? Keeping content explicit for clarity -->
+        <!-- helper: quick-link grid wrapper -->
+        <template id="gridTemplate"></template>
+
         <!-- Q1 -->
         <div class="collapsible-container">
           <div
@@ -726,26 +618,30 @@
           <div class="collapsible-content">
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">GOES Satellite</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text"
-                  >Satellite & Radar</span
-                ></a
-              >
-              <a
-                href="https://www.goes.noaa.gov/"
-                target="_blank"
-                class="quick-link-btn"
-                >GOES Imagery<span class="hint-text">Menu on Left</span></a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text"
+                    >GOES Satellite</span
+                  ></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >Satellite & Radar</span
+                  ></a
+                >
+                <a
+                  href="https://www.goes.noaa.gov/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >GOES Imagery<span class="hint-text">Menu on Left</span></a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -783,24 +679,26 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">NWS Radar</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text">NEXRAD</span></a
-              >
-              <a
-                href="https://radar.weather.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >NWS Official Radar</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">NWS Radar</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text">NEXRAD</span></a
+                >
+                <a
+                  href="https://radar.weather.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >NWS Official Radar</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -815,7 +713,7 @@
               <textarea
                 id="caption2"
                 name="caption2"
-                placeholder="Describe the radar image: What type of precipitation is shown? What weather patterns or storm structures do you observe? What time period does this cover?"
+                placeholder="Describe the radar image: What type of precipitation is shown? What weather patterns or storm structures do you observe? What time period does this cover? "
               ></textarea>
             </div>
           </div>
@@ -839,26 +737,30 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text"
-                  >Surface Analysis</span
-                ></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text">Surface Data</span></a
-              >
-              <a
-                href="https://weather.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >Local Observations</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text"
+                    >Surface Analysis</span
+                  ></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >Surface Data</span
+                  ></a
+                >
+                <a
+                  href="https://weather.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Local Observations</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -896,14 +798,16 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Source:</span>
-              <a
-                href="https://forecast.weather.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >NWS Official Forecast<span class="hint-text"
-                  >Type location → Scroll down</span
-                ></a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://forecast.weather.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >NWS Official Forecast<span class="hint-text"
+                    >Type location → Scroll down</span
+                  ></a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -942,24 +846,28 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">SPC Outlooks</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text">SPC Outlooks</span></a
-              >
-              <a
-                href="https://spc.noaa.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >SPC Official Outlook</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">SPC Outlooks</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >SPC Outlooks</span
+                  ></a
+                >
+                <a
+                  href="https://spc.noaa.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >SPC Official Outlook</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -997,24 +905,26 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">WPC QPF</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text">WPC QPF</span></a
-              >
-              <a
-                href="https://wpc.ncep.noaa.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >WPC Official QPF</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">WPC QPF</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text">WPC QPF</span></a
+                >
+                <a
+                  href="https://wpc.ncep.noaa.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >WPC Official QPF</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -1052,20 +962,22 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">GEFS Models</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text"
-                  >Weather Data → Numerical Models</span
-                ></a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">GEFS Models</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >Weather Data → Numerical Models</span
+                  ></a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -1103,20 +1015,22 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">HRRR Model</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text"
-                  >Weather Data → Numerical Models</span
-                ></a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">HRRR Model</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >Weather Data → Numerical Models</span
+                  ></a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -1154,24 +1068,26 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">GFS Model</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text">Upper Air</span></a
-              >
-              <a
-                href="https://mag.ncep.noaa.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >Model Analysis</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text">GFS Model</span></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text">Upper Air</span></a
+                >
+                <a
+                  href="https://mag.ncep.noaa.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Model Analysis</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -1210,26 +1126,30 @@
 
             <div class="quick-links">
               <span class="quick-links-title">🔗 Recommended Sources:</span>
-              <a
-                href="https://pivotalweather.com"
-                target="_blank"
-                class="quick-link-btn"
-                >Pivotal Weather<span class="hint-text">GOES Satellite</span></a
-              >
-              <a
-                href="https://weather.cod.edu/"
-                target="_blank"
-                class="quick-link-btn"
-                >College of DuPage<span class="hint-text"
-                  >Satellite & Radar</span
-                ></a
-              >
-              <a
-                href="https://star.nesdis.noaa.gov"
-                target="_blank"
-                class="quick-link-btn"
-                >NOAA STAR</a
-              >
+              <div class="link-grid">
+                <a
+                  href="https://pivotalweather.com"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >Pivotal Weather<span class="hint-text"
+                    >GOES Satellite</span
+                  ></a
+                >
+                <a
+                  href="https://weather.cod.edu/"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >College of DuPage<span class="hint-text"
+                    >Satellite & Radar</span
+                  ></a
+                >
+                <a
+                  href="https://star.nesdis.noaa.gov"
+                  target="_blank"
+                  class="quick-link-btn"
+                  >NOAA STAR</a
+                >
+              </div>
             </div>
 
             <div style="padding: 6px 0">
@@ -1296,15 +1216,14 @@
           badL = [],
           emptyC = [],
           shortC = [];
-        const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-        items.forEach((n) => {
+        nums.forEach((n) => {
           const link = document.getElementById(`link${n}`);
           const cap = document.getElementById(`caption${n}`);
           const lv = link.value.trim(),
             cv = cap.value.trim();
 
-          // clear classes
           link.classList.remove("is-invalid");
           cap.classList.remove("is-invalid");
 
@@ -1422,9 +1341,8 @@
         header.classList.toggle("is-collapsed", collapsed);
       }
 
-      // Start with everything OPEN except you can change defaults here:
+      // Default: everything OPEN (change to true to start closed)
       document.querySelectorAll(".collapsible-header").forEach((h) => {
-        // set to true to start closed:
         const startClosed = false;
         if (startClosed) {
           h.classList.add("is-collapsed");

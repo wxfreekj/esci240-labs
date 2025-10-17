@@ -2,13 +2,252 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>
       Lab 3: Temperature, Pressure, and Density in the Atmosphere - ESCI 240
     </title>
     <link rel="stylesheet" href="shared/styles/common.css" />
     <link rel="stylesheet" href="shared/styles/lab-styles.css" />
     <style>
+      :root {
+        --indigo: #667eea;
+        --indigo-dark: #5a67d8;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --surface-2: #e8f0fe;
+        --ink-900: #1d263b;
+        --ink-800: #23335a;
+        --ink-700: #3a4a7a;
+        --ink-600: #4d5c8e;
+        --ink-500: #6a76a8;
+        --danger: #dc2626;
+        --radius: 12px;
+
+        /* Mobile-first typography */
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-h2: clamp(1.05rem, 1.8vw + 0.9rem, 1.25rem);
+        --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+        --fs-btn: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px;
+      }
+
+      /* Page chrome */
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink-700);
+        background: #fff;
+        font-size: var(--fs-body);
+        line-height: 1.5;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 80px auto 72px;
+        padding: 0 16px;
+      }
+
+      .header h1 {
+        margin: 0 0 6px 0;
+        font-size: var(--fs-h1);
+        color: var(--ink-100);
+      }
+
+      .header p {
+        margin: 0;
+        color: #c6c6c7;
+        font-weight: 600;
+        font-size: 0.98em;
+      }
+
+      /* Top progress bar */
+      .progress-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: saturate(120%) blur(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+        padding-top: env(safe-area-inset-top);
+      }
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        width: 0%;
+        transition: width 0.3s ease;
+        display: block;
+      }
+
+      /* Section wrapper */
+      .section {
+        margin: 0 0 16px 0;
+      }
+
+      /* Collapsible blocks (cards) */
+      .collapsible-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
+      }
+
+      .collapsible-header {
+        margin: 0;
+        padding: max(var(--pad-header-y), 12px) 48px
+          max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 800;
+        color: #1f3b82;
+        background: var(--surface);
+        min-height: var(--hit-area);
+        display: flex;
+        align-items: center;
+      }
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease;
+      }
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+      }
+
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: var(--pad-card);
+        border-top: 1px solid #e5ecff;
+      }
+      .collapsible-content.is-collapsed {
+        display: none;
+      }
+
+      /* Forms */
+      textarea {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #c9d4ff;
+        border-radius: 10px;
+        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        box-sizing: border-box;
+        background: #fff;
+        min-height: 110px;
+        resize: vertical;
+      }
+      .is-invalid {
+        border-color: var(--danger) !important;
+        background: #fef2f2 !important;
+      }
+      textarea:focus-visible {
+        outline: 2px solid var(--indigo);
+        outline-offset: 2px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--ink-700);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      /* Bottom buttons */
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        justify-content: center;
+        margin: 28px 0;
+      }
+      @media (min-width: 700px) {
+        .button-row {
+          grid-template-columns: repeat(3, minmax(220px, 1fr));
+        }
+      }
+      .btn {
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-weight: 900;
+        font-size: var(--fs-btn);
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        min-height: 44px;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      }
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        color: #fff;
+      }
+      .btn-ghost {
+        background: #f7f7ff;
+        border: 1px solid #d9dfff;
+        color: #2b2c65;
+      }
+
+      .muted {
+        font-size: 0.95em;
+        color: #555;
+        margin: 14px 0 0 0;
+      }
+
       /* Lab 3 specific styles */
       .inline-input {
         display: inline-block;
@@ -61,38 +300,45 @@
         background: #f8f9fa;
         box-shadow: none;
       }
+
+      /* Motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+
+      /* Responsive container spacing */
+      @media (max-width: 900px) {
+        .container {
+          margin-top: 76px;
+        }
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 0 12px;
+        }
+        .collapsible-container {
+          border-radius: 10px;
+        }
+      }
+      @media (max-width: 480px) {
+        .container {
+          margin-bottom: 84px;
+        }
+        .collapsible-header {
+          padding-left: 14px;
+          padding-right: 42px;
+        }
+      }
     </style>
   </head>
   <body>
-    <!-- Progress Indicator -->
-    <div
-      class="progress-indicator"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 8px 0;
-      "
-    >
-      <div
-        class="progress-bar"
-        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
-      >
-        <div
-          class="progress-fill"
-          id="progressFill"
-          style="
-            height: 8px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            display: block;
-          "
-        ></div>
+    <!-- progress -->
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
       </div>
     </div>
 
@@ -102,31 +348,17 @@
         <p>Atmospheric Structure and Properties (30 Points)</p>
       </div>
 
-      <div class="content">
-        <!-- For This Lab Section -->
-        <div class="section">
-          <h2>📋 For This Lab</h2>
+      <!-- For This Lab (collapsible) -->
+      <div class="section">
+        <div class="collapsible-container">
           <div
-            class="info-box"
-            style="
-              background: #e3f2fd;
-              border-left: 4px solid #2196f3;
-              padding: 20px;
-              border-radius: 8px;
-              margin-bottom: 25px;
-            "
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
           >
-            <h3
-              style="
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #1976d2;
-                font-size: 1.1em;
-              "
-            >
-              Instructions
-            </h3>
-            <ol style="margin: 0; padding-left: 25px; line-height: 2">
+            📋 For this Lab
+          </div>
+          <div class="collapsible-content">
+            <ol style="margin: 0; padding-left: 22px; line-height: 1.9">
               <li>
                 Complete all atmospheric calculations and analysis sections
               </li>
@@ -141,28 +373,28 @@
                 <strong>"Download file for Canvas Submission"</strong>
               </li>
               <li>
-                Locate the downloaded file
-                (<em>Lab03_AtmosphericAnalysis.txt</em>) and upload it to Canvas
+                Locate <em>Lab03_AtmosphericAnalysis.txt</em> and upload it to
+                Canvas
               </li>
             </ol>
-            <p
-              style="
-                margin-top: 15px;
-                margin-bottom: 0;
-                font-size: 0.95em;
-                color: #555;
-              "
-            >
+            <p class="muted">
               <strong>💡 Tip:</strong> Use a calculator for precise
               calculations. Pay attention to units and significant figures.
             </p>
           </div>
         </div>
+      </div>
 
-        <!-- Introduction Section -->
-        <div class="section">
-          <h2>📚 Introduction</h2>
-          <div class="intro-box">
+      <!-- Introduction -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            📚 Introduction
+          </div>
+          <div class="collapsible-content">
             <p>
               The Earth's atmosphere is a complex system where
               <strong>temperature</strong>, <strong>pressure</strong>, and
@@ -178,10 +410,17 @@
             </p>
           </div>
         </div>
+      </div>
 
-        <!-- Section 1: Atmospheric Mass Distribution -->
-        <div class="section">
-          <h2>Part 1: Atmospheric Mass Distribution with Height</h2>
+      <!-- Section 1: Atmospheric Mass Distribution -->
+      <div class="collapsible-container">
+        <div
+          class="collapsible-header stripe-blue"
+          onclick="toggleCollapsible(this)"
+        >
+          Part 1: Atmospheric Mass Distribution with Height
+        </div>
+        <div class="collapsible-content">
           <div class="info-box">
             <strong>Key Concept:</strong> For every 5.6 km you ascend in the
             atmosphere, there is approximately one-half of the atmospheric mass
@@ -284,10 +523,17 @@
             atmosphere above
           </div>
         </div>
+      </div>
 
-        <!-- Section 2: Pressure Calculations -->
-        <div class="section">
-          <h2>Part 2: Barometric Pressure at Different Altitudes</h2>
+      <!-- Section 2: Pressure Calculations -->
+      <div class="collapsible-container">
+        <div
+          class="collapsible-header stripe-blue"
+          onclick="toggleCollapsible(this)"
+        >
+          Part 2: Barometric Pressure at Different Altitudes
+        </div>
+        <div class="collapsible-content">
           <div class="info-box">
             <strong>Background:</strong> Barometric pressure reflects the weight
             of the atmosphere above a point. At sea level, the pressure is
@@ -366,10 +612,17 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Section 3: Lapse Rate -->
-        <div class="section">
-          <h2>Part 3: Atmospheric Lapse Rate</h2>
+      <!-- Section 3: Lapse Rate -->
+      <div class="collapsible-container">
+        <div
+          class="collapsible-header stripe-blue"
+          onclick="toggleCollapsible(this)"
+        >
+          Part 3: Atmospheric Lapse Rate
+        </div>
+        <div class="collapsible-content">
           <div class="info-box">
             <strong>Lapse Rate Definition:</strong> The rate at which
             temperature decreases with altitude. When averaged over all seasons,
@@ -387,9 +640,17 @@
             Figure 2: Temperature changes with altitude on Mauna Kea, Hawaii
           </div>
         </div>
+      </div>
 
-        <!-- Section 4: Temperature Profiles -->
-        <div class="section">
+      <!-- Section 4: Temperature Profiles -->
+      <div class="collapsible-container">
+        <div
+          class="collapsible-header stripe-blue"
+          onclick="toggleCollapsible(this)"
+        >
+          Part 4: Atmospheric Temperature Profiles
+        </div>
+        <div class="collapsible-content">
           <h2>Part 4: Atmospheric Temperature Profiles</h2>
           <p style="margin-bottom: 20px">
             The following chart shows three plots of temperature with altitude
@@ -589,10 +850,17 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Section 5: Analysis Questions -->
-        <div class="section">
-          <h2>Part 5: Analysis and Synthesis</h2>
+      <!-- Section 5: Analysis Questions -->
+      <div class="collapsible-container">
+        <div
+          class="collapsible-header stripe-blue"
+          onclick="toggleCollapsible(this)"
+        >
+          Part 5: Analysis and Synthesis
+        </div>
+        <div class="collapsible-content">
 
           <div class="question">
             <span class="question-label"
@@ -624,55 +892,24 @@
             ></textarea>
           </div>
         </div>
+      </div>
 
-        <!-- Buttons -->
-        <div
-          class="button-container"
-          style="
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
-          "
+      <!-- Buttons -->
+      <div class="button-row">
+        <button type="button" class="btn btn-primary" onclick="exportToTextFile()">
+          📥 Download file for Canvas Submission
+        </button>
+        <button type="button" class="btn btn-ghost" onclick="resetForm()">
+          🗑️ Clear All Answers
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 3 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 3:%0D%0A%0D%0A'"
         >
-          <button
-            class="export-btn"
-            onclick="exportToTextFile()"
-            style="flex: 1; min-width: 200px"
-          >
-            � Download file for Canvas Submission
-          </button>
-          <button
-            class="reset-btn"
-            onclick="resetForm()"
-            style="flex: 1; min-width: 200px"
-          >
-            �️ Clear All Answers
-          </button>
-          <button
-            type="button"
-            class="help-btn"
-            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 3 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 3:%0D%0A%0D%0A'"
-            style="
-              flex: 1;
-              min-width: 200px;
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
-              padding: 12px 24px;
-              border: none;
-              border-radius: 8px;
-              cursor: pointer;
-              font-size: 1em;
-              font-weight: 600;
-              transition: transform 0.2s, box-shadow 0.2s;
-            "
-            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(102, 126, 234, 0.4)'"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)'"
-          >
-            ❓ Questions, concerns, feedback, or need help?
-          </button>
-        </div>
+          ❓ Questions, concerns, feedback, or need help?
+        </button>
+      </div>
       </div>
     </div>
 
@@ -1235,6 +1472,23 @@
           element.addEventListener("input", updateProgress);
           element.addEventListener("change", updateProgress);
         });
+
+      /* ---------- Collapsibles ---------- */
+      function toggleCollapsible(header) {
+        const content = header.nextElementSibling;
+        const collapsed = content.classList.toggle("is-collapsed");
+        header.classList.toggle("is-collapsed", collapsed);
+      }
+
+      // Default: everything OPEN
+      document.querySelectorAll(".collapsible-header").forEach((h) => {
+        const startClosed = false;
+        if (startClosed) {
+          h.classList.add("is-collapsed");
+          const c = h.nextElementSibling;
+          if (c) c.classList.add("is-collapsed");
+        }
+      });
 
       // Initial progress update
       updateProgress();

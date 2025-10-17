@@ -2,123 +2,225 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lab 4: Earth-Sun Geometry and Seasons</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Lab 4: Earth-Sun Geometry and Seasons - ESCI 240</title>
+    <link rel="stylesheet" href="shared/styles/common.css" />
+    <link rel="stylesheet" href="shared/styles/lab-styles.css" />
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      :root {
+        --indigo: #667eea;
+        --indigo-dark: #5a67d8;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --surface-2: #e8f0fe;
+        --ink-900: #1d263b;
+        --ink-800: #23335a;
+        --ink-700: #3a4a7a;
+        --ink-600: #4d5c8e;
+        --ink-500: #6a76a8;
+        --danger: #dc2626;
+        --radius: 12px;
+
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-h2: clamp(1.05rem, 1.8vw + 0.9rem, 1.25rem);
+        --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+        --fs-btn: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px;
+        --inline-lh: 1.5;
+      }
+
+      html,
+      body {
+        height: 100%;
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink-700);
+        background: #fff;
+        font-size: var(--fs-body);
+        line-height: 1.5;
+        -webkit-tap-highlight-color: transparent;
       }
 
       .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        overflow: hidden;
+        max-width: 960px;
+        margin: 80px auto 72px;
+        padding: 0 16px 40px;
       }
 
       .header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-        padding: 30px;
         text-align: center;
+        margin-bottom: 32px;
       }
 
       .header h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin: 0 0 6px 0;
+        font-size: var(--fs-h1);
+        color: var(--ink-900);
       }
 
       .header p {
-        font-size: 1.2em;
-        opacity: 0.9;
-      }
-
-      .student-info {
-        padding: 30px;
-        background: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-      }
-
-      .student-info label {
-        display: block;
+        margin: 0;
+        color: var(--ink-600);
         font-weight: 600;
-        margin-bottom: 5px;
-        color: #1e3c72;
+        font-size: 0.98em;
       }
 
-      .student-info input {
+      .progress-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: saturate(120%) blur(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+        padding-top: env(safe-area-inset-top);
+      }
+
+      .progress-bar {
         width: 100%;
-        max-width: 400px;
-        padding: 12px;
-        font-size: 16px;
-        border: 2px solid #dee2e6;
-        border-radius: 8px;
-        margin: 10px 0;
-        transition: border-color 0.3s;
+        height: 8px;
+        background: #e0e0e0;
+        overflow: hidden;
       }
 
-      .student-info input:focus {
-        outline: none;
-        border-color: #667eea;
-      }
-
-      .content {
-        padding: 30px;
+      .progress-fill {
+        height: 8px;
+        background: linear-gradient(90deg, var(--indigo) 0%, var(--purple) 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+        display: block;
       }
 
       .section {
-        margin-bottom: 40px;
-        padding: 25px;
-        background: #e3f2fd;
-        border-radius: 8px;
-        border-left: 5px solid #2196f3;
+        margin: 0 0 16px 0;
       }
 
-      .section h2 {
-        color: #1e3c72;
-        margin-bottom: 20px;
-        font-size: 1.8em;
+      .collapsible-container {
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
       }
 
-      .section h3 {
-        color: #2a5298;
-        margin-top: 20px;
-        margin-bottom: 15px;
-        font-size: 1.3em;
+      .collapsible-header {
+        margin: 0;
+        padding: max(var(--pad-header-y), 12px) 48px
+          max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 800;
+        color: #1f3b82;
+        background: var(--surface);
+        min-height: var(--hit-area);
+        display: flex;
+        align-items: center;
       }
 
-      .intro-box {
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease;
+      }
+
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+      }
+
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: var(--pad-card);
+        border-top: 1px solid #e5ecff;
+      }
+
+      .collapsible-content.is-collapsed {
+        display: none;
+      }
+
+      .intro-box,
+      .info-box {
         background: #e3f2fd;
         border-left: 4px solid #2196f3;
         padding: 20px;
         border-radius: 8px;
-        margin-bottom: 25px;
-        line-height: 1.8;
+        margin: 16px 0;
+        color: #1f3b82;
       }
 
-      .intro-box p {
-        margin-bottom: 15px;
+      .intro-box h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        color: #1f3b82;
       }
 
-      .intro-box ul {
-        margin-left: 30px;
-        line-height: 2;
+      .intro-box p,
+      .info-box p,
+      .intro-box ul,
+      .info-box ul {
+        margin-bottom: 12px;
+        line-height: 1.7;
+      }
+
+      .intro-box ul,
+      .info-box ul {
+        padding-left: 20px;
+      }
+
+      .formula-box {
+        background: #fff7db;
+        border-left: 4px solid #f59e0b;
+        padding: 18px;
+        border-radius: 10px;
+        margin: 20px 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .formula-box h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        color: #ad6800;
+      }
+
+      .formula-box p {
+        margin: 6px 0;
+        color: #92400e;
       }
 
       .diagram-container {
-        background: white;
+        background: #fff;
         padding: 20px;
         border-radius: 10px;
         margin: 20px 0;
@@ -126,51 +228,66 @@
         text-align: center;
       }
 
-      img {
+      .diagram-container img {
         max-width: 100%;
         height: auto;
         display: block;
-        margin: 20px auto;
+        margin: 0 auto;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .image-caption {
         text-align: center;
         font-style: italic;
-        font-weight: 600;
-        color: #2a5298;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        font-size: 0.95em;
+        color: var(--ink-600);
+        font-size: 0.9em;
+        margin-top: 12px;
       }
 
       .question {
-        background: white;
+        background: #fff;
         padding: 20px;
-        margin: 15px 0;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
+        margin: 20px 0;
+        border-radius: 12px;
+        border: 1px solid #dae4ff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
       .question:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
       }
 
       .question-label {
-        font-weight: 600;
-        color: #2a5298;
-        margin-bottom: 12px;
         display: block;
-        font-size: 1.1em;
+        font-weight: 700;
+        color: var(--ink-800);
+        margin-bottom: 12px;
+        font-size: 1.05em;
       }
 
-      .question-points {
-        color: #667eea;
+      .points {
+        color: var(--indigo);
+        font-weight: 600;
         font-size: 0.9em;
-        margin-left: 10px;
+        margin-left: 6px;
+      }
+
+      .question p {
+        margin: 0 0 12px 0;
+        color: var(--ink-700);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: var(--ink-700);
       }
 
       input[type="text"],
@@ -179,46 +296,54 @@
       textarea {
         width: 100%;
         padding: 12px;
-        border: 2px solid #dee2e6;
-        border-radius: 6px;
-        font-size: 16px;
-        transition: border-color 0.3s;
+        border: 1px solid #c9d4ff;
+        border-radius: 10px;
+        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        box-sizing: border-box;
+        background: #fff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
       }
 
       input[type="text"]:focus,
       input[type="number"]:focus,
       select:focus,
       textarea:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: 2px solid var(--indigo);
+        outline-offset: 2px;
+        border-color: var(--indigo);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
       }
 
       textarea {
         min-height: 120px;
         resize: vertical;
-        font-family: inherit;
-        line-height: 1.6;
+      }
+
+      .two-column {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
       }
 
       .table-container {
         overflow-x: auto;
-        margin: 20px 0;
+        margin: 24px 0;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        background: white;
+        background: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
       }
 
       th {
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-        padding: 15px;
+        color: #fff;
+        padding: 16px 12px;
         text-align: center;
         font-weight: 600;
         font-size: 0.95em;
@@ -230,141 +355,98 @@
         text-align: center;
       }
 
+      td select,
       td input {
         width: 100%;
-        padding: 8px;
-        border: 2px solid #dee2e6;
-        border-radius: 4px;
+        padding: 10px;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+        justify-content: center;
+        margin: 32px 0 0;
+      }
+
+      .btn {
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-weight: 900;
+        font-size: var(--fs-btn);
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        min-height: 44px;
         text-align: center;
       }
 
-      .button-container {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        margin-top: 30px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 8px;
-      }
-
-      button {
-        padding: 15px 40px;
-        font-size: 18px;
-        font-weight: 600;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      .btn-export {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-      }
-
-      .btn-export:hover {
+      .btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
       }
 
-      .btn-clear {
-        background: #6c757d;
-        color: white;
+      .btn-primary {
+        background: linear-gradient(135deg, var(--indigo) 0%, var(--purple) 100%);
+        color: #fff;
       }
 
-      .btn-clear:hover {
-        background: #5a6268;
-        transform: translateY(-2px);
+      .btn-ghost {
+        background: #f7f7ff;
+        border: 1px solid #d9dfff;
+        color: #2b2c65;
       }
 
-      .info-box {
-        background: #e3f2fd;
-        border-left: 4px solid #2196f3;
-        padding: 20px;
-        margin: 15px 0;
-        border-radius: 8px;
-        color: #1976d2;
+      .muted {
+        font-size: 0.95em;
+        color: #555;
+        margin: 14px 0 0 0;
       }
 
-      .info-box strong {
-        display: block;
-        margin-bottom: 5px;
+      .is-invalid {
+        border-color: var(--danger) !important;
+        background: #fef2f2 !important;
       }
 
-      .formula-box {
-        background: #fff3cd;
-        border-left: 4px solid #856404;
-        padding: 15px;
-        margin: 15px 0;
-        border-radius: 4px;
-        font-family: "Courier New", monospace;
-        color: #856404;
-      }
-
-      .formula-box p {
-        margin: 8px 0;
-      }
-
-      .two-column {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      @media (max-width: 768px) {
-        .header h1 {
-          font-size: 1.8em;
+      @media (max-width: 900px) {
+        .container {
+          margin-top: 76px;
         }
+      }
 
-        .content {
-          padding: 15px;
+      @media (max-width: 700px) {
+        .container {
+          padding: 0 12px 32px;
         }
-
-        .button-container {
-          flex-direction: column;
+        .collapsible-container {
+          border-radius: 10px;
         }
+      }
 
-        button {
-          width: 100%;
+      @media (max-width: 480px) {
+        .container {
+          margin-bottom: 84px;
         }
+        .collapsible-header {
+          padding-left: 14px;
+          padding-right: 42px;
+        }
+      }
 
-        .two-column {
-          grid-template-columns: 1fr;
+      @media (max-width: 420px) {
+        :root {
+          --inline-lh: 1.45;
+        }
+        .btn {
+          font-size: 0.95em;
         }
       }
     </style>
   </head>
   <body>
-    <div
-      class="progress-indicator"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 8px 0;
-      "
-    >
-      <div
-        class="progress-bar"
-        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
-      >
-        <div
-          class="progress-fill"
-          id="progressBar"
-          style="
-            height: 8px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            display: block;
-          "
-        ></div>
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <span class="progress-fill" id="progressFill"></span>
       </div>
     </div>
 
@@ -374,30 +456,16 @@
         <p>Understanding Solar Declination and Sun Angles (30 Points)</p>
       </div>
 
-      <div class="content">
-        <!-- For This Lab Section -->
-        <div class="section">
-          <h2>📋 For This Lab</h2>
+      <div class="section">
+        <div class="collapsible-container">
           <div
-            style="
-              background: #e3f2fd;
-              border-left: 4px solid #2196f3;
-              padding: 20px;
-              border-radius: 8px;
-              margin-bottom: 25px;
-            "
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
           >
-            <h3
-              style="
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #1976d2;
-                font-size: 1.1em;
-              "
-            >
-              Instructions
-            </h3>
-            <ol style="margin: 0; padding-left: 25px; line-height: 2">
+            📋 For this Lab
+          </div>
+          <div class="collapsible-content">
+            <ol style="margin: 0; padding-left: 22px; line-height: 1.9">
               <li>
                 Study the Earth-Sun geometry concepts and diagrams carefully
               </li>
@@ -414,770 +482,804 @@
               </li>
               <li>Your work is automatically saved as you type</li>
               <li>
-                When complete, click
-                <strong>"Download file for Canvas Submission"</strong>
+                When complete, click <strong>"Download file for Canvas Submission"</strong>
               </li>
               <li>
-                Locate the downloaded file (<em>Lab04_EarthSunGeometry.txt</em>)
-                and upload it to Canvas
+                Locate the downloaded file
+                (<em>Lab04_EarthSunGeometry.txt</em>) and upload it to Canvas
               </li>
             </ol>
-            <p
-              style="
-                margin-top: 15px;
-                margin-bottom: 0;
-                font-size: 0.95em;
-                color: #555;
-              "
-            >
-              💡 <strong>Tip:</strong> Remember that Earth's 23.5° tilt is the
-              key to understanding seasons and the changing position of the Sun
-              throughout the year!
+            <p class="muted">
+              <strong>Tip:</strong> Earth's 23.5° tilt is the key to understanding
+              seasons and the changing position of the Sun throughout the year!
             </p>
           </div>
         </div>
+      </div>
 
-        <!-- Introduction Section -->
-        <div class="section">
-          <h2>📚 Introduction</h2>
-          <div class="intro-box">
-            <p>
-              <strong
-                >Earth's axis of rotation is tilted 23.5° from the
-                perpendicular</strong
-              >
-              and is oriented in the same direction throughout the year. Our
-              seasons occur because of this tilt, which we call the
-              <strong>solar declination</strong>.
-            </p>
-
-            <p>
-              As Earth revolves around the Sun, the Sun's direct rays strike
-              different latitudes. When the Northern Hemisphere is tilted toward
-              the Sun, it receives more direct and intense solar radiation. Six
-              months later, when the Southern Hemisphere is tilted toward the
-              Sun, it receives more direct solar radiation.
-            </p>
-
-            <p>
-              <strong>Key Concept:</strong> At any moment, there is a single
-              latitude where the Sun's rays are perpendicular. To a person at
-              this latitude, the Sun would appear directly overhead at noon.
-            </p>
-          </div>
-
-          <div class="info-box">
-            <strong>🌟 Important:</strong> Because Earth is approximately 150
-            million kilometers (93 million miles) from the Sun, we can assume
-            the Sun's rays strike Earth parallel with each other in straight
-            paths.
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Solstice-pic.png"
-              alt="Earth's orbital positions showing solstices and equinoxes"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 1: The 4 orientations of the Sun and Earth during our
-              equinoxes and solstices.
-            </div>
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Fig2.png"
-              alt="Profile view of sun rays striking Earth"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 2: Profile view showing how the angle of incoming Sun rays
-              strikes Earth at different latitudes.
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 1: December Solstice Questions -->
-        <div class="section">
-          <h2>Part 1: Equinox</h2>
-
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>90° for an observer at 0° latitude</strong>. The blue,
-              orange, and magenta arrows represent possibilities for the Sun
-              angle for an observer at 23.5° S. Additionally, the bottom half of
-              the figure shows three possibilities (left, center, right) for the
-              orientation of the Sun's incoming rays.
-            </p>
-          </div>
-
-          <div class="diagram-container">
-            <img src="Fig6.png" alt="December Solstice diagram" width="100%" />
-            <div class="image-caption">
-              Figure 3: Sun angles and Earth orientations for an Equinox
-            </div>
-          </div>
-
-          <h3>Question 1: Sun Angle for 23.5°S (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents the correct Sun angle for an observer at 23.5°S.
-          </p>
-          <div class="form-group">
-            <label for="q1">Arrow color:</label>
-            <select id="q1" required>
-              <option value="">Select an answer...</option>
-              <option value="blue">A: Blue</option>
-              <option value="orange">B: Orange</option>
-              <option value="magenta">C: Magenta</option>
-            </select>
-          </div>
-
-          <h3>Question 2: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q2">Earth orientation:</label>
-            <select id="q2" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <h3>Question 3: Months of Occurrence (2 pts)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the two months when this
-            orientation could have occurred.
-          </p>
-          <div class="form-group">
-            <label>Months:</label>
-            <div class="two-column">
-              <select id="q3a" required>
-                <option value="">Select an answer...</option>
-                <option value="march">March</option>
-                <option value="june">June</option>
-                <option value="september">September</option>
-                <option value="december">December</option>
-              </select>
-
-              <select id="q3b" required>
-                <option value="">Select an answer...</option>
-                <option value="march">March</option>
-                <option value="june">June</option>
-                <option value="eptember">September</option>
-                <option value="december">December</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!-- Section 2: Summer Solstice Questions -->
-        <div class="section">
-          <h2>Part 2: Summer Solstice in Northern Hemisphere</h2>
-
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>82.5° for an observer at 30°N latitude</strong>. The blue,
-              orange, green, and magenta arrows represent possibilities for the
-              Sun angle for observers at 0° and 66.5°N. Additionally, the bottom
-              half of the figure shows three possibilities (left, center, right)
-              for the orientation of the Sun's incoming rays to Earth.
-            </p>
-          </div>
-
-          <div class="diagram-container">
-            <img src="Fig5.png" alt="June Solstice diagram" width="100%" />
-            <div class="image-caption">
-              Figure 4: Sun angles and Earth orientations for Summer Solstice in
-              North America
-            </div>
-          </div>
-
-          <h3>Question 4: Correct Sun Angle Arrow (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents a correct Sun angle for one of the observers.
-          </p>
-          <div class="form-group">
-            <label for="q4">Arrow color:</label>
-            <select id="q4" required>
-              <option value="">Select an answer...</option>
-              <option value="green">A: Green</option>
-              <option value="blue">B: Blue</option>
-              <option value="orange">C: Orange</option>
-            </select>
-          </div>
-
-          <h3>Question 5: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q5">Earth orientation:</label>
-            <select id="q5" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <h3>Question 6: Month of Occurrence (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the month when this
-            orientation occurred.
-          </p>
-          <div class="form-group">
-            <label for="q6">Month:</label>
-            <select id="q6" required>
-              <option value="">Select an answer...</option>
-              <option value="march">March</option>
-              <option value="june">June</option>
-              <option value="september">September</option>
-              <option value="december">December</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Section 3: December at High Latitude -->
-        <div class="section">
-          <h2>Part 3: Winter Solstice in Northern Hemisphere</h2>
-
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>90° for an observer at 23.5°S latitude</strong>. The blue,
-              green, and magenta arrows represent possibilities for the Sun
-              angle for an observer at 66.5°N. Additionally, the bottom half of
-              the figure shows three possibilities (left, center, right) for the
-              orientation of the Sun's incoming rays.
-            </p>
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Fig7.png"
-              alt="December high latitude diagram"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 5: Sun angles and Earth orientations for December at high
-              northern latitude
-            </div>
-          </div>
-
-          <h3>Question 7: Correct Sun Angle Arrow (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents a possible correct Sun angle for the observer.
-          </p>
-          <div class="form-group">
-            <label for="q7">Arrow color:</label>
-            <select id="q7" required>
-              <option value="">Select an answer...</option>
-              <option value="blue">A: Blue</option>
-              <option value="magenta">B: Magenta</option>
-              <option value="green">C: Green</option>
-            </select>
-          </div>
-
-          <h3>Question 8: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q8">Earth orientation:</label>
-            <select id="q8" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <h3>Question 9: Month of Occurrence (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the month when this
-            orientation occurred.
-          </p>
-          <div class="form-group">
-            <label for="q9">Month:</label>
-            <select id="q9" required>
-              <option value="">Select an answer...</option>
-              <option value="march">March</option>
-              <option value="june">June</option>
-              <option value="eptember">September</option>
-              <option value="december">December</option>
-            </select>
-          </div>
-
-          <h3>Question 10: Sunbathing at 80°N (5 pts)</h3>
-          <p>
-            <strong>Instructions:</strong> On this day, a friend says they are
-            spending the day at 80°N and plan on trying to lay out and catch a
-            suntan. Explain to your friend why this does or doesn't make sense.
-            Be sure to discuss the Sun angle and length of daylight in your
-            response.
-          </p>
-          <div class="form-group">
-            <label for="q10">Your explanation:</label>
-            <textarea
-              id="q10"
-              placeholder="Your explanation here..."
-              rows="6"
-              required
-            ></textarea>
-            <div class="info-box">
-              <strong>💡 Hint:</strong> Consider that 80°N is inside the Arctic
-              Circle (66.5°N). What happens to sunlight at high latitudes during
-              the December solstice? Think about both the angle of the sun and
-              whether the sun even rises at this latitude on this date.
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 4: Understanding Sun Angle Calculations -->
-        <div class="section">
-          <h2>Part 4: Calculating Sun Angles</h2>
-
-          <div class="intro-box">
-            <h3>Key Definitions:</h3>
-            <ul>
-              <li>
-                <strong>Subsolar Point:</strong> The latitude at which the Sun
-                is directly overhead at solar noon
-              </li>
-              <li>
-                <strong>Zenith Angle:</strong> The angle between a point
-                directly overhead and the Sun at solar noon
-              </li>
-              <li>
-                <strong>Solar Elevation (Sun) Angle:</strong> The angle of the
-                Sun above the horizon at solar noon
-              </li>
-            </ul>
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Fig8.png"
-              alt="Zenith and solar elevation angles"
-              width="500"
-            />
-            <div class="image-caption">
-              Figure 6: Relationship between zenith angle and solar elevation
-              angle
-            </div>
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Fig9.png"
-              alt="Earth showing subsolar point and zenith angle"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 7: The zenith angle equals the latitude separation between
-              observer and subsolar point
-            </div>
-          </div>
-
-          <div class="intro-box">
-            <p>
-              As stated earlier, we assume that the Sun's rays strike Earth in
-              straight, parallel paths. This means that
-              <strong
-                >the zenith angle of any location is the same as the number of
-                degrees of latitude separating the location and the place
-                receiving direct solar rays</strong
-              >
-              (subsolar point).
-            </p>
-          </div>
-
-          <div class="formula-box">
-            <h3>📐 Calculation Method:</h3>
-            <p>
-              <strong>Step 1:</strong> Find the subsolar point (use analemma)
-            </p>
-            <p>
-              <strong>Step 2:</strong> Calculate latitude separation between
-              observer and subsolar point
-            </p>
-            <p>
-              <strong>Step 3:</strong> Sun Angle = 90° - Latitude Separation
-            </p>
-            <br />
-            <p>
-              <strong>Example:</strong> On September 5th at Omaha, NE (41°N):
-            </p>
-            <p>• Subsolar point: 7°N (from analemma)</p>
-            <p>• Latitude separation: 41° - 7° = 34°</p>
-            <p>• Sun angle: 90° - 34° = 56°</p>
-          </div>
-
-          <div class="diagram-container">
-            <img src="Fig10.png" alt="Analemma example" width="600" />
-            <div class="image-caption">
-              Figure 8: Example of using the analemma to find subsolar point for
-              September 5th
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 5: Analemma and Sun Angle Table -->
-        <div class="section">
-          <h2>Part 5: Sun Angle Calculations Table</h2>
-
-          <div class="info-box">
-            <strong>📋 Instructions:</strong> Use the analemma below to find the
-            subsolar point for each date, then calculate the sun angle for each
-            location. Each cell is worth 0.5 points.
-          </div>
-
-          <div class="diagram-container">
-            <img src="Fig11.png" alt="The Analemma" width="600" />
-            <div class="image-caption">
-              Figure 9: The Analemma - Use this to find the subsolar point for
-              any date of the year
-            </div>
-          </div>
-
-          <h2>
-            Question 11: Using the Analemma (15 pts total - 0.5 pt each cell)
-          </h2>
-          <p>
-            <strong>Instructions:</strong> Use the analemma to fill in the
-            missing values in the table below.
-          </p>
-
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Subsolar<br />Point</th>
-                  <th>Peru, NE<br />(40.5°N)<br />Sun Angle</th>
-                  <th>Wellington, NZ<br />(16°S)<br />Sun Angle</th>
-                  <th>Exeter, UK<br />(51°N)<br />Sun Angle</th>
-                  <th>Saint George<br />Island, FL (28.5°N)<br />Sun Angle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>22-Dec</strong></td>
-                  <td>
-                    <select id="t_a">
-                      <option value="">Select...</option>
-                      <option value="23.5S">23.5°S</option>
-                      <option value="0">0°</option>
-                      <option value="23.5N">23.5°N</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_b">
-                      <option value="">Select...</option>
-                      <option value="26.5">26.5°</option>
-                      <option value="30.5">30.5°</option>
-                      <option value="23.5">23.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_c">
-                      <option value="">Select...</option>
-                      <option value="52.5">52.5°</option>
-                      <option value="60.5">60.5°</option>
-                      <option value="46.5">46.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_d">
-                      <option value="">Select...</option>
-                      <option value="15">15°</option>
-                      <option value="20">20°</option>
-                      <option value="10">10°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_e">
-                      <option value="">Select...</option>
-                      <option value="38">38°</option>
-                      <option value="42">42°</option>
-                      <option value="33">33°</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>22-Mar</strong></td>
-                  <td>
-                    <select id="t_f">
-                      <option value="">Select...</option>
-                      <option value="0">0°</option>
-                      <option value="23.5S">23.5°S</option>
-                      <option value="10N">10°N</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_g">
-                      <option value="">Select...</option>
-                      <option value="50">50°</option>
-                      <option value="45">45°</option>
-                      <option value="55">55°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_h">
-                      <option value="">Select...</option>
-                      <option value="74">74°</option>
-                      <option value="80">80°</option>
-                      <option value="68">68°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_i">
-                      <option value="">Select...</option>
-                      <option value="39">39°</option>
-                      <option value="45">45°</option>
-                      <option value="33">33°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_j">
-                      <option value="">Select...</option>
-                      <option value="61.5">61.5°</option>
-                      <option value="67">67°</option>
-                      <option value="56">56°</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>22-Sep</strong></td>
-                  <td>
-                    <select id="t_k">
-                      <option value="">Select...</option>
-                      <option value="0">0°</option>
-                      <option value="10S">10°S</option>
-                      <option value="23.5N">23.5°N</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_l">
-                      <option value="">Select...</option>
-                      <option value="50">50°</option>
-                      <option value="45">45°</option>
-                      <option value="55">55°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_m">
-                      <option value="">Select...</option>
-                      <option value="74">74°</option>
-                      <option value="80">80°</option>
-                      <option value="68">68°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_n">
-                      <option value="">Select...</option>
-                      <option value="39">39°</option>
-                      <option value="45">45°</option>
-                      <option value="33">33°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_o">
-                      <option value="">Select...</option>
-                      <option value="61.5">61.5°</option>
-                      <option value="67">67°</option>
-                      <option value="56">56°</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>22-Jun</strong></td>
-                  <td>
-                    <select id="t_p">
-                      <option value="">Select...</option>
-                      <option value="23.5N">23.5°N</option>
-                      <option value="20N">20°N</option>
-                      <option value="0">0°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_q">
-                      <option value="">Select...</option>
-                      <option value="73">73°</option>
-                      <option value="68">68°</option>
-                      <option value="78">78°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_r">
-                      <option value="">Select...</option>
-                      <option value="30.5">30.5°</option>
-                      <option value="25">25°</option>
-                      <option value="35.5">35.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_s">
-                      <option value="">Select...</option>
-                      <option value="62.5">62.5°</option>
-                      <option value="67">67°</option>
-                      <option value="57.5">57.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_t">
-                      <option value="">Select...</option>
-                      <option value="85">85°</option>
-                      <option value="80">80°</option>
-                      <option value="90">90°</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <select id="t_date" style="width: 100px">
-                      <option value="">Select...</option>
-                      <option value="8-May">8-May</option>
-                      <option value="8-Apr">8-Apr</option>
-                      <option value="8-Jun">8-Jun</option>
-                    </select>
-                  </td>
-                  <td><strong>16.5°N</strong></td>
-                  <td>
-                    <select id="t_v">
-                      <option value="">Select...</option>
-                      <option value="66">66°</option>
-                      <option value="60">60°</option>
-                      <option value="71">71°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_w">
-                      <option value="">Select...</option>
-                      <option value="57.5">57.5°</option>
-                      <option value="52">52°</option>
-                      <option value="62.5">62.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_x">
-                      <option value="">Select...</option>
-                      <option value="55.5">55.5°</option>
-                      <option value="50">50°</option>
-                      <option value="60.5">60.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_y">
-                      <option value="">Select...</option>
-                      <option value="78">78°</option>
-                      <option value="73">73°</option>
-                      <option value="82">82°</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>3-Feb</strong></td>
-                  <td>
-                    <select id="t_z">
-                      <option value="">Select...</option>
-                      <option value="16.5S">16.5°S</option>
-                      <option value="20S">20°S</option>
-                      <option value="12S">12°S</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_aa">
-                      <option value="">Select...</option>
-                      <option value="33">33°</option>
-                      <option value="38">38°</option>
-                      <option value="28">28°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_ab">
-                      <option value="">Select...</option>
-                      <option value="89.5">89.5°</option>
-                      <option value="84">84°</option>
-                      <option value="90">90°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_ac">
-                      <option value="">Select...</option>
-                      <option value="22.5">22.5°</option>
-                      <option value="27.5">27.5°</option>
-                      <option value="17.5">17.5°</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select id="t_ad">
-                      <option value="">Select...</option>
-                      <option value="45">45°</option>
-                      <option value="50">50°</option>
-                      <option value="40">40°</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- Export Section -->
-        <div class="button-container">
-          <button class="btn-export" onclick="exportAnswers()">
-            📥 Export Answers for Canvas
-          </button>
-          <button class="btn-clear" onclick="clearForm()">
-            🗑️ Clear All Answers
-          </button>
-          <button
-            type="button"
-            class="help-btn"
-            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 4 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 4:%0D%0A%0D%0A'"
-            style="
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
-              padding: 12px 24px;
-              border: none;
-              border-radius: 8px;
-              cursor: pointer;
-              font-size: 1em;
-              font-weight: 600;
-              transition: transform 0.2s, box-shadow 0.2s;
-              margin-top: 10px;
-            "
-            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(102, 126, 234, 0.4)'"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)'"
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
           >
-            ❓ Questions, concerns, feedback, or need help?
-          </button>
+            📚 Introduction to Earth-Sun Geometry
+          </div>
+          <div class="collapsible-content">
+            <div class="intro-box">
+              <p>
+                <strong>Earth's axis of rotation is tilted 23.5° from the perpendicular</strong>
+                and is oriented in the same direction throughout the year. Our
+                seasons occur because of this tilt, which we call the
+                <strong>solar declination</strong>.
+              </p>
+              <p>
+                As Earth revolves around the Sun, the Sun's direct rays strike
+                different latitudes. When the Northern Hemisphere is tilted toward
+                the Sun, it receives more direct and intense solar radiation. Six
+                months later, when the Southern Hemisphere is tilted toward the
+                Sun, it receives more direct solar radiation.
+              </p>
+              <p>
+                <strong>Key Concept:</strong> At any moment, there is a single latitude
+                where the Sun's rays are perpendicular. To a person at this latitude,
+                the Sun would appear directly overhead at noon.
+              </p>
+            </div>
+
+            <div class="info-box">
+              <p>
+                <strong>🌟 Important:</strong> Because Earth is approximately 150 million
+                kilometers (93 million miles) from the Sun, we can assume the Sun's
+                rays strike Earth in parallel paths.
+              </p>
+            </div>
+
+            <div class="diagram-container">
+              <img
+                src="Solstice-pic.png"
+                alt="Earth's orbital positions showing solstices and equinoxes"
+              />
+              <div class="image-caption">
+                Figure 1: The four orientations of the Sun and Earth during our
+                equinoxes and solstices.
+              </div>
+            </div>
+
+            <div class="diagram-container">
+              <img
+                src="Fig2.png"
+                alt="Profile view of sun rays striking Earth"
+              />
+              <div class="image-caption">
+                Figure 2: Profile view showing how the angle of incoming Sun rays
+                strikes Earth at different latitudes.
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Part 1: Equinox Sun Angles
+          </div>
+          <div class="collapsible-content">
+            <div class="intro-box">
+              <p>
+                The diagram below shows the Sun angle for an observer at various
+                latitudes. The <strong>black arrow</strong> represents a correct solar
+                angle of <strong>90° for an observer at 0° latitude</strong>. The blue,
+                orange, and magenta arrows represent possibilities for the Sun angle
+                for an observer at 23.5°S. The bottom half of the figure shows three
+                possibilities (left, center, right) for the orientation of the Sun's
+                incoming rays.
+              </p>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig6.png" alt="Equinox diagram" />
+              <div class="image-caption">
+                Figure 3: Sun angles and Earth orientations for an Equinox.
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 1: Sun Angle for 23.5°S
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>
+                Determine which color arrow represents the correct Sun angle for an
+                observer at 23.5°S.
+              </p>
+              <div class="form-group">
+                <label for="q1">Arrow color</label>
+                <select id="q1" required>
+                  <option value="">Select an answer...</option>
+                  <option value="blue">A: Blue</option>
+                  <option value="orange">B: Orange</option>
+                  <option value="magenta">C: Magenta</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 2: Earth Orientation
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>
+                Identify which Earth orientation (left, center, or right) correctly
+                illustrates the orientation of the Sun's incoming rays to Earth's
+                surface.
+              </p>
+              <div class="form-group">
+                <label for="q2">Earth orientation</label>
+                <select id="q2" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 3: Months of Occurrence
+                <span class="points">(2 pts)</span>
+              </span>
+              <p>Identify the two months when this orientation could have occurred.</p>
+              <div class="two-column">
+                <select id="q3a" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="september">September</option>
+                  <option value="december">December</option>
+                </select>
+                <select id="q3b" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="september">September</option>
+                  <option value="december">December</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Part 2: Summer Solstice in the Northern Hemisphere
+          </div>
+          <div class="collapsible-content">
+            <div class="intro-box">
+              <p>
+                The diagram below shows the Sun angle for an observer at various
+                latitudes. The <strong>black arrow</strong> represents a correct solar
+                angle of <strong>82.5° for an observer at 30°N latitude</strong>. The blue,
+                orange, green, and magenta arrows represent possibilities for the Sun
+                angle for observers at 0° and 66.5°N. The bottom half of the figure
+                shows three possibilities (left, center, right) for the orientation of
+                the Sun's incoming rays to Earth.
+              </p>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig5.png" alt="June solstice diagram" />
+              <div class="image-caption">
+                Figure 4: Sun angles and Earth orientations for the Summer Solstice in
+                North America.
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 4: Correct Sun Angle Arrow
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>
+                Determine which color arrow represents a correct Sun angle for one of
+                the observers.
+              </p>
+              <div class="form-group">
+                <label for="q4">Arrow color</label>
+                <select id="q4" required>
+                  <option value="">Select an answer...</option>
+                  <option value="green">A: Green</option>
+                  <option value="blue">B: Blue</option>
+                  <option value="orange">C: Orange</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 5: Earth Orientation
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>
+                Identify which Earth orientation (left, center, or right) correctly
+                illustrates the orientation of the Sun's incoming rays to Earth's
+                surface.
+              </p>
+              <div class="form-group">
+                <label for="q5">Earth orientation</label>
+                <select id="q5" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 6: Month of Occurrence
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>Identify the month when this orientation occurred.</p>
+              <div class="form-group">
+                <label for="q6">Month</label>
+                <select id="q6" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="september">September</option>
+                  <option value="december">December</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Part 3: Winter Solstice in the Northern Hemisphere
+          </div>
+          <div class="collapsible-content">
+            <div class="intro-box">
+              <p>
+                The diagram below shows the Sun angle for an observer at various
+                latitudes. The <strong>black arrow</strong> represents a correct solar
+                angle of <strong>90° for an observer at 23.5°S latitude</strong>. The blue,
+                green, and magenta arrows represent possibilities for the Sun angle for
+                an observer at 66.5°N. The bottom half of the figure shows three
+                possibilities (left, center, right) for the orientation of the Sun's
+                incoming rays.
+              </p>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig7.png" alt="December high latitude diagram" />
+              <div class="image-caption">
+                Figure 5: Sun angles and Earth orientations for December at high
+                northern latitude.
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 7: Correct Sun Angle Arrow
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>Determine which color arrow represents a possible correct Sun angle.</p>
+              <div class="form-group">
+                <label for="q7">Arrow color</label>
+                <select id="q7" required>
+                  <option value="">Select an answer...</option>
+                  <option value="blue">A: Blue</option>
+                  <option value="magenta">B: Magenta</option>
+                  <option value="green">C: Green</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 8: Earth Orientation
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>
+                Identify which Earth orientation (left, center, or right) correctly
+                illustrates the orientation of the Sun's incoming rays to Earth's
+                surface.
+              </p>
+              <div class="form-group">
+                <label for="q8">Earth orientation</label>
+                <select id="q8" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 9: Month of Occurrence
+                <span class="points">(1 pt)</span>
+              </span>
+              <p>Identify the month when this orientation occurred.</p>
+              <div class="form-group">
+                <label for="q9">Month</label>
+                <select id="q9" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="september">September</option>
+                  <option value="december">December</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="question">
+              <span class="question-label">
+                Question 10: Sunbathing at 80°N
+                <span class="points">(5 pts)</span>
+              </span>
+              <p>
+                On this day, a friend says they are spending the day at 80°N and plan
+                on trying to lay out and catch a suntan. Explain why this does or
+                doesn't make sense. Discuss the Sun angle and length of daylight in
+                your response.
+              </p>
+              <div class="form-group">
+                <label for="q10">Your explanation</label>
+                <textarea
+                  id="q10"
+                  placeholder="Describe your explanation here..."
+                  rows="6"
+                  required
+                ></textarea>
+                <div class="info-box" style="margin-top: 12px">
+                  <p>
+                    <strong>💡 Hint:</strong> Consider that 80°N is inside the Arctic
+                    Circle (66.5°N). What happens to sunlight at high latitudes during
+                    the December solstice? Think about both the angle of the sun and
+                    whether the sun even rises at this latitude on this date.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Part 4: Calculating Sun Angles
+          </div>
+          <div class="collapsible-content">
+            <div class="intro-box">
+              <h3>Key Definitions</h3>
+              <ul>
+                <li>
+                  <strong>Subsolar Point:</strong> The latitude at which the Sun is
+                  directly overhead at solar noon.
+                </li>
+                <li>
+                  <strong>Zenith Angle:</strong> The angle between a point directly
+                  overhead and the Sun at solar noon.
+                </li>
+                <li>
+                  <strong>Solar Elevation (Sun) Angle:</strong> The angle of the Sun
+                  above the horizon at solar noon.
+                </li>
+              </ul>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig8.png" alt="Zenith and solar elevation angles" />
+              <div class="image-caption">
+                Figure 6: Relationship between zenith angle and solar elevation angle.
+              </div>
+            </div>
+
+            <div class="diagram-container">
+              <img
+                src="Fig9.png"
+                alt="Earth showing subsolar point and zenith angle"
+              />
+              <div class="image-caption">
+                Figure 7: The zenith angle equals the latitude separation between the
+                observer and subsolar point.
+              </div>
+            </div>
+
+            <div class="intro-box">
+              <p>
+                As stated earlier, we assume that the Sun's rays strike Earth in
+                straight, parallel paths. This means that
+                <strong>
+                  the zenith angle of any location is the same as the number of degrees
+                  of latitude separating the location and the place receiving direct
+                  solar rays
+                </strong>
+                (subsolar point).
+              </p>
+            </div>
+
+            <div class="formula-box">
+              <h3>📐 Calculation Method</h3>
+              <p><strong>Step 1:</strong> Find the subsolar point (use the analemma).</p>
+              <p>
+                <strong>Step 2:</strong> Calculate latitude separation between the
+                observer and subsolar point.
+              </p>
+              <p><strong>Step 3:</strong> Sun Angle = 90° − Latitude Separation.</p>
+              <br />
+              <p><strong>Example:</strong> On September 5th at Omaha, NE (41°N):</p>
+              <p>• Subsolar point: 7°N (from analemma)</p>
+              <p>• Latitude separation: 41° − 7° = 34°</p>
+              <p>• Sun angle: 90° − 34° = 56°</p>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig10.png" alt="Analemma example" />
+              <div class="image-caption">
+                Figure 8: Example of using the analemma to find the subsolar point for
+                September 5th.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Part 5: Sun Angle Calculations Table
+          </div>
+          <div class="collapsible-content">
+            <div class="info-box">
+              <p>
+                <strong>📋 Instructions:</strong> Use the analemma below to find the
+                subsolar point for each date, then calculate the sun angle for each
+                location. Each cell is worth 0.5 points.
+              </p>
+            </div>
+
+            <div class="diagram-container">
+              <img src="Fig11.png" alt="The Analemma" />
+              <div class="image-caption">
+                Figure 9: The Analemma – use this to find the subsolar point for any
+                date of the year.
+              </div>
+            </div>
+
+            <div class="question" style="margin-top: 28px">
+              <span class="question-label">
+                Question 11: Using the Analemma
+                <span class="points">(15 pts total – 0.5 pt each cell)</span>
+              </span>
+              <p>
+                Use the analemma to fill in the missing values in the table below.
+              </p>
+
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Subsolar<br />Point</th>
+                      <th>Peru, NE<br />(40.5°N)<br />Sun Angle</th>
+                      <th>Wellington, NZ<br />(16°S)<br />Sun Angle</th>
+                      <th>Exeter, UK<br />(51°N)<br />Sun Angle</th>
+                      <th>Saint George<br />Island, FL (28.5°N)<br />Sun Angle</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>22-Dec</strong></td>
+                      <td>
+                        <select id="t_a">
+                          <option value="">Select...</option>
+                          <option value="23.5S">23.5°S</option>
+                          <option value="0">0°</option>
+                          <option value="23.5N">23.5°N</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_b">
+                          <option value="">Select...</option>
+                          <option value="26.5">26.5°</option>
+                          <option value="30.5">30.5°</option>
+                          <option value="23.5">23.5°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_c">
+                          <option value="">Select...</option>
+                          <option value="52.5">52.5°</option>
+                          <option value="60.5">60.5°</option>
+                          <option value="46.5">46.5°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_d">
+                          <option value="">Select...</option>
+                          <option value="15">15°</option>
+                          <option value="20">20°</option>
+                          <option value="10">10°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_e">
+                          <option value="">Select...</option>
+                          <option value="38">38°</option>
+                          <option value="42">42°</option>
+                          <option value="33">33°</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>22-Mar</strong></td>
+                      <td>
+                        <select id="t_f">
+                          <option value="">Select...</option>
+                          <option value="0">0°</option>
+                          <option value="23.5S">23.5°S</option>
+                          <option value="10N">10°N</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_g">
+                          <option value="">Select...</option>
+                          <option value="50">50°</option>
+                          <option value="45">45°</option>
+                          <option value="55">55°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_h">
+                          <option value="">Select...</option>
+                          <option value="74">74°</option>
+                          <option value="80">80°</option>
+                          <option value="68">68°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_i">
+                          <option value="">Select...</option>
+                          <option value="39">39°</option>
+                          <option value="45">45°</option>
+                          <option value="33">33°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_j">
+                          <option value="">Select...</option>
+                          <option value="61.5">61.5°</option>
+                          <option value="67">67°</option>
+                          <option value="56">56°</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>22-Sep</strong></td>
+                      <td>
+                        <select id="t_k">
+                          <option value="">Select...</option>
+                          <option value="0">0°</option>
+                          <option value="10S">10°S</option>
+                          <option value="23.5N">23.5°N</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_l">
+                          <option value="">Select...</option>
+                          <option value="50">50°</option>
+                          <option value="45">45°</option>
+                          <option value="55">55°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_m">
+                          <option value="">Select...</option>
+                          <option value="74">74°</option>
+                          <option value="80">80°</option>
+                          <option value="68">68°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_n">
+                          <option value="">Select...</option>
+                          <option value="39">39°</option>
+                          <option value="45">45°</option>
+                          <option value="33">33°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_o">
+                          <option value="">Select...</option>
+                          <option value="61.5">61.5°</option>
+                          <option value="67">67°</option>
+                          <option value="56">56°</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>22-Jun</strong></td>
+                      <td>
+                        <select id="t_p">
+                          <option value="">Select...</option>
+                          <option value="23.5N">23.5°N</option>
+                          <option value="20N">20°N</option>
+                          <option value="0">0°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_q">
+                          <option value="">Select...</option>
+                          <option value="73">73°</option>
+                          <option value="68">68°</option>
+                          <option value="78">78°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_r">
+                          <option value="">Select...</option>
+                          <option value="30.5">30.5°</option>
+                          <option value="25">25°</option>
+                          <option value="35.5">35.5°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_s">
+                          <option value="">Select...</option>
+                          <option value="62.5">62.5°</option>
+                          <option value="67">67°</option>
+                          <option value="57.5">57.5°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_t">
+                          <option value="">Select...</option>
+                          <option value="85">85°</option>
+                          <option value="80">80°</option>
+                          <option value="90">90°</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select id="t_date" style="width: 110px">
+                          <option value="">Select...</option>
+                          <option value="8-May">8-May</option>
+                          <option value="8-Apr">8-Apr</option>
+                          <option value="8-Jun">8-Jun</option>
+                        </select>
+                      </td>
+                      <td><strong>16.5°N</strong></td>
+                      <td>
+                        <select id="t_v">
+                          <option value="">Select...</option>
+                          <option value="66">66°</option>
+                          <option value="60">60°</option>
+                          <option value="71">71°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_w">
+                          <option value="">Select...</option>
+                          <option value="57.5">57.5°</option>
+                          <option value="52">52°</option>
+                          <option value="62.5">62.5°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_x">
+                          <option value="">Select...</option>
+                          <option value="43">43°</option>
+                          <option value="38">38°</option>
+                          <option value="48">48°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_y">
+                          <option value="">Select...</option>
+                          <option value="77.5">77.5°</option>
+                          <option value="72">72°</option>
+                          <option value="82.5">82.5°</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Custom Date</strong></td>
+                      <td>
+                        <select id="t_z">
+                          <option value="">Select...</option>
+                          <option value="10N">10°N</option>
+                          <option value="0">0°</option>
+                          <option value="15S">15°S</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_aa">
+                          <option value="">Select...</option>
+                          <option value="70">70°</option>
+                          <option value="65">65°</option>
+                          <option value="75">75°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_ab">
+                          <option value="">Select...</option>
+                          <option value="60">60°</option>
+                          <option value="55">55°</option>
+                          <option value="65">65°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_ac">
+                          <option value="">Select...</option>
+                          <option value="35">35°</option>
+                          <option value="40">40°</option>
+                          <option value="30">30°</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select id="t_ad">
+                          <option value="">Select...</option>
+                          <option value="80">80°</option>
+                          <option value="75">75°</option>
+                          <option value="85">85°</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="btn btn-primary" onclick="exportAnswers()">
+          📥 Download file for Canvas Submission
+        </button>
+        <button type="button" class="btn btn-ghost" onclick="clearForm()">
+          🗑️ Clear All Answers
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 4 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 4:%0D%0A%0D%0A'"
+        >
+          ❓ Questions, concerns, feedback, or need help?
+        </button>
       </div>
     </div>
 
     <script>
-      // Validation functions
       function validateSelect(select) {
         const value = select.value.trim();
 
@@ -1220,7 +1322,6 @@
           emptyTableCells: [],
         };
 
-        // Questions 1-9 - Dropdowns
         for (let i = 1; i <= 9; i++) {
           const id = i === 3 ? ["q3a", "q3b"] : [`q${i}`];
           id.forEach((qId) => {
@@ -1233,7 +1334,6 @@
           });
         }
 
-        // Question 10 - Textarea
         const q10 = document.getElementById("q10");
         const q10Value = q10.value.trim();
         if (!q10Value) {
@@ -1253,7 +1353,6 @@
           q10.style.backgroundColor = "";
         }
 
-        // Table questions t_a through t_ad
         const tableIds = [
           "a",
           "b",
@@ -1331,36 +1430,32 @@
         return isValid;
       }
 
-      // Progress bar tracking
       function updateProgress() {
         const inputs = document.querySelectorAll(
-          'input[type="text"]:not(#studentName):not(#studentId), input[type="number"], select, textarea'
+          'input[type="text"], input[type="number"], select, textarea'
         );
         let filled = 0;
         inputs.forEach((input) => {
           if (input.value.trim() !== "") filled++;
         });
         const progress = (filled / inputs.length) * 100;
-        document.getElementById("progressBar").style.width = progress + "%";
+        document.getElementById("progressFill").style.width = progress + "%";
       }
 
-      // Add event listeners to all inputs
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", () => {
         const inputs = document.querySelectorAll("input, select, textarea");
         inputs.forEach((input) => {
           input.addEventListener("input", updateProgress);
           input.addEventListener("change", updateProgress);
         });
+        updateProgress();
       });
 
-      // Export answers function for Canvas LMS auto-grading
       function exportAnswers() {
-        // Validate before exporting
         if (!validateAllInputs()) {
           return;
         }
 
-        // Canvas LMS compatible format
         let output = "";
 
         output += "ASSIGNMENT=Lab4_Earth_Sun_Geometry\n";
@@ -1368,18 +1463,15 @@
         output += "TOTAL_POINTS=30\n";
         output += "---BEGIN_ANSWERS---\n";
 
-        // Part 1 (4 points)
         output += "Q1=" + document.getElementById("q1").value + "\n";
         output += "Q2=" + document.getElementById("q2").value + "\n";
         output += "Q3A=" + document.getElementById("q3a").value + "\n";
         output += "Q3B=" + document.getElementById("q3b").value + "\n";
 
-        // Part 2 (3 points)
         output += "Q4=" + document.getElementById("q4").value + "\n";
         output += "Q5=" + document.getElementById("q5").value + "\n";
         output += "Q6=" + document.getElementById("q6").value + "\n";
 
-        // Part 3 (8 points)
         output += "Q7=" + document.getElementById("q7").value + "\n";
         output += "Q8=" + document.getElementById("q8").value + "\n";
         output += "Q9=" + document.getElementById("q9").value + "\n";
@@ -1388,7 +1480,6 @@
           document.getElementById("q10").value.replace(/\n/g, " ") +
           "\n";
 
-        // Part 5 - Table (15 points - 0.5 each)
         const tableIds = [
           "a",
           "b",
@@ -1430,7 +1521,6 @@
 
         output += "---END_ANSWERS---\n";
 
-        // Create and download file
         const blob = new Blob([output], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -1449,7 +1539,6 @@
         );
       }
 
-      // Clear form function
       function clearForm() {
         if (
           confirm(
@@ -1457,20 +1546,21 @@
           )
         ) {
           const inputs = document.querySelectorAll(
-            'input[type="text"]:not(#studentName):not(#studentId), input[type="number"], select, textarea'
+            'input[type="text"], input[type="number"], select, textarea'
           );
           inputs.forEach((input) => {
             input.value = "";
+            input.style.borderColor = "";
+            input.style.backgroundColor = "";
           });
           updateProgress();
           alert("✅ All answers have been cleared.");
         }
       }
 
-      // Prevent accidental page navigation
       window.addEventListener("beforeunload", function (e) {
         const inputs = document.querySelectorAll(
-          'input[type="text"]:not(#studentName):not(#studentId), input[type="number"], select, textarea'
+          'input[type="text"], input[type="number"], select, textarea'
         );
         let hasContent = false;
         inputs.forEach((input) => {
@@ -1480,6 +1570,21 @@
         if (hasContent) {
           e.preventDefault();
           e.returnValue = "";
+        }
+      });
+
+      function toggleCollapsible(header) {
+        const content = header.nextElementSibling;
+        const collapsed = content.classList.toggle("is-collapsed");
+        header.classList.toggle("is-collapsed", collapsed);
+      }
+
+      document.querySelectorAll(".collapsible-header").forEach((header) => {
+        const startClosed = false;
+        if (startClosed) {
+          header.classList.add("is-collapsed");
+          const content = header.nextElementSibling;
+          if (content) content.classList.add("is-collapsed");
         }
       });
     </script>

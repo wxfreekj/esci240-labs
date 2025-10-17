@@ -1,4 +1,4 @@
-﻿{
+{
   "folders": [
     {
       "path": "."
@@ -17,7 +17,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[python]": {
       "editor.defaultFormatter": "ms-python.black-formatter"
-    }
+    },
+    "terminal.integrated.scrollback": 2000
   },
   "extensions": {
     "recommendations": [

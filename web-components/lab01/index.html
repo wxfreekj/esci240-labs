@@ -2,41 +2,291 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lab 1: Nature of Science</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Lab 1 - Nature of Science</title>
+
+    <!-- Optional shared styles (kept for your project structure) -->
     <link rel="stylesheet" href="shared/styles/common.css" />
     <link rel="stylesheet" href="shared/styles/lab-styles.css" />
-  </head>
-  <body>
-    <!-- Progress Indicator -->
-    <div
-      class="progress-indicator"
-      style="
+
+    <style>
+      :root {
+        --indigo: #667eea;
+        --indigo-dark: #5a67d8;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --surface-2: #e8f0fe;
+        --ink-900: #1d263b;
+        --ink-800: #23335a;
+        --ink-700: #3a4a7a;
+        --ink-600: #4d5c8e;
+        --ink-500: #6a76a8;
+        --danger: #dc2626;
+        --radius: 12px;
+
+        /* Mobile-first typography */
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-h2: clamp(1.05rem, 1.8vw + 0.9rem, 1.25rem);
+        --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+        --fs-btn: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px; /* touch target minimum */
+      }
+
+      /* Page chrome */
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink-700);
+        background: #fff;
+        font-size: var(--fs-body);
+        line-height: 1.5;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 80px auto 72px;
+        padding: 0 16px;
+      }
+
+      .header h1 {
+        margin: 0 0 6px 0;
+        font-size: var(--fs-h1);
+        color: var(--ink-100);
+      }
+
+      .header p {
+        margin: 0;
+        color: #c6c6c7;
+        font-weight: 600;
+        font-size: 0.98em;
+      }
+
+      /* Top progress bar */
+      .progress-indicator {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 1000;
         background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: saturate(120%) blur(4px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         padding: 8px 0;
-      "
-    >
-      <div
-        class="progress-bar"
-        style="width: 100%; height: 8px; background: #e0e0e0; overflow: hidden"
-      >
-        <div
-          class="progress-fill"
-          id="progressFill"
-          style="
-            height: 8px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            display: block;
-          "
-        ></div>
+        padding-top: env(safe-area-inset-top);
+      }
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        width: 0%;
+        transition: width 0.3s ease;
+        display: block;
+      }
+
+      /* Section wrapper */
+      .section {
+        margin: 0 0 16px 0;
+      }
+
+      /* Collapsible blocks (cards) */
+      .collapsible-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
+      }
+
+      .collapsible-header {
+        margin: 0;
+        padding: max(var(--pad-header-y), 12px) 48px
+          max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 800;
+        color: #1f3b82;
+        background: var(--surface);
+        min-height: var(--hit-area);
+        display: flex;
+        align-items: center;
+      }
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease;
+      }
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+      }
+
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: var(--pad-card);
+        border-top: 1px solid #e5ecff;
+      }
+      .collapsible-content.is-collapsed {
+        display: none;
+      }
+
+      /* Forms */
+      textarea {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #c9d4ff;
+        border-radius: 10px;
+        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif; /* 16px avoids iOS zoom */
+        box-sizing: border-box;
+        background: #fff;
+        min-height: 110px;
+        resize: vertical;
+      }
+      .is-invalid {
+        border-color: var(--danger) !important;
+        background: #fef2f2 !important;
+      }
+      textarea:focus-visible {
+        outline: 2px solid var(--indigo);
+        outline-offset: 2px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--ink-700);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      /* Bottom buttons */
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        justify-content: center;
+        margin: 28px 0;
+      }
+      @media (min-width: 700px) {
+        .button-row {
+          grid-template-columns: repeat(3, minmax(220px, 1fr));
+        }
+      }
+      .btn {
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-weight: 900;
+        font-size: var(--fs-btn);
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        min-height: 44px;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      }
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        color: #fff;
+      }
+      .btn-ghost {
+        background: #f7f7ff;
+        border: 1px solid #d9dfff;
+        color: #2b2c65;
+      }
+
+      .muted {
+        font-size: 0.95em;
+        color: #555;
+        margin: 14px 0 0 0;
+      }
+
+      /* Motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+
+      /* Responsive container spacing */
+      @media (max-width: 900px) {
+        .container {
+          margin-top: 76px;
+        }
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 0 12px;
+        }
+        .collapsible-container {
+          border-radius: 10px;
+        }
+      }
+      @media (max-width: 480px) {
+        .container {
+          margin-bottom: 84px;
+        }
+        .collapsible-header {
+          padding-left: 14px;
+          padding-right: 42px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- progress -->
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
       </div>
     </div>
 
@@ -46,31 +296,18 @@
         <p>Understanding Scientific Principles and Methods (30 Points)</p>
       </div>
 
-      <div class="content">
-        <!-- For this Lab Section -->
-        <div class="section">
-          <h2>📋 For This Lab</h2>
+      <!-- For This Lab (collapsible) -->
+      <div class="section">
+        <div class="collapsible-container">
           <div
-            class="info-box"
-            style="
-              background: #e3f2fd;
-              border-left: 4px solid #2196f3;
-              padding: 20px;
-              border-radius: 8px;
-              margin-bottom: 25px;
-            "
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+            style="top: -1px"
           >
-            <h3
-              style="
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #1976d2;
-                font-size: 1.1em;
-              "
-            >
-              Instructions
-            </h3>
-            <ol style="margin: 0; padding-left: 25px; line-height: 2">
+            📋 For this Lab
+          </div>
+          <div class="collapsible-content">
+            <ol style="margin: 0; padding-left: 22px; line-height: 1.9">
               <li>Read the required chapter before beginning</li>
               <li>Answer all six questions in the text boxes provided</li>
               <li>
@@ -83,29 +320,29 @@
                 <strong>"Download file for Canvas Submission"</strong>
               </li>
               <li>
-                Locate the downloaded file (<em>Lab01_NatureOfScience.txt</em>)
-                and upload it to Canvas
+                Locate <em>Lab01_NatureOfScience.txt</em> and upload it to
+                Canvas
               </li>
             </ol>
-            <p
-              style="
-                margin-top: 15px;
-                margin-bottom: 0;
-                font-size: 0.95em;
-                color: #555;
-              "
-            >
+            <p class="muted">
               <strong>💡 Tip:</strong> Each question requires a minimum of 20
               characters. Take your time to provide thoughtful, complete
               responses.
             </p>
           </div>
         </div>
+      </div>
 
-        <!-- Introduction Section -->
-        <div class="section">
-          <h2>📖 Introduction</h2>
-          <div class="intro-box">
+      <!-- Introduction -->
+      <div class="section">
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-indigo"
+            onclick="toggleCollapsible(this)"
+          >
+            📖 Introduction
+          </div>
+          <div class="collapsible-content">
             <p>
               This lab explores the fundamental principles of scientific inquiry
               and methodology. You'll examine the assumptions scientists make,
@@ -118,15 +355,26 @@
               <a
                 href="http://www.project2061.org/publications/sfaa/online/chap1.htm"
                 target="_blank"
+                style="color: var(--indigo); font-weight: 800"
               >
                 Science for All Americans - Chapter 1
               </a>
             </p>
           </div>
         </div>
-        <form id="questionForm">
-          <div class="section">
-            <h3>Question 1: Assumptions in Science (6 pts)</h3>
+      </div>
+
+      <!-- FORM -->
+      <form id="questionForm">
+        <!-- Q1 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 1: Assumptions in Science (6 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q1a"
                 >Describe two of the assumptions or common beliefs shared by
@@ -144,23 +392,39 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="section">
-            <h3>Question 2: Scientific Method (3 pts)</h3>
+        <!-- Q2 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 2: Scientific Method (3 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q2"
                 >What are the fixed steps of science that scientists always
-                follow when conducting research? (3 pts)
-              </label>
+                follow when conducting research? (3 pts)</label
+              >
               <textarea
                 id="q2"
                 placeholder="Enter your answer here..."
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="section">
-            <h3>Question 3: Testing Past Events (3 pts)</h3>
+        <!-- Q3 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 3: Testing Past Events (3 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q3"
                 >Since scientific ideas are often validated by making
@@ -173,9 +437,17 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="section">
-            <h3>Question 4: Minimizing Bias (6 pts)</h3>
+        <!-- Q4 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 4: Minimizing Bias (6 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q4a"
                 >How might a scientist introduce bias into their data
@@ -197,9 +469,17 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="section">
-            <h3>Question 5: Science and Authority (6 pts)</h3>
+        <!-- Q5 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 5: Science and Authority (6 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q5a"
                 >What does it mean to say that science is not based on
@@ -221,9 +501,17 @@
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="section">
-            <h3>Question 6: Ethical Challenges (6 pts)</h3>
+        <!-- Q6 -->
+        <div class="collapsible-container">
+          <div
+            class="collapsible-header stripe-blue"
+            onclick="toggleCollapsible(this)"
+          >
+            Question 6: Ethical Challenges (6 pts)
+          </div>
+          <div class="collapsible-content">
             <div class="form-group">
               <label for="q6a"
                 >Describe one of the ethical challenges faced in scientific
@@ -238,80 +526,47 @@
               >
               <textarea
                 id="q6b"
-                placeholder="How migh scientists address eithical challenges in their research?"
+                placeholder="How might scientists address ethical challenges in their research?"
               ></textarea>
             </div>
           </div>
+        </div>
 
-          <div
-            class="button-container"
-            style="
-              display: flex;
-              gap: 10px;
-              flex-wrap: wrap;
-              justify-content: center;
-              margin-top: 30px;
-            "
+        <!-- Buttons -->
+        <div class="button-row">
+          <button type="button" class="btn btn-primary" id="downloadBtn">
+            📥 Download file for Canvas Submission
+          </button>
+          <button type="button" class="btn btn-ghost" id="clearBtn">
+            🗑️ Clear All Answers
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 1 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 1:%0D%0A%0D%0A'"
           >
-            <button
-              type="button"
-              class="download-btn"
-              onclick="downloadAnswers()"
-              style="flex: 1; min-width: 200px"
-            >
-              📥 Download file for Canvas Submission
-            </button>
-            <button
-              type="button"
-              class="clear-btn"
-              onclick="clearForm()"
-              style="flex: 1; min-width: 200px"
-            >
-              🗑️ Clear All Answers
-            </button>
-            <button
-              type="button"
-              class="help-btn"
-              onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 1 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 1:%0D%0A%0D%0A'"
-              style="
-                flex: 1;
-                min-width: 200px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 12px 24px;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: 600;
-                transition: transform 0.2s, box-shadow 0.2s;
-              "
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(102, 126, 234, 0.4)'"
-              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)'"
-            >
-              ❓ Questions, concerns, feedback, or need help?
-            </button>
-          </div>
-        </form>
-      </div>
+            ❓ Questions, concerns, feedback, or need help?
+          </button>
+        </div>
+      </form>
     </div>
 
     <script>
-      // Update progress indicator based on points
+      /* ---------- Progress ---------- */
       function updateProgress() {
-        let earnedPoints = 0;
-        const totalPoints = 30; // 6+3+3+6+6+6 = 30 points
-        const questionPoints = {
+        let earned = 0;
+        const total = 30;
+        const points = {
           q1a: 3,
-          q1b: 3, // Q1: 6 pts total (3 each)
-          q2: 3, // Q2: 3 pts
-          q3: 3, // Q3: 3 pts
+          q1b: 3,
+          q2: 3,
+          q3: 3,
           q4a: 3,
-          q4b: 3, // Q4: 6 pts total (3 each)
+          q4b: 3,
           q5a: 3,
-          q5b: 3, // Q5: 6 pts total (3 each)
+          q5b: 3,
           q6a: 3,
-          q6b: 3, // Q6: 6 pts total (3 each)
+          q6b: 3,
         };
 
         const fields = [
@@ -329,22 +584,15 @@
 
         fields.forEach((field) => {
           const answer = document.getElementById(field).value.trim();
-          if (answer) {
-            earnedPoints += questionPoints[field];
-          }
+          if (answer) earned += points[field];
         });
 
-        const percentage = (earnedPoints / totalPoints) * 100;
-
-        const progressFillElement = document.getElementById("progressFill");
-
-        if (progressFillElement) {
-          progressFillElement.style.width = percentage + "%";
-        }
+        document.getElementById("progressFill").style.width =
+          (earned / total) * 100 + "%";
       }
 
-      // Load saved answers from localStorage when page loads
-      window.addEventListener("load", function () {
+      /* ---------- Auto-save ---------- */
+      window.addEventListener("load", () => {
         const fields = [
           "q1a",
           "q1b",
@@ -359,66 +607,24 @@
         ];
         fields.forEach((field) => {
           const saved = localStorage.getItem(field);
-          if (saved) {
-            document.getElementById(field).value = saved;
-          }
+          if (saved) document.getElementById(field).value = saved;
         });
-        // Update progress after loading saved values
         updateProgress();
       });
 
-      // Save answers to localStorage as user types
       document.querySelectorAll("textarea").forEach((textarea) => {
         textarea.addEventListener("input", function () {
           localStorage.setItem(this.id, this.value);
           updateProgress();
         });
-
-        // Add validation on blur
-        textarea.addEventListener("blur", function () {
-          validateTextarea(this);
-        });
       });
 
-      function validateTextarea(textarea) {
-        const minLength = 20;
-        const value = textarea.value.trim();
-
-        // Clear previous errors
-        const existingError =
-          textarea.parentElement.querySelector(".validation-error");
-        if (existingError) {
-          existingError.remove();
-        }
-        textarea.style.borderColor = "";
-        textarea.style.backgroundColor = "";
-
-        if (value && value.length < minLength) {
-          textarea.style.borderColor = "#dc2626";
-          textarea.style.backgroundColor = "#fef2f2";
-
-          const errorDiv = document.createElement("div");
-          errorDiv.className = "validation-error";
-          errorDiv.style.color = "#dc2626";
-          errorDiv.style.fontSize = "0.875rem";
-          errorDiv.style.marginTop = "0.25rem";
-          errorDiv.textContent =
-            "⚠️ Please provide more detail (at least " +
-            minLength +
-            " characters)";
-
-          textarea.parentElement.appendChild(errorDiv);
-          return false;
-        }
-        return true;
-      }
-
-      function downloadAnswers() {
-        // Validate all answers before downloading
-        let allValid = true;
-        const emptyQuestions = [];
-        const shortQuestions = [];
-
+      /* ---------- Validation ---------- */
+      function validateAllInputs() {
+        let ok = true,
+          firstBad = null;
+        const empty = [],
+          short = [];
         const fields = [
           "q1a",
           "q1b",
@@ -434,41 +640,44 @@
 
         fields.forEach((field) => {
           const textarea = document.getElementById(field);
-          const value = textarea.value.trim();
+          const val = textarea.value.trim();
 
-          if (!value) {
-            emptyQuestions.push(field);
-            allValid = false;
-          } else if (!validateTextarea(textarea)) {
-            shortQuestions.push(field);
-            allValid = false;
+          textarea.classList.remove("is-invalid");
+
+          if (!val) {
+            empty.push(field);
+            textarea.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = textarea;
+          } else if (val.length < 20) {
+            short.push(field);
+            textarea.classList.add("is-invalid");
+            ok = false;
+            if (!firstBad) firstBad = textarea;
           }
         });
 
-        if (!allValid) {
-          let message = "Please complete the following before downloading:\n\n";
-          if (emptyQuestions.length > 0) {
-            message += "Empty fields: " + emptyQuestions.join(", ") + "\n";
+        if (!ok) {
+          let msg = "Please complete the following before downloading:\n\n";
+          if (empty.length) msg += `Empty fields: ${empty.join(", ")}\n`;
+          if (short.length)
+            msg += `Fields needing more detail (min 20 chars): ${short.join(
+              ", "
+            )}`;
+          alert(msg);
+          if (firstBad) {
+            firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstBad.focus();
           }
-          if (shortQuestions.length > 0) {
-            message +=
-              "Fields needing more detail: " + shortQuestions.join(", ");
-          }
-          alert(message);
-
-          // Scroll to first error
-          const firstError = document.getElementById(
-            emptyQuestions[0] || shortQuestions[0]
-          );
-          if (firstError) {
-            firstError.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-          return;
         }
+        return ok;
+      }
+
+      /* ---------- Download ---------- */
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        if (!validateAllInputs()) return;
 
         const answers = [];
-
-        // Header with metadata
         answers.push("LAB: 01");
         answers.push("TITLE: The Nature of Science");
         answers.push("COURSE: ESCI 240");
@@ -477,7 +686,7 @@
         answers.push("=".repeat(70));
         answers.push("");
 
-        // Question 1 - Split format
+        // Q1
         answers.push("[QUESTION_1]");
         answers.push("POINTS: 6");
         answers.push("TYPE: split");
@@ -493,7 +702,7 @@
         answers.push("[/QUESTION_1]");
         answers.push("");
 
-        // Question 2
+        // Q2
         answers.push("[QUESTION_2]");
         answers.push("POINTS: 3");
         answers.push("TYPE: essay");
@@ -507,12 +716,12 @@
         answers.push("[/QUESTION_2]");
         answers.push("");
 
-        // Question 3
+        // Q3
         answers.push("[QUESTION_3]");
         answers.push("POINTS: 3");
         answers.push("TYPE: essay");
         answers.push(
-          "PROMPT: Since scientific ideas are often validated by making predictions about future events, how can scientists test or validate ideas about events that happened in the past?"
+          "PROMPT: How can scientists test or validate ideas about events that happened in the past?"
         );
         answers.push("");
         answers.push("[ANSWER]");
@@ -521,7 +730,7 @@
         answers.push("[/QUESTION_3]");
         answers.push("");
 
-        // Question 4 - Split format
+        // Q4
         answers.push("[QUESTION_4]");
         answers.push("POINTS: 6");
         answers.push("TYPE: split");
@@ -545,7 +754,7 @@
         answers.push("[/QUESTION_4]");
         answers.push("");
 
-        // Question 5 - Split format
+        // Q5
         answers.push("[QUESTION_5]");
         answers.push("POINTS: 6");
         answers.push("TYPE: split");
@@ -569,49 +778,46 @@
         answers.push("[/QUESTION_5]");
         answers.push("");
 
-        // Question 6 - Split format
+        // Q6
         answers.push("[QUESTION_6]");
         answers.push("POINTS: 6");
         answers.push("TYPE: split");
-        answers.push(
-          "PROMPT: Identify and briefly explain two common ethical challenges that scientists may face in their work."
-        );
+        answers.push("PROMPT: Ethical Challenges");
         answers.push("");
         answers.push("[PART_A]");
-        answers.push("Ethical Challenge 1:");
+        answers.push("Ethical Challenge:");
         answers.push("");
         answers.push(document.getElementById("q6a").value.trim());
         answers.push("[/PART_A]");
         answers.push("");
         answers.push("[PART_B]");
-        answers.push("Ethical Challenge 2:");
+        answers.push("How to address:");
         answers.push("");
         answers.push(document.getElementById("q6b").value.trim());
         answers.push("[/PART_B]");
         answers.push("[/QUESTION_6]");
         answers.push("");
 
-        // Footer
         answers.push("=".repeat(70));
         answers.push("END OF SUBMISSION");
 
         const blob = new Blob([answers.join("\n")], { type: "text/plain" });
-        const url = window.URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = "Lab01_NatureOfScience.txt";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
+        alert("✅ Assignment downloaded successfully!");
+      });
 
-        alert("Your answers have been downloaded as a text file!");
-      }
-
-      function clearForm() {
+      /* ---------- Clear ---------- */
+      document.getElementById("clearBtn").addEventListener("click", () => {
         if (
           confirm(
-            "Are you sure you want to clear all answers? This cannot be undone."
+            "Are you sure you want to clear all fields? This cannot be undone."
           )
         ) {
           const fields = [
@@ -631,9 +837,29 @@
             localStorage.removeItem(field);
           });
           updateProgress();
-          alert("All answers have been cleared.");
+          alert("🗑️ All fields have been cleared.");
         }
+      });
+
+      /* ---------- Collapsibles ---------- */
+      function toggleCollapsible(header) {
+        const content = header.nextElementSibling;
+        const collapsed = content.classList.toggle("is-collapsed");
+        header.classList.toggle("is-collapsed", collapsed);
       }
+
+      // Default: everything OPEN
+      document.querySelectorAll(".collapsible-header").forEach((h) => {
+        const startClosed = false;
+        if (startClosed) {
+          h.classList.add("is-collapsed");
+          const c = h.nextElementSibling;
+          if (c) c.classList.add("is-collapsed");
+        }
+      });
+
+      // Initialize progress
+      updateProgress();
     </script>
   </body>
 </html>

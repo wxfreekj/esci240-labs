@@ -135,6 +135,145 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
+      img.zoomable {
+        cursor: zoom-in;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      img.zoomable:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Zoom and Pan Modal */
+      .zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        overflow: hidden;
+      }
+
+      .zoom-modal.active {
+        display: block;
+      }
+
+      .zoom-container {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        cursor: grab;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .zoom-container.grabbing {
+        cursor: grabbing;
+      }
+
+      .zoom-image {
+        position: absolute;
+        max-width: none;
+        transform-origin: center center;
+        transition: transform 0.1s ease-out;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .zoom-controls {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px 20px;
+        border-radius: 50px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+      }
+
+      .zoom-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        font-weight: bold;
+      }
+
+      .zoom-btn:hover {
+        background: #5568d3;
+        transform: scale(1.1);
+      }
+
+      .zoom-btn:active {
+        transform: scale(0.95);
+      }
+
+      .zoom-level {
+        min-width: 60px;
+        text-align: center;
+        font-weight: 600;
+        color: #1e3c72;
+        font-size: 14px;
+      }
+
+      .close-zoom {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: #ffffff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s;
+        z-index: 10001;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .close-zoom:hover {
+        color: #ff4444;
+      }
+
+      .zoom-instructions {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 12px 24px;
+        border-radius: 8px;
+        color: #1e3c72;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+      }
+
+      .zoom-hint {
+        text-align: center;
+        font-size: 0.85em;
+        color: #666;
+        margin-top: 5px;
+        font-style: italic;
+      }
+
       .image-caption {
         text-align: center;
         font-style: italic;
@@ -834,7 +973,16 @@
           </div>
 
           <div class="diagram-container">
-            <img src="Fig10.png" alt="Analemma example" width="600" />
+            <img
+              src="Fig10.png"
+              alt="Analemma example"
+              width="600"
+              class="zoomable"
+              onclick="openImageModal(this)"
+            />
+            <div class="zoom-hint">
+              🔍 Click to zoom and pan around the image
+            </div>
             <div class="image-caption">
               Figure 8: Example of using the analemma to find subsolar point for
               September 5th
@@ -853,7 +1001,16 @@
           </div>
 
           <div class="diagram-container">
-            <img src="Fig11.png" alt="The Analemma" width="600" />
+            <img
+              src="Fig11.png"
+              alt="The Analemma"
+              width="600"
+              class="zoomable"
+              onclick="openImageModal(this)"
+            />
+            <div class="zoom-hint">
+              🔍 Click to zoom and pan around the image
+            </div>
             <div class="image-caption">
               Figure 9: The Analemma - Use this to find the subsolar point for
               any date of the year
@@ -1482,6 +1639,182 @@
           e.returnValue = "";
         }
       });
+
+      // Pan and Zoom functionality
+      let zoomState = {
+        scale: 1,
+        translateX: 0,
+        translateY: 0,
+        isDragging: false,
+        startX: 0,
+        startY: 0,
+        lastX: 0,
+        lastY: 0,
+      };
+
+      function openImageModal(img) {
+        const modal = document.getElementById("zoomModal");
+        const zoomImg = document.getElementById("zoomImage");
+        const container = document.getElementById("zoomContainer");
+
+        modal.classList.add("active");
+        zoomImg.src = img.src;
+        zoomImg.alt = img.alt;
+
+        // Reset zoom state
+        zoomState = {
+          scale: 1,
+          translateX: 0,
+          translateY: 0,
+          isDragging: false,
+          startX: 0,
+          startY: 0,
+          lastX: 0,
+          lastY: 0,
+        };
+
+        // Center and fit image
+        setTimeout(() => {
+          centerImage();
+          updateTransform();
+        }, 50);
+
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeImageModal() {
+        const modal = document.getElementById("zoomModal");
+        modal.classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function centerImage() {
+        const img = document.getElementById("zoomImage");
+        const container = document.getElementById("zoomContainer");
+
+        const containerRect = container.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+
+        // Center the image
+        zoomState.translateX = (containerRect.width - imgRect.width) / 2;
+        zoomState.translateY = (containerRect.height - imgRect.height) / 2;
+      }
+
+      function updateTransform() {
+        const img = document.getElementById("zoomImage");
+        img.style.transform = `translate(${zoomState.translateX}px, ${zoomState.translateY}px) scale(${zoomState.scale})`;
+        document.getElementById("zoomLevel").textContent = `${Math.round(
+          zoomState.scale * 100
+        )}%`;
+      }
+
+      function zoomIn() {
+        zoomState.scale = Math.min(zoomState.scale * 1.3, 5);
+        updateTransform();
+      }
+
+      function zoomOut() {
+        zoomState.scale = Math.max(zoomState.scale / 1.3, 0.5);
+        updateTransform();
+      }
+
+      function resetZoom() {
+        zoomState.scale = 1;
+        centerImage();
+        updateTransform();
+      }
+
+      // Mouse/Touch event handlers
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("zoomContainer");
+        const img = document.getElementById("zoomImage");
+
+        // Mouse drag
+        container.addEventListener("mousedown", (e) => {
+          if (e.target === img) {
+            zoomState.isDragging = true;
+            zoomState.startX = e.clientX - zoomState.translateX;
+            zoomState.startY = e.clientY - zoomState.translateY;
+            container.classList.add("grabbing");
+          }
+        });
+
+        container.addEventListener("mousemove", (e) => {
+          if (zoomState.isDragging) {
+            zoomState.translateX = e.clientX - zoomState.startX;
+            zoomState.translateY = e.clientY - zoomState.startY;
+            updateTransform();
+          }
+        });
+
+        container.addEventListener("mouseup", () => {
+          zoomState.isDragging = false;
+          container.classList.remove("grabbing");
+        });
+
+        container.addEventListener("mouseleave", () => {
+          zoomState.isDragging = false;
+          container.classList.remove("grabbing");
+        });
+
+        // Touch drag
+        container.addEventListener("touchstart", (e) => {
+          if (e.touches.length === 1) {
+            zoomState.isDragging = true;
+            zoomState.startX = e.touches[0].clientX - zoomState.translateX;
+            zoomState.startY = e.touches[0].clientY - zoomState.translateY;
+          }
+        });
+
+        container.addEventListener("touchmove", (e) => {
+          if (zoomState.isDragging && e.touches.length === 1) {
+            e.preventDefault();
+            zoomState.translateX = e.touches[0].clientX - zoomState.startX;
+            zoomState.translateY = e.touches[0].clientY - zoomState.startY;
+            updateTransform();
+          }
+        });
+
+        container.addEventListener("touchend", () => {
+          zoomState.isDragging = false;
+        });
+
+        // Mouse wheel zoom
+        container.addEventListener("wheel", (e) => {
+          e.preventDefault();
+          if (e.deltaY < 0) {
+            zoomIn();
+          } else {
+            zoomOut();
+          }
+        });
+
+        // Escape key to close
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeImageModal();
+          }
+        });
+      });
     </script>
+
+    <!-- Zoom and Pan Modal -->
+    <div id="zoomModal" class="zoom-modal">
+      <span class="close-zoom" onclick="closeImageModal()">&times;</span>
+      <div class="zoom-instructions">
+        🖱️ Drag to pan • Scroll to zoom • +/- buttons to zoom
+      </div>
+      <div id="zoomContainer" class="zoom-container">
+        <img id="zoomImage" class="zoom-image" alt="Zoomable image" />
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+        <span id="zoomLevel" class="zoom-level">100%</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">+</button>
+        <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">
+          ⟲
+        </button>
+      </div>
+    </div>
   </body>
 </html>

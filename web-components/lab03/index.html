@@ -36,6 +36,9 @@
         --pad-card: clamp(14px, 2vw, 20px);
         --pad-header-y: 14px;
         --hit-area: 44px;
+
+        /* NEW: line-height token for inline inputs */
+        --inline-lh: 1.5;
       }
 
       /* Page chrome */
@@ -65,7 +68,6 @@
         font-size: var(--fs-h1);
         color: var(--ink-100);
       }
-
       .header p {
         margin: 0;
         color: #c6c6c7;
@@ -196,7 +198,6 @@
         font-weight: 600;
         color: var(--ink-700);
       }
-
       .form-group {
         margin-bottom: 16px;
       }
@@ -241,48 +242,59 @@
         border: 1px solid #d9dfff;
         color: #2b2c65;
       }
-
       .muted {
         font-size: 0.95em;
         color: #555;
         margin: 14px 0 0 0;
       }
 
-      /* Lab 3 specific styles */
+      /* ──────────────────────────────────────────────────────────────
+         SEARCH/CHANGE NOTE #1:
+         Replaced old .inline-input / .fill-in-line with responsive versions.
+         These make boxes scale nicely on phones and wrap cleanly.
+         ────────────────────────────────────────────────────────────── */
       .inline-input {
         display: inline-block;
-        width: 70px;
+        /* responsive width: min 6ch, prefers ~22vw, max 10ch */
+        width: clamp(6ch, 22vw, 10ch);
         margin: 0 3px;
-        padding: 6px 8px;
+        padding: 0 0.55em; /* horizontal padding only */
         text-align: center;
-        border: none;
-        border-bottom: 2px solid #667eea;
-        border-radius: 0;
-        background: transparent;
+        border: 2px solid #667eea;
+        border-radius: 6px;
+        background: #fff;
         font-weight: 600;
         color: #1e3c72;
         vertical-align: baseline;
+        height: calc(var(--inline-lh) * 1em);
+        line-height: var(--inline-lh);
+        box-sizing: content-box;
       }
-
       .inline-input.wide {
-        width: 75px;
+        /* slightly wider responsive box */
+        width: clamp(7ch, 28vw, 12ch);
       }
-
       .inline-input:focus {
-        border-bottom: 2px solid #764ba2;
+        border: 2px solid #764ba2;
         background: #f8f9fa;
-        box-shadow: none;
+        box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        outline: none;
       }
 
       .fill-in-line {
-        line-height: 2.5;
-        margin: 10px 0;
+        /* was line-height: 2.5; now an inline-flex row that wraps cleanly */
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.3rem 0.25rem;
+        margin: 6px 0;
         font-size: 1.05em;
+        line-height: var(--inline-lh);
       }
 
       .inline-dropdown {
         display: inline-block;
-        padding: 6px 8px;
+        padding: 0 0.3em;
         border: none;
         border-bottom: 2px solid #667eea;
         border-radius: 0;
@@ -293,12 +305,31 @@
         cursor: pointer;
         font-family: inherit;
         font-size: 1em;
+        height: calc(var(--inline-lh) * 1em);
+        line-height: var(--inline-lh);
       }
-
       .inline-dropdown:focus {
         border-bottom: 2px solid #764ba2;
         background: #f8f9fa;
         box-shadow: none;
+      }
+
+      /* Responsive images */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .image-caption {
+        text-align: center;
+        font-style: italic;
+        color: var(--ink-600);
+        font-size: 0.9em;
+        margin-top: 8px;
+        margin-bottom: 20px;
       }
 
       /* Motion preferences */
@@ -330,6 +361,20 @@
         .collapsible-header {
           padding-left: 14px;
           padding-right: 42px;
+        }
+      }
+
+      /* ──────────────────────────────────────────────────────────────
+         SEARCH/CHANGE NOTE #2:
+         Tiny-phone adjustments to keep inputs legible but compact.
+         ────────────────────────────────────────────────────────────── */
+      @media (max-width: 420px) {
+        :root {
+          --inline-lh: 1.45;
+        }
+        .inline-input,
+        .inline-dropdown {
+          font-size: 0.95em;
         }
       }
     </style>
@@ -423,8 +468,8 @@
         <div class="collapsible-content">
           <div class="info-box">
             <strong>Key Concept:</strong> For every 5.6 km you ascend in the
-            atmosphere, there is approximately one-half of the atmospheric mass
-            remaining above that height.
+            atmosphere, approximately one-half of the atmospheric mass remains
+            above that height.
           </div>
 
           <div class="question">
@@ -452,6 +497,9 @@
                       type="number"
                       id="q1_224"
                       step="0.1"
+                      min="0"
+                      max="100"
+                      inputmode="decimal"
                       placeholder="%"
                     />
                   </td>
@@ -463,6 +511,9 @@
                       type="number"
                       id="q1_168"
                       step="0.1"
+                      min="0"
+                      max="100"
+                      inputmode="decimal"
                       placeholder="%"
                     />
                   </td>
@@ -474,6 +525,9 @@
                       type="number"
                       id="q1_112"
                       step="0.1"
+                      min="0"
+                      max="100"
+                      inputmode="decimal"
                       placeholder="%"
                     />
                   </td>
@@ -485,6 +539,9 @@
                       type="number"
                       id="q1_56"
                       step="0.1"
+                      min="0"
+                      max="100"
+                      inputmode="decimal"
                       placeholder="%"
                     />
                   </td>
@@ -499,11 +556,10 @@
           </div>
 
           <div class="question">
-            <span class="question-label"
-              >Question 2: Select which curve accurately represents the data in
-              Question 1. <span class="points">(3 pts)</span></span
-            >
-
+            <span class="question-label">
+              Question 2: Which curve best matches your table from Question 1?
+              <span class="points">(3 pts)</span>
+            </span>
             <select id="q2_curve" class="dropdown">
               <option value="">-- Select a curve --</option>
               <option value="a">Curve a (dotted magenta)</option>
@@ -531,83 +587,97 @@
           class="collapsible-header stripe-blue"
           onclick="toggleCollapsible(this)"
         >
-          Part 2: Barometric Pressure at Different Altitudes
+          Part 2: Barometric Pressure with Altitude
         </div>
         <div class="collapsible-content">
           <div class="info-box">
-            <strong>Background:</strong> Barometric pressure reflects the weight
-            of the atmosphere above a point. At sea level, the pressure is
-            approximately 1000 millibars (mb). Since atmospheric mass at 5.6 km
-            is 50% of its sea-level value, the pressure at this height would be
-            approximately 500 mb.
+            <strong>Background:</strong> Sea-level pressure ≈ 1000 mb. At 5.6 km
+            (half the mass above), pressure ≈ 500 mb.
           </div>
 
           <div class="question">
             <span class="question-label"
-              >Question 3: Estimate pressure and percentage of atmosphere
+              >Question 3: Estimate pressure and % above
               <span class="points">(6 pts total)</span></span
             >
 
             <div class="fill-in-line">
-              <strong>a.</strong> The height of a cruising airliner (11 km) is
+              <strong>a.</strong> At a typical jet cruising altitude (11 km):
+              Pressure
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3a_pressure"
                 step="10"
-                placeholder="mb"
+                min="0"
+                inputmode="decimal"
+                placeholder="?"
               />
-              mb with approximately
+              mb; atmosphere above
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3a_percent"
                 step="1"
-                placeholder="%"
+                min="0"
+                max="100"
+                inputmode="decimal"
+                placeholder="?"
               />
-              % of the atmosphere remaining above.
+              %.
               <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
-              <strong>b.</strong> The top of Mt. Everest (8.85 km) is
+              <strong>b.</strong> At the summit of Mt. Everest (8.85 km):
+              Pressure
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3b_pressure"
                 step="10"
-                placeholder="mb"
+                min="0"
+                inputmode="decimal"
+                placeholder="?"
               />
-              mb with approximately
+              mb; atmosphere above
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3b_percent"
                 step="1"
-                placeholder="%"
+                min="0"
+                max="100"
+                inputmode="decimal"
+                placeholder="?"
               />
-              % of the atmosphere remaining above.
+              %.
               <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
-              <strong>c.</strong> Denver, CO (1.6 km) is
+              <strong>c.</strong> In Denver, CO (1.6 km): Pressure
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3c_pressure"
                 step="10"
-                placeholder="mb"
+                min="0"
+                inputmode="decimal"
+                placeholder="?"
               />
-              mb with approximately
+              mb; atmosphere above
               <input
                 type="number"
                 class="inline-input wide"
                 id="q3c_percent"
                 step="1"
-                placeholder="%"
+                min="0"
+                max="100"
+                inputmode="decimal"
+                placeholder="?"
               />
-              % of the atmosphere remaining above.
+              %.
               <span class="points">(2 pts)</span>
             </div>
           </div>
@@ -625,10 +695,9 @@
         <div class="collapsible-content">
           <div class="info-box">
             <strong>Lapse Rate Definition:</strong> The rate at which
-            temperature decreases with altitude. When averaged over all seasons,
-            air temperature is 15°C at Earth's surface and decreases by 6.5°C
-            per kilometer in the lowest 11 kilometers. This is known as the
-            average lapse rate or "standard atmosphere."
+            temperature decreases with altitude. Averaged over all seasons,
+            temperature is ~15°C at Earth's surface and decreases by ~6.5°C per
+            km in the lowest 11 km (the "standard atmosphere").
           </div>
 
           <img
@@ -653,10 +722,9 @@
         <div class="collapsible-content">
           <h2>Part 4: Atmospheric Temperature Profiles</h2>
           <p style="margin-bottom: 20px">
-            The following chart shows three plots of temperature with altitude
-            in the atmosphere. One represents a cold day in Alaska, another a
-            warm day in the tropics, and the last one represents the standard
-            atmosphere.
+            The chart below shows three temperature-with-height profiles. One is
+            a cold day in Alaska, one a warm day in the tropics, and one the
+            standard atmosphere.
           </p>
 
           <img src="L3Q4.jpeg" alt="Temperature Profiles" id="profilesimage" />
@@ -667,51 +735,54 @@
 
           <div class="question">
             <span class="question-label"
-              >Questions 4-6: Surface and Upper Atmosphere Temperatures
+              >Questions 4–6: Surface and upper-air temperatures
               <span class="points">(3 pts)</span></span
             >
 
+            <!-- SEARCH/CHANGE NOTE #3: removed style="width:50px;" so inputs can scale -->
             <div class="fill-in-line">
               <strong>Question 4:</strong> Station
-              <select id="q4" class="inline-dropdown">
-                <option value="">--</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
+              <input
+                type="text"
+                class="inline-input"
+                id="q4"
+                maxlength="1"
+                placeholder="A/B/C"
+              />
               has the highest surface temperature.
               <span class="points">(1 pt)</span>
             </div>
 
             <div class="fill-in-line">
               <strong>Question 5:</strong> Station
-              <select id="q5" class="inline-dropdown">
-                <option value="">--</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
+              <input
+                type="text"
+                class="inline-input"
+                id="q5"
+                maxlength="1"
+                placeholder="A/B/C"
+              />
               has the highest temperature at 10 km.
               <span class="points">(1 pt)</span>
             </div>
 
             <div class="fill-in-line">
               <strong>Question 6:</strong> Station
-              <select id="q6" class="inline-dropdown">
-                <option value="">--</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
+              <input
+                type="text"
+                class="inline-input"
+                id="q6"
+                maxlength="1"
+                placeholder="A/B/C"
+              />
               has the highest temperature at 14 km.
               <span class="points">(1 pt)</span>
             </div>
           </div>
 
           <div class="info-box">
-            <strong>Inversion Layers:</strong> Layers in the atmosphere where
-            temperature increases with height (opposite of normal). This is
-            called a temperature inversion.
+            <strong>Inversion Layers:</strong> Layers where temperature
+            increases with height (opposite of normal).
           </div>
 
           <div class="question">
@@ -727,20 +798,24 @@
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
               </select>
-              color plot has an inversion layer that starts at
+              profile shows an inversion starting near
               <input
                 type="number"
                 class="inline-input wide"
                 id="q7_start"
                 step="0.1"
+                min="0"
+                inputmode="decimal"
                 placeholder="km"
               />
-              km and ends at
+              km and ending near
               <input
                 type="number"
                 class="inline-input wide"
                 id="q7_end"
                 step="0.1"
+                min="0"
+                inputmode="decimal"
                 placeholder="km"
               />
               km.
@@ -748,81 +823,92 @@
           </div>
 
           <div class="info-box">
-            <strong>Tropopause:</strong> The boundary that marks the top of the
-            troposphere, defined as the level where temperature stops decreasing
-            with height.
+            <strong>Tropopause:</strong> The top of the troposphere—where
+            temperature stops decreasing with height.
           </div>
 
           <div class="question">
             <span class="question-label"
-              >Questions 8-10: Tropopause Identification
+              >Questions 8–10: Tropopause identification
               <span class="points">(6 pts)</span></span
             >
 
             <div class="fill-in-line">
-              <strong>Question 8:</strong> The tropopause occurs at
+              <strong>Question 8:</strong> For the red station, the tropopause
+              occurs at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q8_height"
                 step="0.1"
+                min="0"
+                inputmode="decimal"
                 placeholder="km"
               />
-              km at a temperature of
+              km at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q8_temp"
                 step="0.1"
+                inputmode="decimal"
                 placeholder="°C"
               />
-              °C for the red station. <span class="points">(2 pts)</span>
+              °C. <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
-              <strong>Question 9:</strong> The tropopause occurs at
+              <strong>Question 9:</strong> For the blue station, the tropopause
+              occurs at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q9_height"
                 step="0.1"
+                min="0"
+                inputmode="decimal"
                 placeholder="km"
               />
-              km at a temperature of
+              km at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q9_temp"
                 step="0.1"
+                inputmode="decimal"
                 placeholder="°C"
               />
-              °C for the blue station. <span class="points">(2 pts)</span>
+              °C. <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
-              <strong>Question 10:</strong> The tropopause occurs at
+              <strong>Question 10:</strong> For the magenta station, the
+              tropopause occurs at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q10_height"
                 step="0.1"
+                min="0"
+                inputmode="decimal"
                 placeholder="km"
               />
-              km at a temperature of
+              km at
               <input
                 type="number"
                 class="inline-input wide"
                 id="q10_temp"
                 step="0.1"
+                inputmode="decimal"
                 placeholder="°C"
               />
-              °C for the magenta station. <span class="points">(2 pts)</span>
+              °C. <span class="points">(2 pts)</span>
             </div>
           </div>
 
           <div class="question">
             <span class="question-label"
-              >Questions 11-12: Location Identification
+              >Questions 11–12: Location identification
               <span class="points">(2 pts)</span></span
             >
 
@@ -834,7 +920,7 @@
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
               </select>
-              color plot represents Alaska. <span class="points">(1 pt)</span>
+              profile represents Alaska. <span class="points">(1 pt)</span>
             </div>
 
             <div class="fill-in-line">
@@ -845,8 +931,7 @@
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
               </select>
-              color plot represents the tropics.
-              <span class="points">(1 pt)</span>
+              profile represents the tropics. <span class="points">(1 pt)</span>
             </div>
           </div>
         </div>
@@ -861,10 +946,9 @@
           Part 5: Analysis and Synthesis
         </div>
         <div class="collapsible-content">
-
           <div class="question">
             <span class="question-label"
-              >Question 13: Tropopause-Temperature Relationship
+              >Question 13: Tropopause vs. temperature
               <span class="points">(3 pts)</span></span
             >
             <p>
@@ -879,7 +963,7 @@
 
           <div class="question">
             <span class="question-label"
-              >Question 14: Atmospheric Variables
+              >Question 14: Atmospheric variables with height
               <span class="points">(3 pts)</span></span
             >
             <p>
@@ -896,7 +980,11 @@
 
       <!-- Buttons -->
       <div class="button-row">
-        <button type="button" class="btn btn-primary" onclick="exportToTextFile()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="exportToTextFile()"
+        >
           📥 Download file for Canvas Submission
         </button>
         <button type="button" class="btn btn-ghost" onclick="resetForm()">
@@ -910,14 +998,12 @@
           ❓ Questions, concerns, feedback, or need help?
         </button>
       </div>
-      </div>
     </div>
 
     <script>
-      // Validation functions
+      /* ------------------- Validation ------------------- */
       function validateNumber(input, min = null, max = null) {
         const value = parseFloat(input.value.trim());
-
         if (input.value.trim() === "" || isNaN(value)) {
           input.style.borderColor = "#dc2626";
           input.style.backgroundColor = "#fef2f2";
@@ -936,25 +1022,20 @@
           return true;
         }
       }
-
       function validateSelect(select) {
         const value = select.value.trim();
-
         if (!value) {
           select.style.borderColor = "#dc2626";
           select.style.backgroundColor = "#fef2f2";
           return false;
-        } else {
-          select.style.borderColor = "";
-          select.style.backgroundColor = "";
-          return true;
         }
+        select.style.borderColor = "";
+        select.style.backgroundColor = "";
+        return true;
       }
-
       function validateTextarea(textarea) {
         const value = textarea.value.trim();
         const minLength = 20;
-
         if (!value) {
           textarea.style.borderColor = "#dc2626";
           textarea.style.backgroundColor = "#fef2f2";
@@ -963,16 +1044,15 @@
           textarea.style.borderColor = "#dc2626";
           textarea.style.backgroundColor = "#fef2f2";
           return false;
-        } else {
-          textarea.style.borderColor = "";
-          textarea.style.backgroundColor = "";
-          return true;
         }
+        textarea.style.borderColor = "";
+        textarea.style.backgroundColor = "";
+        return true;
       }
 
       function validateAllInputs() {
-        let isValid = true;
-        let firstInvalid = null;
+        let isValid = true,
+          firstInvalid = null;
         const errors = {
           emptyNumbers: [],
           emptyDropdowns: [],
@@ -981,8 +1061,7 @@
         };
 
         // Question 1 - Four number inputs
-        const q1Ids = ["q1_224", "q1_168", "q1_112", "q1_56"];
-        q1Ids.forEach((id) => {
+        ["q1_224", "q1_168", "q1_112", "q1_56"].forEach((id) => {
           const input = document.getElementById(id);
           if (!validateNumber(input, 0, 100)) {
             errors.emptyNumbers.push("Q1: " + id.replace("q1_", "") + " km");
@@ -1000,32 +1079,40 @@
         }
 
         // Question 3 - Six pressure/percent inputs
-        const q3Ids = [
+        [
           "q3a_pressure",
           "q3a_percent",
           "q3b_pressure",
           "q3b_percent",
           "q3c_pressure",
           "q3c_percent",
-        ];
-        q3Ids.forEach((id) => {
+        ].forEach((id) => {
           const input = document.getElementById(id);
-          if (!validateNumber(input, 0)) {
+          const needsMax = id.endsWith("percent");
+          if (!validateNumber(input, 0, needsMax ? 100 : null)) {
             errors.emptyNumbers.push(
-              "Q3: " + id.replace("q3", "").replace("_", " ")
+              "Q3: " + id.replace("q3", "").replace("_", " ").toUpperCase()
             );
             isValid = false;
             if (!firstInvalid) firstInvalid = input;
           }
         });
 
-        // Questions 4-6 - Station dropdowns
-        ["q4", "q5", "q6"].forEach((id, index) => {
-          const select = document.getElementById(id);
-          if (!validateSelect(select)) {
-            errors.emptyDropdowns.push(`Q${index + 4}: Station selection`);
+        // Questions 4-6 - Station text inputs (A/B/C)
+        ["q4", "q5", "q6"].forEach((id, idx) => {
+          const input = document.getElementById(id);
+          const value = input.value.trim().toUpperCase();
+          if (!value || !["A", "B", "C"].includes(value)) {
+            errors.emptyNumbers.push(
+              `Q${idx + 4}: Station letter (A, B, or C)`
+            );
+            input.style.borderColor = "#dc2626";
+            input.style.backgroundColor = "#fef2f2";
             isValid = false;
-            if (!firstInvalid) firstInvalid = select;
+            if (!firstInvalid) firstInvalid = input;
+          } else {
+            input.style.borderColor = "";
+            input.style.backgroundColor = "";
           }
         });
 
@@ -1060,11 +1147,11 @@
         }
 
         // Questions 11-12 - Color dropdowns
-        ["q11", "q12"].forEach((id) => {
+        ["q11", "q12"].forEach((id, i) => {
           const select = document.getElementById(id);
           if (!validateSelect(select)) {
             errors.emptyDropdowns.push(
-              id === "q11" ? "Q11: Alaska color" : "Q12: Tropics color"
+              i === 0 ? "Q11: Alaska color" : "Q12: Tropics color"
             );
             isValid = false;
             if (!firstInvalid) firstInvalid = select;
@@ -1072,57 +1159,47 @@
         });
 
         // Questions 13-14 - Textareas
-        ["q13", "q14"].forEach((id, index) => {
+        ["q13", "q14"].forEach((id, i) => {
           const textarea = document.getElementById(id);
           const value = textarea.value.trim();
           if (!value) {
-            errors.emptyTextareas.push(`Q${index + 13}`);
-            textarea.style.borderColor = "#dc2626";
-            textarea.style.backgroundColor = "#fef2f2";
+            errors.emptyTextareas.push(`Q${i + 13}`);
+            textarea.classList.add("is-invalid");
             isValid = false;
             if (!firstInvalid) firstInvalid = textarea;
           } else if (value.length < 20) {
-            errors.shortTextareas.push(`Q${index + 13}`);
-            textarea.style.borderColor = "#dc2626";
-            textarea.style.backgroundColor = "#fef2f2";
+            errors.shortTextareas.push(`Q${i + 13}`);
+            textarea.classList.add("is-invalid");
             isValid = false;
             if (!firstInvalid) firstInvalid = textarea;
           } else {
-            textarea.style.borderColor = "";
-            textarea.style.backgroundColor = "";
+            textarea.classList.remove("is-invalid");
           }
         });
 
         if (!isValid) {
           let message = "Please complete the following before exporting:\n\n";
-
-          if (errors.emptyNumbers.length > 0) {
+          if (errors.emptyNumbers.length)
             message +=
               "Missing or invalid numeric values:\n  • " +
               errors.emptyNumbers.join("\n  • ") +
               "\n\n";
-          }
-          if (errors.emptyDropdowns.length > 0) {
+          if (errors.emptyDropdowns.length)
             message +=
               "Missing dropdown selections:\n  • " +
               errors.emptyDropdowns.join("\n  • ") +
               "\n\n";
-          }
-          if (errors.emptyTextareas.length > 0) {
+          if (errors.emptyTextareas.length)
             message +=
               "Missing text responses:\n  • " +
               errors.emptyTextareas.join("\n  • ") +
               "\n\n";
-          }
-          if (errors.shortTextareas.length > 0) {
+          if (errors.shortTextareas.length)
             message +=
-              "Text responses too short (need at least 20 characters):\n  • " +
+              "Text responses too short (≥ 20 chars):\n  • " +
               errors.shortTextareas.join("\n  • ") +
               "\n";
-          }
-
           alert(message);
-
           if (firstInvalid) {
             firstInvalid.scrollIntoView({
               behavior: "smooth",
@@ -1131,21 +1208,16 @@
             firstInvalid.focus();
           }
         }
-
         return isValid;
       }
 
-      // Export to formatted text file
+      /* ------------------- Export ------------------- */
       function exportToTextFile() {
-        // Validate before exporting
-        if (!validateAllInputs()) {
-          return;
-        }
+        if (!validateAllInputs()) return;
 
         const timestamp = new Date().toISOString();
         let output = "";
 
-        // Header
         output +=
           "================================================================================\n";
         output +=
@@ -1156,7 +1228,7 @@
         output +=
           "================================================================================\n\n";
 
-        // Part 1: Question 1 - Table data
+        // Part 1
         output += "PART 1: ATMOSPHERIC MASS DISTRIBUTION WITH HEIGHT\n";
         output +=
           "--------------------------------------------------------------------------------\n";
@@ -1165,322 +1237,266 @@
         output += `  Height 22.4 km: ${getValue("q1_224")}%\n`;
         output += `  Height 16.8 km: ${getValue("q1_168")}%\n`;
         output += `  Height 11.2 km: ${getValue("q1_112")}%\n`;
-        output += `  Height 5.6 km: ${getValue("q1_56")}%\n`;
-        output += "\n";
-
-        // Question 2 - Curve selection
+        output += `  Height 5.6 km: ${getValue("q1_56")}%\n\n`;
+        output += "Question 2 (3 pts): Selected curve\n";
         const curveValue = getValue("q2_curve");
-        output += `Question 2 (3 pts): Selected curve\n`;
         output += `  Answer: Curve ${
           curveValue ? curveValue.toUpperCase() : "[NOT ANSWERED]"
-        }\n`;
-        output += "\n";
+        }\n\n`;
 
-        // Part 2: Pressure calculations
-        output += "PART 2: BAROMETRIC PRESSURE AT DIFFERENT ALTITUDES\n";
+        // Part 2
+        output += "PART 2: BAROMETRIC PRESSURE WITH ALTITUDE\n";
         output +=
           "--------------------------------------------------------------------------------\n";
         output += "Question 3 (6 pts): Pressure and percentage estimates\n";
-        output += `  a. Cruising airliner (11 km):\n`;
-        output += `     Pressure: ${getValue("q3a_pressure")} mb\n`;
-        output += `     Percentage above: ${getValue("q3a_percent")}%\n`;
-        output += `  b. Mt. Everest (8.85 km):\n`;
-        output += `     Pressure: ${getValue("q3b_pressure")} mb\n`;
-        output += `     Percentage above: ${getValue("q3b_percent")}%\n`;
-        output += `  c. Denver, CO (1.6 km):\n`;
-        output += `     Pressure: ${getValue("q3c_pressure")} mb\n`;
-        output += `     Percentage above: ${getValue("q3c_percent")}%\n`;
-        output += "\n";
+        output += `  a. Jet cruising altitude (11 km): ${getValue(
+          "q3a_pressure"
+        )} mb; ${getValue("q3a_percent")}% above\n`;
+        output += `  b. Mt. Everest (8.85 km): ${getValue(
+          "q3b_pressure"
+        )} mb; ${getValue("q3b_percent")}% above\n`;
+        output += `  c. Denver, CO (1.6 km): ${getValue(
+          "q3c_pressure"
+        )} mb; ${getValue("q3c_percent")}% above\n\n`;
 
-        // Part 4: Temperature profiles
+        // Part 4
         output += "PART 4: ATMOSPHERIC TEMPERATURE PROFILES\n";
         output +=
           "--------------------------------------------------------------------------------\n";
-        output += `Question 4 (1 pt): Station with highest surface temperature\n`;
-        output += `  Answer: Station ${getValue("q4")}\n`;
-        output += "\n";
-        output += `Question 5 (1 pt): Station with highest temperature at 10 km\n`;
-        output += `  Answer: Station ${getValue("q5")}\n`;
-        output += "\n";
-        output += `Question 6 (1 pt): Station with highest temperature at 14 km\n`;
-        output += `  Answer: Station ${getValue("q6")}\n`;
-        output += "\n";
-        output += `Question 7 (2 pts): Inversion layer identification\n`;
-        output += `  Color: ${getValue("q7_color")}\n`;
-        output += `  Start height: ${getValue("q7_start")} km\n`;
-        output += `  End height: ${getValue("q7_end")} km\n`;
-        output += "\n";
-        output += `Question 8 (2 pts): Tropopause for red station\n`;
-        output += `  Height: ${getValue("q8_height")} km\n`;
-        output += `  Temperature: ${getValue("q8_temp")}°C\n`;
-        output += "\n";
-        output += `Question 9 (2 pts): Tropopause for blue station\n`;
-        output += `  Height: ${getValue("q9_height")} km\n`;
-        output += `  Temperature: ${getValue("q9_temp")}°C\n`;
-        output += "\n";
-        output += `Question 10 (2 pts): Tropopause for magenta station\n`;
-        output += `  Height: ${getValue("q10_height")} km\n`;
-        output += `  Temperature: ${getValue("q10_temp")}°C\n`;
-        output += "\n";
-        output += `Question 11 (1 pt): Color plot representing Alaska\n`;
-        output += `  Answer: ${getValue("q11")}\n`;
-        output += "\n";
-        output += `Question 12 (1 pt): Color plot representing the tropics\n`;
-        output += `  Answer: ${getValue("q12")}\n`;
-        output += "\n";
+        output += `Question 4 (1 pt): Highest surface temperature -> Station ${getValue(
+          "q4"
+        )}\n`;
+        output += `Question 5 (1 pt): Highest temp at 10 km -> Station ${getValue(
+          "q5"
+        )}\n`;
+        output += `Question 6 (1 pt): Highest temp at 14 km -> Station ${getValue(
+          "q6"
+        )}\n`;
+        output += `Question 7 (2 pts): Inversion color: ${getValue(
+          "q7_color"
+        )}; start: ${getValue("q7_start")} km; end: ${getValue("q7_end")} km\n`;
+        output += `Question 8 (2 pts): Red station tropopause -> ${getValue(
+          "q8_height"
+        )} km at ${getValue("q8_temp")} °C\n`;
+        output += `Question 9 (2 pts): Blue station tropopause -> ${getValue(
+          "q9_height"
+        )} km at ${getValue("q9_temp")} °C\n`;
+        output += `Question 10 (2 pts): Magenta station tropopause -> ${getValue(
+          "q10_height"
+        )} km at ${getValue("q10_temp")} °C\n`;
+        output += `Question 11 (1 pt): Alaska color -> ${getValue("q11")}\n`;
+        output += `Question 12 (1 pt): Tropics color -> ${getValue("q12")}\n\n`;
 
-        // Part 5: Analysis questions
+        // Part 5
         output += "PART 5: ANALYSIS AND SYNTHESIS\n";
         output +=
           "--------------------------------------------------------------------------------\n";
-        output += "Question 13 (3 pts): Tropopause-Temperature Relationship\n";
-        output += wrapText(getValue("q13"), 80, "  ");
-        output += "\n\n";
-        output += "Question 14 (3 pts): Atmospheric Variables\n";
-        output += wrapText(getValue("q14"), 80, "  ");
-        output += "\n\n";
+        output += "Question 13 (3 pts): Tropopause vs. temperature\n";
+        output += wrapText(getValue("q13"), 80, "  ") + "\n\n";
+        output += "Question 14 (3 pts): Atmospheric variables with height\n";
+        output += wrapText(getValue("q14"), 80, "  ") + "\n\n";
 
         output +=
-          "================================================================================\n";
-        output += "END OF SUBMISSION\n";
-        output +=
-          "================================================================================\n";
+          "================================================================================\nEND OF SUBMISSION\n================================================================================\n";
 
-        // Create and download the file
         const blob = new Blob([output], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `Lab03_AtmosphericAnalysis.txt`;
+        a.download = "Lab03_AtmosphericAnalysis.txt";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        // Visual feedback
         const btn = event.target;
-        const originalText = btn.textContent;
+        const t = btn.textContent;
         btn.textContent = "✓ File Generated!";
         btn.style.background =
           "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
         setTimeout(() => {
-          btn.textContent = originalText;
+          btn.textContent = t;
           btn.style.background =
-            "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
-        }, 2000);
+            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+        }, 1800);
       }
 
-      // Helper function to get value from input field
+      /* ------------------- Helpers ------------------- */
       function getValue(id) {
-        const element = document.getElementById(id);
-        return element ? element.value || "[NOT ANSWERED]" : "[NOT ANSWERED]";
+        const el = document.getElementById(id);
+        return el ? el.value || "[NOT ANSWERED]" : "[NOT ANSWERED]";
       }
-
-      // Helper function to wrap text at specified width
       function wrapText(text, width, indent = "") {
-        if (!text || text === "[NOT ANSWERED]") {
+        if (!text || text === "[NOT ANSWERED]")
           return indent + "[NOT ANSWERED]";
-        }
-
         const words = text.split(/\s+/);
         const lines = [];
-        let currentLine = "";
-
-        for (const word of words) {
-          if ((currentLine + word).length > width - indent.length) {
-            if (currentLine) {
-              lines.push(indent + currentLine.trim());
-              currentLine = word + " ";
+        let line = "";
+        for (const w of words) {
+          if ((line + w).length > width - indent.length) {
+            if (line) {
+              lines.push(indent + line.trim());
+              line = w + " ";
             } else {
-              lines.push(indent + word);
-              currentLine = "";
+              lines.push(indent + w);
+              line = "";
             }
           } else {
-            currentLine += word + " ";
+            line += w + " ";
           }
         }
-
-        if (currentLine) {
-          lines.push(indent + currentLine.trim());
-        }
-
+        if (line) lines.push(indent + line.trim());
         return lines.join("\n");
       }
 
-      // Auto-save functionality
+      /* ------------------- Save / Load / Reset ------------------- */
       function saveProgress() {
-        const formData = {
-          timestamp: new Date().toISOString(),
-        };
-
-        // Save all input fields and select elements
-        const inputs = document.querySelectorAll(
-          'input[type="text"], input[type="number"], textarea, select'
-        );
-        inputs.forEach((input) => {
-          formData[input.id] = input.value;
-        });
-
-        localStorage.setItem("lab3_progress", JSON.stringify(formData));
-
-        // Visual feedback
-        const btn = event.target;
-        const originalText = btn.textContent;
-        btn.textContent = "✓ Saved!";
-        btn.style.background =
-          "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.background =
-            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-        }, 2000);
+        const data = { timestamp: new Date().toISOString() };
+        document
+          .querySelectorAll(
+            'input[type="text"], input[type="number"], textarea, select'
+          )
+          .forEach((el) => {
+            data[el.id] = el.value;
+          });
+        localStorage.setItem("lab3_progress", JSON.stringify(data));
       }
-
-      // Load saved progress
       function loadProgress() {
         const saved = localStorage.getItem("lab3_progress");
-        if (saved) {
-          const formData = JSON.parse(saved);
-          Object.keys(formData).forEach((key) => {
-            const element = document.getElementById(key);
-            if (element) {
-              element.value = formData[key];
-            }
-          });
-        }
+        if (!saved) return;
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach((k) => {
+          const el = document.getElementById(k);
+          if (el) el.value = data[k];
+        });
       }
-
-      // Reset form
       function resetForm() {
         if (
-          confirm(
+          !confirm(
             "Are you sure you want to reset all answers? This cannot be undone."
           )
-        ) {
-          localStorage.removeItem("lab3_progress");
-          document
-            .querySelectorAll(
-              'input[type="text"], input[type="number"], textarea, select'
-            )
-            .forEach((input) => {
-              input.value = "";
-            });
-          alert("Form has been reset!");
-        }
+        )
+          return;
+        localStorage.removeItem("lab3_progress");
+        document
+          .querySelectorAll(
+            'input[type="text"], input[type="number"], textarea, select'
+          )
+          .forEach((el) => {
+            el.value = "";
+            el.classList.remove("is-invalid");
+            el.style.backgroundColor = "";
+            el.style.borderColor = "";
+          });
+        alert("Form has been reset!");
+        updateProgress();
       }
 
-      // Auto-save every 30 seconds
       setInterval(() => {
         const inputs = document.querySelectorAll(
           'input[type="text"], input[type="number"], textarea, select'
         );
         let hasData = false;
-        inputs.forEach((input) => {
-          if (input.value) hasData = true;
+        inputs.forEach((i) => {
+          if (i.value) hasData = true;
         });
-        if (hasData) {
-          saveProgress();
-        }
+        if (hasData) saveProgress();
       }, 30000);
 
-      // Load progress on page load
-      window.addEventListener("load", loadProgress);
-
-      // Warn before leaving if there's unsaved data
+      window.addEventListener("load", () => {
+        loadProgress();
+        updateProgress();
+      });
       window.addEventListener("beforeunload", (e) => {
         const inputs = document.querySelectorAll(
           'input[type="text"], input[type="number"], textarea, select'
         );
         let hasData = false;
-        inputs.forEach((input) => {
-          if (input.value) hasData = true;
+        inputs.forEach((i) => {
+          if (i.value) hasData = true;
         });
-
         if (hasData) {
           e.preventDefault();
           e.returnValue = "";
         }
       });
 
-      // Update progress indicator
+      /* ------------------- Progress ------------------- */
       function updateProgress() {
-        let completedCount = 0;
-        const totalParts = 5;
+        // Count distinct parts that have at least some completion
+        let completed = 0,
+          total = 5;
 
-        // Check each section for completion
-        const sections = [
-          // Part 1 - questions in this section
-          [
-            "atm_mass_0km",
-            "atm_mass_5km",
-            "atm_mass_10km",
-            "atm_mass_explanation",
-          ],
-          // Part 2 - pressure questions
-          ["press_0m", "press_1500m", "press_explanation"],
-          // Part 3 - lapse rate
-          ["lapse_rate_calc", "lapse_rate_comparison"],
-          // Part 4 - temperature profiles (any input counts)
-          ["temp_profile"],
-          // Part 5 - analysis questions
-          ["analysis"],
-        ];
-
-        // For parts 1-3, check if majority of inputs are filled
-        for (let i = 0; i < 3; i++) {
-          const sectionInputs = sections[i];
-          let filledInputs = 0;
-          sectionInputs.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element && element.value && element.value.trim()) {
-              filledInputs++;
-            }
-          });
-          if (filledInputs >= sectionInputs.length * 0.5) {
-            completedCount++;
+        // Part 1: Q1 + Q2
+        const p1 = ["q1_224", "q1_168", "q1_112", "q1_56", "q2_curve"].some(
+          (id) => {
+            const el = document.getElementById(id);
+            return el && el.value.trim();
           }
-        }
-
-        // For part 4, check if any temperature profile inputs are filled
-        const part4Inputs = document.querySelectorAll(
-          ".section:nth-of-type(4) input, .section:nth-of-type(4) select"
         );
-        let part4Filled = 0;
-        part4Inputs.forEach((input) => {
-          if (input.value && input.value.trim()) part4Filled++;
-        });
-        if (part4Filled >= part4Inputs.length * 0.3) completedCount++;
+        if (p1) completed++;
 
-        // For part 5, check analysis questions
-        const part5Inputs = document.querySelectorAll(
-          ".section:nth-of-type(5) textarea"
-        );
-        let part5Filled = 0;
-        part5Inputs.forEach((input) => {
-          if (input.value && input.value.trim()) part5Filled++;
+        // Part 2: any of Q3 fields
+        const p2 = [
+          "q3a_pressure",
+          "q3a_percent",
+          "q3b_pressure",
+          "q3b_percent",
+          "q3c_pressure",
+          "q3c_percent",
+        ].some((id) => {
+          const el = document.getElementById(id);
+          return el && el.value.trim();
         });
-        if (part5Filled >= part5Inputs.length * 0.5) completedCount++;
+        if (p2) completed++;
 
-        const percentage = (completedCount / totalParts) * 100;
-        document.getElementById("progressFill").style.width = percentage + "%";
+        // Part 3: (informational only) always counts if image loaded
+        completed++;
+
+        // Part 4: any of Q4–Q12
+        const p4 = [
+          "q4",
+          "q5",
+          "q6",
+          "q7_color",
+          "q7_start",
+          "q7_end",
+          "q8_height",
+          "q8_temp",
+          "q9_height",
+          "q9_temp",
+          "q10_height",
+          "q10_temp",
+          "q11",
+          "q12",
+        ].some((id) => {
+          const el = document.getElementById(id);
+          return el && el.value.trim();
+        });
+        if (p4) completed++;
+
+        // Part 5: Q13 or Q14
+        const p5 = ["q13", "q14"].some((id) => {
+          const el = document.getElementById(id);
+          return el && el.value.trim();
+        });
+        if (p5) completed++;
+
+        const pct = (completed / total) * 100;
+        document.getElementById("progressFill").style.width = pct + "%";
       }
+      document.querySelectorAll("input, textarea, select").forEach((el) => {
+        el.addEventListener("input", updateProgress);
+        el.addEventListener("change", updateProgress);
+      });
 
-      // Add event listeners to all inputs
-      document
-        .querySelectorAll("input, textarea, select")
-        .forEach((element) => {
-          element.addEventListener("input", updateProgress);
-          element.addEventListener("change", updateProgress);
-        });
-
-      /* ---------- Collapsibles ---------- */
+      /* ------------------- Collapsibles ------------------- */
       function toggleCollapsible(header) {
         const content = header.nextElementSibling;
         const collapsed = content.classList.toggle("is-collapsed");
         header.classList.toggle("is-collapsed", collapsed);
       }
-
-      // Default: everything OPEN
+      // Default: everything OPEN (change startClosed to true to start collapsed)
       document.querySelectorAll(".collapsible-header").forEach((h) => {
         const startClosed = false;
         if (startClosed) {
@@ -1489,9 +1505,6 @@
           if (c) c.classList.add("is-collapsed");
         }
       });
-
-      // Initial progress update
-      updateProgress();
     </script>
   </body>
 </html>

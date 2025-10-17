@@ -284,7 +284,7 @@
       .fill-in-line {
         /* was line-height: 2.5; now an inline-flex row that wraps cleanly */
         display: inline-flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         align-items: baseline;
         gap: 0.3rem 0.25rem;
         margin: 6px 0;
@@ -293,15 +293,15 @@
       }
 
       .inline-dropdown {
-        display: inline-block;
+        display: inline-flex;
         padding: 0 0.3em;
         border: none;
-        border-bottom: 2px solid #667eea;
-        border-radius: 0;
+        border: 2px solid #667eea;
+        border-radius: 3px;
         background: transparent;
         font-weight: 600;
         color: #1e3c72;
-        vertical-align: baseline;
+        vertical-align: middle;
         cursor: pointer;
         font-family: inherit;
         font-size: 1em;
@@ -376,6 +376,9 @@
         .inline-dropdown {
           font-size: 0.95em;
         }
+        .fill-in-line {
+          font-size: 0.95em;
+        }
       }
     </style>
   </head>
@@ -447,6 +450,7 @@
               relationships is fundamental to atmospheric science and weather
               prediction.
             </p>
+            <br />
             <p>
               In this lab, you will explore how atmospheric properties change
               with height, calculate pressure at different altitudes, analyze
@@ -597,8 +601,8 @@
 
           <div class="question">
             <span class="question-label"
-              >Question 3: Estimate pressure and % above
-              <span class="points">(6 pts total)</span></span
+              >Question 3: Estimate the pressure and % of atmosphere left above
+              for each example <span class="points">(6 pts total)</span></span
             >
 
             <div class="fill-in-line">
@@ -613,7 +617,7 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              mb; atmosphere above
+              mb; % of atmosphere above
               <input
                 type="number"
                 class="inline-input wide"
@@ -624,13 +628,13 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              %.
+
               <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
               <strong>b.</strong> At the summit of Mt. Everest (8.85 km):
-              Pressure
+              Pressure:
               <input
                 type="number"
                 class="inline-input wide"
@@ -640,7 +644,7 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              mb; atmosphere above
+              mb; % of atmosphere above:
               <input
                 type="number"
                 class="inline-input wide"
@@ -651,12 +655,12 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              %.
+
               <span class="points">(2 pts)</span>
             </div>
 
             <div class="fill-in-line">
-              <strong>c.</strong> In Denver, CO (1.6 km): Pressure
+              <strong>c.</strong> In Denver, CO (1.6 km): Pressure:
               <input
                 type="number"
                 class="inline-input wide"
@@ -666,7 +670,7 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              mb; atmosphere above
+              mb; % of atmosphere above:
               <input
                 type="number"
                 class="inline-input wide"
@@ -677,7 +681,7 @@
                 inputmode="decimal"
                 placeholder="?"
               />
-              %.
+
               <span class="points">(2 pts)</span>
             </div>
           </div>
@@ -747,7 +751,8 @@
                 class="inline-input"
                 id="q4"
                 maxlength="1"
-                placeholder="A/B/C"
+                placeholder="A (Blue) / B (Red) / C (Magenta)"
+                style="width: 30ch"
               />
               has the highest surface temperature.
               <span class="points">(1 pt)</span>
@@ -760,7 +765,8 @@
                 class="inline-input"
                 id="q5"
                 maxlength="1"
-                placeholder="A/B/C"
+                placeholder="A (Blue) / B (Red) / C (Magenta)"
+                style="width: 30ch"
               />
               has the highest temperature at 10 km.
               <span class="points">(1 pt)</span>
@@ -773,7 +779,8 @@
                 class="inline-input"
                 id="q6"
                 maxlength="1"
-                placeholder="A/B/C"
+                placeholder="A (Blue) / B (Red) / C (Magenta)"
+                style="width: 30ch"
               />
               has the highest temperature at 14 km.
               <span class="points">(1 pt)</span>
@@ -792,8 +799,12 @@
             >
             <div class="fill-in-line">
               The
-              <select id="q7_color" class="inline-dropdown">
-                <option value="">--</option>
+              <select
+                id="q7_color"
+                class="inline-dropdown"
+                style="width: 20ch; text-align: center"
+              >
+                <option value="">--select profile--</option>
                 <option value="blue">blue</option>
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
@@ -912,21 +923,29 @@
               <span class="points">(2 pts)</span></span
             >
 
-            <div class="fill-in-line">
+            <div class="fill-in-line" style="width: 100%">
               <strong>Question 11:</strong> The
-              <select id="q11" class="inline-dropdown">
-                <option value="">--</option>
+              <select
+                id="q11"
+                class="inline-dropdown"
+                style="width: 15ch; text-align: center"
+              >
+                <option value="">--color--</option>
                 <option value="blue">blue</option>
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
               </select>
               profile represents Alaska. <span class="points">(1 pt)</span>
             </div>
-
-            <div class="fill-in-line">
+            <br />
+            <div class="fill-in-line" style="width: 100%">
               <strong>Question 12:</strong> The
-              <select id="q12" class="inline-dropdown">
-                <option value="">--</option>
+              <select
+                id="q12"
+                class="inline-dropdown"
+                style="width: 15ch; text-align: center"
+              >
+                <option value="">--color--</option>
                 <option value="blue">blue</option>
                 <option value="red">red</option>
                 <option value="magenta">magenta</option>
@@ -948,7 +967,7 @@
         <div class="collapsible-content">
           <div class="question">
             <span class="question-label"
-              >Question 13: Tropopause vs. temperature
+              >Question 13: Tropopause vs. Temperature
               <span class="points">(3 pts)</span></span
             >
             <p>

@@ -3,9 +3,9 @@
  * Initializes all components for Surface Map Analysis lab
  */
 
-import { initializeStationModelBuilder } from "../shared/components/station-model-builder.js";
-import { initializeSingleLineCanvas } from "../shared/components/single-line-canvas.js";
-import { initializeMultiLineCanvas } from "../shared/components/multi-line-canvas.js";
+import { initializeStationModelBuilder } from "../shared/components/station-model-builder.js?v=2";
+import { initializeSingleLineCanvas } from "../shared/components/single-line-canvas.js?v=2";
+import { initializeMultiLineCanvas } from "../shared/components/multi-line-canvas.js?v=2";
 import {
   exportLabAnswers,
   clearLabForm,

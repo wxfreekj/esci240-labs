@@ -1,468 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>Lab 6: Upper Air Analysis</title>
-    <link rel="stylesheet" href="shared/styles/common.css">
-    <link rel="stylesheet" href="shared/styles/lab-styles.css">
+    <link rel="stylesheet" href="shared/styles/common.css" />
+    <link rel="stylesheet" href="shared/styles/lab-styles.css" />
     <style>
-        :root {
-            --indigo: #667eea;
-            --purple: #764ba2;
-            --google-blue: #4285f4;
-            --surface: #f0f4ff;
-            --ink-700: #3a4a7a;
-            --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
-            --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
-            --pad-card: clamp(14px, 2vw, 20px);
-            --pad-header-y: 14px;
-            --hit-area: 44px;
-            --inline-lh: 1.5;
-        }
+      :root {
+        --indigo: #667eea;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --ink-700: #3a4a7a;
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px;
+        --inline-lh: 1.5;
+      }
 
-        html,
-        body {
-            height: 100%;
-        }
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-            color: var(--ink-700);
-            background: #fff;
-            font-size: var(--fs-body);
-            line-height: 1.5;
-            -webkit-tap-highlight-color: transparent;
-        }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+          sans-serif;
+        color: var(--ink-700);
+        background: #fff;
+        font-size: var(--fs-body);
+        line-height: 1.5;
+        -webkit-tap-highlight-color: transparent;
+      }
 
+      .container {
+        max-width: 960px;
+        margin: 80px auto 72px;
+        padding: 0 16px;
+      }
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        padding: max(var(--pad-header-y), 16px) var(--pad-card);
+        border-radius: 12px;
+        margin: 0 0 24px 0;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+      }
+      .header h1 {
+        margin: 0 0 6px 0;
+        font-size: var(--fs-h1);
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+      }
+      .header p {
+        margin: 0;
+        color: #e8ebff;
+        font-weight: 600;
+        font-size: 0.98em;
+        opacity: 0.95;
+      }
+
+      /* Progress */
+      .progress-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: saturate(120%) blur(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+        padding-top: env(safe-area-inset-top);
+      }
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        width: 0%;
+        transition: width 0.3s ease;
+        display: block;
+      }
+
+      .section {
+        margin: 0 0 16px 0;
+      }
+
+      /* Collapsibles */
+      .collapsible-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
+        transition: margin 0.2s ease;
+      }
+      .collapsible-container:has(.collapsible-header.is-collapsed) {
+        margin: 0 0 6px 0;
+      }
+      .collapsible-header {
+        margin: 0;
+        padding: max(var(--pad-header-y), 12px) 48px
+          max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 800;
+        color: #1f3b82;
+        background: var(--surface);
+        min-height: var(--hit-area);
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+      }
+      .collapsible-header.is-collapsed {
+        padding: 8px 48px 8px var(--pad-card);
+        min-height: auto;
+        font-size: 0.9em;
+        font-weight: 700;
+      }
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease, font-size 0.2s ease;
+      }
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+        font-size: 0.85em;
+      }
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: var(--pad-card);
+        border-top: 1px solid #e5ecff;
+      }
+      .collapsible-content.is-collapsed {
+        display: none;
+      }
+
+      /* Inline inputs */
+      .inline-inputs {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .inline-inputs input {
+        width: 150px;
+        padding: 10px;
+        border: 2px solid var(--indigo);
+        border-radius: 8px;
+        font-size: 1em;
+      }
+      .inline-inputs input:focus {
+        border-color: var(--purple);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+      }
+
+      /* Form groups */
+      .form-group {
+        margin: 15px 0 25px 0;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--ink-700);
+      }
+      .form-group input[type="text"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #d1d9e6;
+        border-radius: 8px;
+        font-size: 1em;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+      }
+      .form-group input[type="text"]:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--indigo);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      /* Key terms */
+      .key-terms {
+        background: var(--surface);
+        border-left: 5px solid var(--google-blue);
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 18px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+      .key-terms h3 {
+        margin-top: 0;
+        color: var(--ink-700);
+        font-weight: 800;
+      }
+      .key-terms ul {
+        margin-bottom: 0;
+      }
+
+      /* Buttons */
+      .button-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      .download-btn,
+      .clear-btn,
+      .help-btn {
+        flex: 1;
+        min-width: 200px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .download-btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+      }
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4);
+      }
+      .clear-btn {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+      }
+      .clear-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(239, 68, 68, 0.4);
+      }
+      .help-btn {
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        color: white;
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+      }
+      .help-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Images */
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Zoom Modal */
+      .zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        overflow: hidden;
+      }
+      .zoom-modal.active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .zoom-container {
+        position: relative;
+        width: 90%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      .zoom-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transform-origin: center center;
+        transition: transform 0.1s ease-out;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+      .zoom-controls {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 12px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        z-index: 10001;
+      }
+      .zoom-btn {
+        background: linear-gradient(135deg, var(--indigo), var(--purple));
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+        min-width: 40px;
+      }
+      .zoom-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+      .zoom-level {
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        font-weight: 600;
+        color: #333;
+        min-width: 60px;
+        justify-content: center;
+      }
+      .zoom-close {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        border: none;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        z-index: 10001;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, background 0.2s;
+      }
+      .zoom-close:hover {
+        transform: scale(1.1);
+        background: white;
+      }
+      .zoom-instructions {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        z-index: 10001;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      blockquote {
+        background: var(--surface);
+        border-left: 4px solid var(--indigo);
+        padding: 16px 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        font-style: italic;
+        color: #555;
+      }
+
+      hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
+        margin: 30px 0;
+        opacity: 0.3;
+      }
+
+      /* Two-column grid for questions */
+      .questions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
+        .questions-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+
+      @media (max-width: 700px) {
         .container {
-            max-width: 960px;
-            margin: 80px auto 72px;
-            padding: 0 16px;
+          margin-top: 60px;
         }
-        .header {
-            background: linear-gradient(135deg, var(--indigo) 0%, var(--purple) 100%);
-            padding: max(var(--pad-header-y), 16px) var(--pad-card);
-            border-radius: 12px;
-            margin: 0 0 24px 0;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
-        }
-        .header h1 {
-            margin: 0 0 6px 0;
-            font-size: var(--fs-h1);
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-        }
-        .header p {
-            margin: 0;
-            color: #e8ebff;
-            font-weight: 600;
-            font-size: 0.98em;
-            opacity: 0.95;
-        }
-
-        /* Progress */
-        .progress-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: saturate(120%) blur(4px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 8px 0;
-            padding-top: env(safe-area-inset-top);
-        }
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 8px;
-            background: linear-gradient(90deg, var(--indigo) 0%, var(--purple) 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            display: block;
-        }
-
-        .section {
-            margin: 0 0 16px 0;
-        }
-
-        /* Collapsibles */
-        .collapsible-container {
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 0 0 16px 0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            background: var(--surface);
-            border: 1px solid #dfe7ff;
-            transition: margin 0.2s ease;
-        }
-        .collapsible-container:has(.collapsible-header.is-collapsed) {
-            margin: 0 0 6px 0;
-        }
-        .collapsible-header {
-            margin: 0;
-            padding: max(var(--pad-header-y), 12px) 48px max(var(--pad-header-y), 12px) var(--pad-card);
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            font-weight: 800;
-            color: #1f3b82;
-            background: var(--surface);
-            min-height: var(--hit-area);
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-        .collapsible-header.is-collapsed {
-            padding: 8px 48px 8px var(--pad-card);
-            min-height: auto;
-            font-size: 0.9em;
-            font-weight: 700;
-        }
-        .collapsible-header:hover {
-            filter: brightness(0.98);
-        }
-        .collapsible-header::after {
-            content: "▼";
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.95em;
-            color: #6a6a6a;
-            transition: transform 0.2s ease, font-size 0.2s ease;
-        }
-        .collapsible-header.is-collapsed::after {
-            transform: translateY(-50%) rotate(-90deg);
-            font-size: 0.85em;
-        }
-        .stripe-blue {
-            border-left: 4px solid var(--google-blue);
-        }
-        .stripe-indigo {
-            border-left: 4px solid var(--indigo);
-        }
-        .collapsible-content {
-            display: block;
-            background: var(--surface);
-            padding: var(--pad-card);
-            border-top: 1px solid #e5ecff;
-        }
-        .collapsible-content.is-collapsed {
-            display: none;
-        }
-
-        /* Inline inputs */
         .inline-inputs {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-            flex-wrap: wrap;
+          flex-direction: column;
+          align-items: stretch;
         }
         .inline-inputs input {
-            width: 150px;
-            padding: 10px;
-            border: 2px solid var(--indigo);
-            border-radius: 8px;
-            font-size: 1em;
+          width: 100%;
         }
-        .inline-inputs input:focus {
-            border-color: var(--purple);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
-        }
+      }
 
-        /* Form groups */
-        .form-group {
-            margin: 15px 0 25px 0;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--ink-700);
-        }
-        .form-group input[type="text"],
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #d1d9e6;
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            box-sizing: border-box;
-        }
-        .form-group input[type="text"]:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--indigo);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        /* Key terms */
-        .key-terms {
-            background: var(--surface);
-            border-left: 5px solid var(--google-blue);
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 18px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-        .key-terms h3 {
-            margin-top: 0;
-            color: var(--ink-700);
-            font-weight: 800;
-        }
-        .key-terms ul {
-            margin-bottom: 0;
-        }
-
-        /* Buttons */
+      @media (max-width: 480px) {
         .button-container {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
+          flex-direction: column;
         }
         .download-btn,
         .clear-btn,
         .help-btn {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+          min-width: 100%;
         }
-        .download-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-        }
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4);
-        }
-        .clear-btn {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
-        }
-        .clear-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.4);
-        }
-        .help-btn {
-            background: linear-gradient(135deg, var(--indigo) 0%, var(--purple) 100%);
-            color: white;
-            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-        }
-        .help-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Images */
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 20px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Zoom Modal */
-        .zoom-modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            overflow: hidden;
-        }
-        .zoom-modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .zoom-container {
-            position: relative;
-            width: 90%;
-            height: 90%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        .zoom-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transform-origin: center center;
-            transition: transform 0.1s ease-out;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-        .zoom-controls {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 12px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 10001;
-        }
-        .zoom-btn {
-            background: linear-gradient(135deg, var(--indigo), var(--purple));
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            min-width: 40px;
-        }
-        .zoom-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-        .zoom-level {
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            font-weight: 600;
-            color: #333;
-            min-width: 60px;
-            justify-content: center;
-        }
-        .zoom-close {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-            z-index: 10001;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, background 0.2s;
-        }
-        .zoom-close:hover {
-            transform: scale(1.1);
-            background: white;
-        }
-        .zoom-instructions {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            z-index: 10001;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        blockquote {
-            background: var(--surface);
-            border-left: 4px solid var(--indigo);
-            padding: 16px 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-style: italic;
-            color: #555;
-        }
-
-        hr {
-            border: none;
-            height: 2px;
-            background: linear-gradient(90deg, var(--indigo) 0%, var(--purple) 100%);
-            margin: 30px 0;
-            opacity: 0.3;
-        }
-
-        /* Two-column grid for questions */
-        .questions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 20px 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .questions-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 700px) {
-            .container {
-                margin-top: 60px;
-            }
-            .inline-inputs {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .inline-inputs input {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .button-container {
-                flex-direction: column;
-            }
-            .download-btn,
-            .clear-btn,
-            .help-btn {
-                min-width: 100%;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Progress Indicator -->
     <div class="progress-indicator">
       <div class="progress-bar">
@@ -471,846 +492,1211 @@
     </div>
 
     <div class="container">
-        <div class="header">
-            <h1>🌪️ Lab 6: Upper Air Analysis</h1>
-            <p>Decoding Upper-Level Weather Patterns (30 Points)</p>
+      <div class="header">
+        <h1>🌪️ Lab 6: Upper Air Analysis</h1>
+        <p>Decoding Upper-Level Weather Patterns (30 Points)</p>
+      </div>
+
+      <div class="content">
+        <!-- For This Lab Section -->
+        <div class="collapsible-container stripe-indigo">
+          <h2 class="collapsible-header">📋 For This Lab</h2>
+          <div class="collapsible-content">
+            <h3
+              style="
+                margin-top: 0;
+                margin-bottom: 15px;
+                color: #1976d2;
+                font-size: 1.1em;
+              "
+            >
+              Instructions
+            </h3>
+            <ol style="margin: 0; padding-left: 25px; line-height: 2">
+              <li>Study the key terms and upper air analysis concepts</li>
+              <li>
+                Complete all analysis questions about pressure surfaces and wind
+                patterns
+              </li>
+              <li>
+                Monitor your progress using the progress bar at the top of the
+                page
+              </li>
+              <li>Your work is automatically saved as you type</li>
+              <li>
+                When complete, click
+                <strong>"Download file for Canvas Submission"</strong>
+              </li>
+              <li>
+                Locate the downloaded file (<em>Lab06_UpperAirAnalysis.txt</em>)
+                and upload it to Canvas
+              </li>
+            </ol>
+            <p
+              style="
+                margin-top: 15px;
+                margin-bottom: 0;
+                font-size: 0.95em;
+                color: #555;
+              "
+            >
+              <strong>💡 Tip:</strong> Focus on understanding pressure surfaces
+              and how they relate to weather patterns at different altitudes.
+            </p>
+          </div>
         </div>
-        
-        <div class="content">
-            <!-- For This Lab Section -->
-            <div class="collapsible-container stripe-indigo">
-                <h2 class="collapsible-header">📋 For This Lab</h2>
-                <div class="collapsible-content">
-                    <h3 style="margin-top: 0; margin-bottom: 15px; color: #1976d2; font-size: 1.1em;">Instructions</h3>
-                    <ol style="margin: 0; padding-left: 25px; line-height: 2;">
-                        <li>Study the key terms and upper air analysis concepts</li>
-                        <li>Complete all analysis questions about pressure surfaces and wind patterns</li>
-                        <li>Monitor your progress using the progress bar at the top of the page</li>
-                        <li>Your work is automatically saved as you type</li>
-                        <li>When complete, click <strong>"Download file for Canvas Submission"</strong></li>
-                        <li>Locate the downloaded file (<em>Lab06_UpperAirAnalysis.txt</em>) and upload it to Canvas</li>
-                    </ol>
-                    <p style="margin-top: 15px; margin-bottom: 0; font-size: 0.95em; color: #555;">
-                        <strong>💡 Tip:</strong> Focus on understanding pressure surfaces and how they relate to weather patterns at different altitudes.
-                    </p>
-                </div>
+
+        <div class="collapsible-container stripe-indigo">
+          <h2 class="collapsible-header">
+            Introduction: Decoding the Atmosphere in 3D
+          </h2>
+          <div class="collapsible-content">
+            <blockquote>
+              Upper-air analysis is a cornerstone of modern meteorology,
+              providing a three-dimensional view of the weather patterns that
+              shape our daily lives. While surface weather maps give us a
+              snapshot of conditions at ground level, the true drivers of
+              weather systems—large-scale winds, pressure systems, and
+              temperature contrasts—are found high above. This lab explores the
+              interpretation of upper-air charts, which map meteorological
+              conditions not at a fixed height, but on a constant pressure
+              surface.
+            </blockquote>
+
+            <h3>Background</h3>
+            <div class="key-terms">
+              <h3>Key Terms & Concepts</h3>
+              <ul>
+                <li>
+                  <strong>Pressure Surface:</strong> An imaginary surface where
+                  the atmospheric pressure is the same everywhere. Common
+                  surfaces are 850-mb, 500-mb, and 200/300-mb, each representing
+                  different altitudes in the atmosphere.
+                </li>
+                <li>
+                  <strong>Contour Interval:</strong> The difference in value
+                  between adjacent contour lines on a map. For upper-air charts,
+                  this usually refers to the height difference (in meters or
+                  decameters) between lines.
+                </li>
+                <li>
+                  <strong>Height Contour:</strong> A line connecting points of
+                  equal height above sea level for a given pressure surface.
+                  These contours reveal the shape of the pressure surface and
+                  help identify ridges, troughs, and gradients.
+                </li>
+                <li>
+                  <strong>Advection:</strong> The horizontal movement of air,
+                  carrying properties like temperature or moisture from one
+                  place to another. <em>Warm air advection</em> means warmer air
+                  is moving into a region; <em>cold air advection</em> means
+                  colder air is moving in.
+                </li>
+                <li>
+                  <strong>Dew Point Depression:</strong> The difference between
+                  the air temperature and the dew point temperature. A small
+                  depression means the air is nearly saturated (humid); a large
+                  depression means drier air.
+                </li>
+                <li>
+                  <strong>Wind Barb:</strong> A symbol used to show both wind
+                  speed and direction. The shaft points in the direction the
+                  wind is coming from; barbs and flags indicate speed (each full
+                  barb = 10 knots, half barb = 5 knots, flag = 50 knots).
+                </li>
+                <li>
+                  <strong>Jet Stream:</strong> A fast-moving ribbon of air found
+                  near the top of the troposphere (200/300-mb level). Jet
+                  streams steer weather systems and are associated with strong
+                  wind speeds.
+                </li>
+                <li>
+                  <strong>Ridge:</strong> An elongated area of relatively high
+                  heights (pressure aloft), often associated with warmer, drier,
+                  and more stable weather.
+                </li>
+                <li>
+                  <strong>Trough:</strong> An elongated area of relatively low
+                  heights (pressure aloft), often associated with cooler,
+                  unsettled, and stormier weather.
+                </li>
+              </ul>
             </div>
-        
-            <div class="collapsible-container stripe-indigo">
-                <h2 class="collapsible-header">Introduction: Decoding the Atmosphere in 3D</h2>
-                <div class="collapsible-content">
-                    <blockquote>
-                        Upper-air analysis is a cornerstone of modern meteorology, providing a three-dimensional view of the weather patterns that shape our daily lives. While surface weather maps give us a snapshot of conditions at ground level, the true drivers of weather systems—large-scale winds, pressure systems, and temperature contrasts—are found high above. This lab explores the interpretation of upper-air charts, which map meteorological conditions not at a fixed height, but on a constant pressure surface.
-                    </blockquote>
 
-                    <h3>Background</h3>
-                    <div class="key-terms">
-                        <h3>Key Terms & Concepts</h3>
-                        <ul>
-                            <li><strong>Pressure Surface:</strong> An imaginary surface where the atmospheric pressure is the same everywhere. Common surfaces are 850-mb, 500-mb, and 200/300-mb, each representing different altitudes in the atmosphere.</li>
-                            <li><strong>Contour Interval:</strong> The difference in value between adjacent contour lines on a map. For upper-air charts, this usually refers to the height difference (in meters or decameters) between lines.</li>
-                            <li><strong>Height Contour:</strong> A line connecting points of equal height above sea level for a given pressure surface. These contours reveal the shape of the pressure surface and help identify ridges, troughs, and gradients.</li>
-                            <li><strong>Advection:</strong> The horizontal movement of air, carrying properties like temperature or moisture from one place to another. <em>Warm air advection</em> means warmer air is moving into a region; <em>cold air advection</em> means colder air is moving in.</li>
-                            <li><strong>Dew Point Depression:</strong> The difference between the air temperature and the dew point temperature. A small depression means the air is nearly saturated (humid); a large depression means drier air.</li>
-                            <li><strong>Wind Barb:</strong> A symbol used to show both wind speed and direction. The shaft points in the direction the wind is coming from; barbs and flags indicate speed (each full barb = 10 knots, half barb = 5 knots, flag = 50 knots).</li>
-                            <li><strong>Jet Stream:</strong> A fast-moving ribbon of air found near the top of the troposphere (200/300-mb level). Jet streams steer weather systems and are associated with strong wind speeds.</li>
-                            <li><strong>Ridge:</strong> An elongated area of relatively high heights (pressure aloft), often associated with warmer, drier, and more stable weather.</li>
-                            <li><strong>Trough:</strong> An elongated area of relatively low heights (pressure aloft), often associated with cooler, unsettled, and stormier weather.</li>
-                        </ul>
-                    </div>
+            <p>
+              The key to understanding these charts is realizing that the
+              altitude of a given pressure surface changes based on the
+              temperature of the air column. Warmer, less dense air expands,
+              pushing the pressure surface to a higher altitude. Colder, denser
+              air contracts, causing the pressure surface to be found at a lower
+              altitude. This difference in column height creates higher pressure
+              aloft over a warm column and lower pressure over a cold column,
+              causing air to move. This redistribution of mass results in rising
+              surface pressure under the cold column and falling surface
+              pressure under the warm column, which ultimately creates surface
+              wind.
+            </p>
 
-                    <p>The key to understanding these charts is realizing that the altitude of a given pressure surface changes based on the temperature of the air column. Warmer, less dense air expands, pushing the pressure surface to a higher altitude. Colder, denser air contracts, causing the pressure surface to be found at a lower altitude. This difference in column height creates higher pressure aloft over a warm column and lower pressure over a cold column, causing air to move. This redistribution of mass results in rising surface pressure under the cold column and falling surface pressure under the warm column, which ultimately creates surface wind.</p>
-                    
-                    <img src="pressureexample.png" alt="Diagram showing how temperature differences in air columns create pressure gradients." onclick="openImageModal(this)">
+            <img
+              src="pressureexample.png"
+              alt="Diagram showing how temperature differences in air columns create pressure gradients."
+              onclick="openImageModal(this)"
+            />
 
-                    <p>The station model for upper-air charts plots key data points including temperature, dew point depression, wind, and the height of the pressure surface.</p>
+            <p>
+              The station model for upper-air charts plots key data points
+              including temperature, dew point depression, wind, and the height
+              of the pressure surface.
+            </p>
 
-                    <img src="upperairdecoder.png" alt="Upper air station model and wind barb key." onclick="openImageModal(this)">
-                </div>
-            </div>
-
-            <hr>
-
-            <form id="lab-form" onsubmit="return false;">
-                <div class="collapsible-container stripe-indigo">
-                    <h2 class="collapsible-header">Part 1: Low-level Analysis</h2>
-                    <div class="collapsible-content">
-                        <p>The 850-mb level provides a view of the atmosphere above the boundary layer. Meteorologists use this level to find areas of warm-air advection (where winds blow from warmer to colder areas) and cold-air advection (where winds blow from colder to warmer areas), which are crucial for forecasting temperature changes and precipitation type.</p>
-                        
-                        <!-- Full-width Map -->
-                        <img src="850map.png" alt="850-mb weather map for analysis." onclick="openImageModal(this)">
-
-                        <!-- Two-column grid of questions -->
-                        <div class="questions-grid">
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 1: Contour Interval (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q1">What is the contour interval shown on this 850-mb map above?</label>
-                                        <select id="q1" name="q1">
-                                            <option value="">Select contour interval...</option>
-                                            <option value="30 mb">30 mb</option>
-                                            <option value="60 mb">60 mb</option>
-                                            <option value="90 mb">90 mb</option>
-                                            <option value="120 mb">120 mb</option>
-                                            <option value="150 mb">150 mb</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 2: Height Range (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label>What is the range of heights shown on the 850-mb map?</label>
-                                        <div class="inline-inputs">
-                                            <input type="text" id="q2_from" name="q2_from" placeholder="Lowest height value">
-                                            <span>to</span>
-                                            <input type="text" id="q2_to" name="q2_to" placeholder="Highest height value">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 3: Wind Direction in Box A (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q3">What is the wind direction within Box A?</label>
-                                        <select id="q3" name="q3">
-                                            <option value="">Select direction...</option>
-                                            <option value="N">N</option>
-                                            <option value="NE">NE</option>
-                                            <option value="E">E</option>
-                                            <option value="SE">SE</option>
-                                            <option value="S">S</option>
-                                            <option value="SW">SW</option>
-                                            <option value="W">W</option>
-                                            <option value="NW">NW</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 4: Wind Direction in Box B (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q4">What is the wind direction within Box B?</label>
-                                        <select id="q4" name="q4">
-                                            <option value="">Select direction...</option>
-                                            <option value="N">N</option>
-                                            <option value="NE">NE</option>
-                                            <option value="E">E</option>
-                                            <option value="SE">SE</option>
-                                            <option value="S">S</option>
-                                            <option value="SW">SW</option>
-                                            <option value="W">W</option>
-                                            <option value="NW">NW</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 5: Cold Air Advection (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q5">Which box shows cold air advection?</label>
-                                        <input type="text" id="q5" name="q5" placeholder="Enter letter A, B, C, or D">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 6: Warm Air Advection (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q6">Which box shows warm air advection?</label>
-                                        <input type="text" id="q6" name="q6" placeholder="Enter letter A, B, C, or D">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 7: Light Winds Location (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q7">Which state would have very light winds according to this map?</label>
-                                        <input type="text" id="q7" name="q7" placeholder="Enter state name">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="collapsible-container stripe-indigo">
-                    <h2 class="collapsible-header">Part 2: Mid-level Analysis</h2>
-                    <div class="collapsible-content">
-                        <p>The 500-mb level is often called the "mid-level" flow. Maps at this level are crucial for forecasting the movement of storms, as the 500-mb winds effectively "steer" surface weather systems.</p>
-                        
-                        <!-- Full-width Map -->
-                        <img src="500mb.png" alt="500-mb weather map for analysis." onclick="openImageModal(this)">
-
-                        <!-- Two-column grid of questions 8-11 -->
-                        <div class="questions-grid">
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 8: 500-mb Contour Interval (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q8">What is the contour interval used on the 500-mb map?</label>
-                                        <select id="q8" name="q8">
-                                            <option value="">Select contour interval...</option>
-                                            <option value="120 mb">120 mb</option>
-                                            <option value="60 mb">60 mb</option>
-                                            <option value="150 mb">150 mb</option>
-                                            <option value="30 mb">30 mb</option>
-                                            <option value="90 mb">90 mb</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 9: Wind Direction in Box A (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q9">What is the wind direction within Box A on the 500-mb map?</label>
-                                        <select id="q9" name="q9">
-                                            <option value="">Select direction...</option>
-                                            <option value="N">N</option>
-                                            <option value="NE">NE</option>
-                                            <option value="E">E</option>
-                                            <option value="SE">SE</option>
-                                            <option value="S">S</option>
-                                            <option value="SW">SW</option>
-                                            <option value="W">W</option>
-                                            <option value="NW">NW</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 10: Wind Direction in Box B (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q10">What is the wind direction within Box B on the 500-mb map?</label>
-                                        <select id="q10" name="q10">
-                                            <option value="">Select direction...</option>
-                                            <option value="N">N</option>
-                                            <option value="NE">NE</option>
-                                            <option value="E">E</option>
-                                            <option value="SE">SE</option>
-                                            <option value="S">S</option>
-                                            <option value="SW">SW</option>
-                                            <option value="W">W</option>
-                                            <option value="NW">NW</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 11: 500-mb Height Range (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label>What is the range of height contours on the 500-mb map?</label>
-                                        <div class="inline-inputs">
-                                            <input type="text" id="q11_from" name="q11_from" placeholder="Lowest height contour">
-                                            <span>to</span>
-                                            <input type="text" id="q11_to" name="q11_to" placeholder="Highest height contour">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Full-width questions 12-13 -->
-                        <div class="collapsible-container stripe-blue">
-                            <h3 class="collapsible-header">Question 12: Temperature-Density-Pressure Relationship (5 pts)</h3>
-                            <div class="collapsible-content">
-                                <div class="form-group">
-                                    <label for="q12">How does the spatial pattern of heights illustrate the relationship between temperature, density, and the rate of vertical pressure change?</label>
-                                    <textarea id="q12" name="q12" placeholder="Explain the relationship between temperature, air density, and how pressure changes with altitude..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="collapsible-container stripe-blue">
-                            <h3 class="collapsible-header">Question 13: Surface Low Movement (2 pts)</h3>
-                            <div class="collapsible-content">
-                                <div class="form-group">
-                                    <label for="q13">If a surface low pressure center developed in eastern New Mexico, toward which direction would it likely move based on the 500-mb winds?</label>
-                                    <select id="q13" name="q13">
-                                        <option value="">Select direction...</option>
-                                        <option value="N">N</option>
-                                        <option value="NE">NE</option>
-                                        <option value="E">E</option>
-                                        <option value="SE">SE</option>
-                                        <option value="S">S</option>
-                                        <option value="SW">SW</option>
-                                        <option value="W">W</option>
-                                        <option value="NW">NW</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="collapsible-container stripe-indigo">
-                    <h2 class="collapsible-header">Part 3: Upper-level Analysis</h2>
-                    <div class="collapsible-content">
-                        <p>Maps at the 200-mb or 300-mb level are used to identify the location and strength of the jet stream. Jet streaks, or areas of maximum wind within the jet stream, are often identified with their own contours.</p>
-                        
-                        <!-- Full-width Map -->
-                        <img src="200mb.png" alt="200-mb weather map for analysis." onclick="openImageModal(this)">
-
-                        <!-- Two-column grid of questions 14-17 -->
-                        <div class="questions-grid">
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 14: 200-mb Height Contour Interval (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q14">What is the contour interval used to show heights on the 200-mb map?</label>
-                                        <select id="q14" name="q14">
-                                            <option value="">Select contour interval...</option>
-                                            <option value="90 mb">90 mb</option>
-                                            <option value="150 mb">150 mb</option>
-                                            <option value="30 mb">30 mb</option>
-                                            <option value="120 mb">120 mb</option>
-                                            <option value="60 mb">60 mb</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 15: Wind Direction in Box A (1 pt)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q15">What is the wind direction in Box A on the 200-mb map?</label>
-                                        <select id="q15" name="q15">
-                                            <option value="">Select direction...</option>
-                                            <option value="N">N</option>
-                                            <option value="NE">NE</option>
-                                            <option value="E">E</option>
-                                            <option value="SE">SE</option>
-                                            <option value="S">S</option>
-                                            <option value="SW">SW</option>
-                                            <option value="W">W</option>
-                                            <option value="NW">NW</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 16: High Wind Locations (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label>Choose two of the states that have winds that exceed 100 kts?</label>
-                                        <div class="inline-inputs">
-                                            <input type="text" id="q16_1" name="q16_1" placeholder="First state name">
-                                            <span>and</span>
-                                            <input type="text" id="q16_2" name="q16_2" placeholder="Second state name">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="collapsible-container stripe-blue">
-                                <h3 class="collapsible-header">Question 17: Lightest Winds Location (2 pts)</h3>
-                                <div class="collapsible-content">
-                                    <div class="form-group">
-                                        <label for="q17">Which state contains the station with the lightest winds on the 200-mb map?</label>
-                                        <input type="text" id="q17" name="q17" placeholder="Enter state name">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="button-container">
-                    <button class="download-btn" onclick="exportAnswers()">📥 Download file for Canvas Submission</button>
-                    <button class="clear-btn" onclick="clearForm()">🗑️ Clear All Answers</button>
-                    <button type="button" class="help-btn" onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 6 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 6:%0D%0A%0D%0A'">
-                      ❓ Questions, concerns, feedback, or need help?
-                    </button>
-                </div>
-            </form>
+            <img
+              src="upperairdecoder.png"
+              alt="Upper air station model and wind barb key."
+              onclick="openImageModal(this)"
+            />
+          </div>
         </div>
+
+        <hr />
+
+        <form id="lab-form" onsubmit="return false;">
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header">Part 1: Low-level Analysis</h2>
+            <div class="collapsible-content">
+              <p>
+                The 850-mb level provides a view of the atmosphere above the
+                boundary layer. Meteorologists use this level to find areas of
+                warm-air advection (where winds blow from warmer to colder
+                areas) and cold-air advection (where winds blow from colder to
+                warmer areas), which are crucial for forecasting temperature
+                changes and precipitation type.
+              </p>
+
+              <!-- Full-width Map -->
+              <img
+                src="850map.png"
+                alt="850-mb weather map for analysis."
+                onclick="openImageModal(this)"
+              />
+
+              <!-- Two-column grid of questions -->
+              <div class="questions-grid">
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 1: Contour Interval (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q1"
+                        >What is the contour interval shown on this 850-mb map
+                        above?</label
+                      >
+                      <select id="q1" name="q1">
+                        <option value="">Select contour interval...</option>
+                        <option value="30 mb">30 mb</option>
+                        <option value="60 mb">60 mb</option>
+                        <option value="90 mb">90 mb</option>
+                        <option value="120 mb">120 mb</option>
+                        <option value="150 mb">150 mb</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 2: Height Range (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label
+                        >What is the range of heights shown on the 850-mb
+                        map?</label
+                      >
+                      <div class="inline-inputs">
+                        <input
+                          type="text"
+                          id="q2_from"
+                          name="q2_from"
+                          placeholder="Lowest height value"
+                        />
+                        <span>to</span>
+                        <input
+                          type="text"
+                          id="q2_to"
+                          name="q2_to"
+                          placeholder="Highest height value"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 3: Wind Direction in Box A (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q3"
+                        >What is the wind direction within Box A?</label
+                      >
+                      <select id="q3" name="q3">
+                        <option value="">Select direction...</option>
+                        <option value="N">N</option>
+                        <option value="NE">NE</option>
+                        <option value="E">E</option>
+                        <option value="SE">SE</option>
+                        <option value="S">S</option>
+                        <option value="SW">SW</option>
+                        <option value="W">W</option>
+                        <option value="NW">NW</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 4: Wind Direction in Box B (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q4"
+                        >What is the wind direction within Box B?</label
+                      >
+                      <select id="q4" name="q4">
+                        <option value="">Select direction...</option>
+                        <option value="N">N</option>
+                        <option value="NE">NE</option>
+                        <option value="E">E</option>
+                        <option value="SE">SE</option>
+                        <option value="S">S</option>
+                        <option value="SW">SW</option>
+                        <option value="W">W</option>
+                        <option value="NW">NW</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 5: Cold Air Advection (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q5"
+                        >Which box shows cold air advection?</label
+                      >
+                      <input
+                        type="text"
+                        id="q5"
+                        name="q5"
+                        placeholder="Enter letter A, B, C, or D"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 6: Warm Air Advection (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q6"
+                        >Which box shows warm air advection?</label
+                      >
+                      <input
+                        type="text"
+                        id="q6"
+                        name="q6"
+                        placeholder="Enter letter A, B, C, or D"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 7: Light Winds Location (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q7"
+                        >Which state would have very light winds according to
+                        this map?</label
+                      >
+                      <input
+                        type="text"
+                        id="q7"
+                        name="q7"
+                        placeholder="Enter state name"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header">Part 2: Mid-level Analysis</h2>
+            <div class="collapsible-content">
+              <p>
+                The 500-mb level is often called the "mid-level" flow. Maps at
+                this level are crucial for forecasting the movement of storms,
+                as the 500-mb winds effectively "steer" surface weather systems.
+              </p>
+
+              <!-- Full-width Map -->
+              <img
+                src="500mb.png"
+                alt="500-mb weather map for analysis."
+                onclick="openImageModal(this)"
+              />
+
+              <!-- Two-column grid of questions 8-11 -->
+              <div class="questions-grid">
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 8: 500-mb Contour Interval (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q8"
+                        >What is the contour interval used on the 500-mb
+                        map?</label
+                      >
+                      <select id="q8" name="q8">
+                        <option value="">Select contour interval...</option>
+                        <option value="120 mb">120 mb</option>
+                        <option value="60 mb">60 mb</option>
+                        <option value="150 mb">150 mb</option>
+                        <option value="30 mb">30 mb</option>
+                        <option value="90 mb">90 mb</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 9: Wind Direction in Box A (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q9"
+                        >What is the wind direction within Box A on the 500-mb
+                        map?</label
+                      >
+                      <select id="q9" name="q9">
+                        <option value="">Select direction...</option>
+                        <option value="N">N</option>
+                        <option value="NE">NE</option>
+                        <option value="E">E</option>
+                        <option value="SE">SE</option>
+                        <option value="S">S</option>
+                        <option value="SW">SW</option>
+                        <option value="W">W</option>
+                        <option value="NW">NW</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 10: Wind Direction in Box B (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q10"
+                        >What is the wind direction within Box B on the 500-mb
+                        map?</label
+                      >
+                      <select id="q10" name="q10">
+                        <option value="">Select direction...</option>
+                        <option value="N">N</option>
+                        <option value="NE">NE</option>
+                        <option value="E">E</option>
+                        <option value="SE">SE</option>
+                        <option value="S">S</option>
+                        <option value="SW">SW</option>
+                        <option value="W">W</option>
+                        <option value="NW">NW</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 11: 500-mb Height Range (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label
+                        >What is the range of height contours on the 500-mb
+                        map?</label
+                      >
+                      <div class="inline-inputs">
+                        <input
+                          type="text"
+                          id="q11_from"
+                          name="q11_from"
+                          placeholder="Lowest height contour"
+                        />
+                        <span>to</span>
+                        <input
+                          type="text"
+                          id="q11_to"
+                          name="q11_to"
+                          placeholder="Highest height contour"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Full-width questions 12-13 -->
+              <div class="collapsible-container stripe-blue">
+                <h3 class="collapsible-header">
+                  Question 12: Temperature-Density-Pressure Relationship (5 pts)
+                </h3>
+                <div class="collapsible-content">
+                  <div class="form-group">
+                    <label for="q12"
+                      >How does the spatial pattern of heights illustrate the
+                      relationship between temperature, density, and the rate of
+                      vertical pressure change?</label
+                    >
+                    <textarea
+                      id="q12"
+                      name="q12"
+                      placeholder="Explain the relationship between temperature, air density, and how pressure changes with altitude..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="collapsible-container stripe-blue">
+                <h3 class="collapsible-header">
+                  Question 13: Surface Low Movement (2 pts)
+                </h3>
+                <div class="collapsible-content">
+                  <div class="form-group">
+                    <label for="q13"
+                      >If a surface low pressure center developed in eastern New
+                      Mexico, toward which direction would it likely move based
+                      on the 500-mb winds?</label
+                    >
+                    <select id="q13" name="q13">
+                      <option value="">Select direction...</option>
+                      <option value="N">N</option>
+                      <option value="NE">NE</option>
+                      <option value="E">E</option>
+                      <option value="SE">SE</option>
+                      <option value="S">S</option>
+                      <option value="SW">SW</option>
+                      <option value="W">W</option>
+                      <option value="NW">NW</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header">Part 3: Upper-level Analysis</h2>
+            <div class="collapsible-content">
+              <p>
+                Maps at the 200-mb or 300-mb level are used to identify the
+                location and strength of the jet stream. Jet streaks, or areas
+                of maximum wind within the jet stream, are often identified with
+                their own contours.
+              </p>
+
+              <!-- Full-width Map -->
+              <img
+                src="200mb.png"
+                alt="200-mb weather map for analysis."
+                onclick="openImageModal(this)"
+              />
+
+              <!-- Two-column grid of questions 14-17 -->
+              <div class="questions-grid">
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 14: 200-mb Height Contour Interval (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q14"
+                        >What is the contour interval used to show heights on
+                        the 200-mb map?</label
+                      >
+                      <select id="q14" name="q14">
+                        <option value="">Select contour interval...</option>
+                        <option value="90 mb">90 mb</option>
+                        <option value="150 mb">150 mb</option>
+                        <option value="30 mb">30 mb</option>
+                        <option value="120 mb">120 mb</option>
+                        <option value="60 mb">60 mb</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 15: Wind Direction in Box A (1 pt)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q15"
+                        >What is the wind direction in Box A on the 200-mb
+                        map?</label
+                      >
+                      <select id="q15" name="q15">
+                        <option value="">Select direction...</option>
+                        <option value="N">N</option>
+                        <option value="NE">NE</option>
+                        <option value="E">E</option>
+                        <option value="SE">SE</option>
+                        <option value="S">S</option>
+                        <option value="SW">SW</option>
+                        <option value="W">W</option>
+                        <option value="NW">NW</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 16: High Wind Locations (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label
+                        >Choose two of the states that have winds that exceed
+                        100 kts?</label
+                      >
+                      <div class="inline-inputs">
+                        <input
+                          type="text"
+                          id="q16_1"
+                          name="q16_1"
+                          placeholder="First state name"
+                        />
+                        <span>and</span>
+                        <input
+                          type="text"
+                          id="q16_2"
+                          name="q16_2"
+                          placeholder="Second state name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapsible-container stripe-blue">
+                  <h3 class="collapsible-header">
+                    Question 17: Lightest Winds Location (2 pts)
+                  </h3>
+                  <div class="collapsible-content">
+                    <div class="form-group">
+                      <label for="q17"
+                        >Which state contains the station with the lightest
+                        winds on the 200-mb map?</label
+                      >
+                      <input
+                        type="text"
+                        id="q17"
+                        name="q17"
+                        placeholder="Enter state name"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button class="download-btn" onclick="exportAnswers()">
+              📥 Download file for Canvas Submission
+            </button>
+            <button class="clear-btn" onclick="clearForm()">
+              🗑️ Clear All Answers
+            </button>
+            <button
+              type="button"
+              class="help-btn"
+              onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 6 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 6:%0D%0A%0D%0A'"
+            >
+              ❓ Questions, concerns, feedback, or need help?
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Zoom Modal -->
     <div id="zoomModal" class="zoom-modal">
-        <button class="zoom-close" onclick="closeImageModal()">×</button>
-        <div class="zoom-instructions">🖱️ Drag to pan • Scroll to zoom • +/- buttons to zoom</div>
-        <div class="zoom-container" id="zoomContainer">
-            <img id="zoomImage" class="zoom-image" src="" alt="Zoomed image">
-        </div>
-        <div class="zoom-controls">
-            <button class="zoom-btn" onclick="zoomOut()">−</button>
-            <span class="zoom-level" id="zoomLevel">100%</span>
-            <button class="zoom-btn" onclick="zoomIn()">+</button>
-            <button class="zoom-btn" onclick="resetZoom()">⟲ Reset</button>
-        </div>
+      <button class="zoom-close" onclick="closeImageModal()">×</button>
+      <div class="zoom-instructions">
+        🖱️ Drag to pan • Scroll to zoom • +/- buttons to zoom
+      </div>
+      <div class="zoom-container" id="zoomContainer">
+        <img id="zoomImage" class="zoom-image" src="" alt="Zoomed image" />
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="zoomOut()">−</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="zoom-btn" onclick="zoomIn()">+</button>
+        <button class="zoom-btn" onclick="resetZoom()">⟲ Reset</button>
+      </div>
     </div>
 
     <script>
-        // Zoom Modal Functionality
-        let zoomState = {
-            scale: 1,
-            translateX: 0,
-            translateY: 0,
-            isDragging: false,
-            startX: 0,
-            startY: 0,
-            lastX: 0,
-            lastY: 0
-        };
+      // Zoom Modal Functionality
+      let zoomState = {
+        scale: 1,
+        translateX: 0,
+        translateY: 0,
+        isDragging: false,
+        startX: 0,
+        startY: 0,
+        lastX: 0,
+        lastY: 0,
+      };
 
-        function openImageModal(img) {
-            const modal = document.getElementById('zoomModal');
-            const zoomImage = document.getElementById('zoomImage');
-            
-            zoomImage.src = img.src;
-            modal.classList.add('active');
-            resetZoom();
-            
-            // Prevent body scroll when modal is open
-            document.body.style.overflow = 'hidden';
-        }
+      function openImageModal(img) {
+        const modal = document.getElementById("zoomModal");
+        const zoomImage = document.getElementById("zoomImage");
 
-        function closeImageModal() {
-            const modal = document.getElementById('zoomModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-            resetZoom();
-        }
+        zoomImage.src = img.src;
+        modal.classList.add("active");
+        resetZoom();
 
-        function centerImage() {
-            zoomState.translateX = 0;
-            zoomState.translateY = 0;
-            updateTransform();
-        }
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = "hidden";
+      }
 
-        function updateTransform() {
-            const zoomImage = document.getElementById('zoomImage');
-            zoomImage.style.transform = `translate(${zoomState.translateX}px, ${zoomState.translateY}px) scale(${zoomState.scale})`;
-            
-            const zoomLevel = document.getElementById('zoomLevel');
-            zoomLevel.textContent = Math.round(zoomState.scale * 100) + '%';
-        }
+      function closeImageModal() {
+        const modal = document.getElementById("zoomModal");
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        resetZoom();
+      }
 
-        function zoomIn() {
-            zoomState.scale = Math.min(zoomState.scale * 1.2, 5);
-            updateTransform();
-        }
+      function centerImage() {
+        zoomState.translateX = 0;
+        zoomState.translateY = 0;
+        updateTransform();
+      }
 
-        function zoomOut() {
-            zoomState.scale = Math.max(zoomState.scale / 1.2, 0.5);
-            updateTransform();
-        }
+      function updateTransform() {
+        const zoomImage = document.getElementById("zoomImage");
+        zoomImage.style.transform = `translate(${zoomState.translateX}px, ${zoomState.translateY}px) scale(${zoomState.scale})`;
 
-        function resetZoom() {
-            zoomState.scale = 1;
-            zoomState.translateX = 0;
-            zoomState.translateY = 0;
-            updateTransform();
-        }
+        const zoomLevel = document.getElementById("zoomLevel");
+        zoomLevel.textContent = Math.round(zoomState.scale * 100) + "%";
+      }
 
-        // Mouse drag handlers
-        document.addEventListener('DOMContentLoaded', function() {
-            const zoomContainer = document.getElementById('zoomContainer');
-            const zoomImage = document.getElementById('zoomImage');
+      function zoomIn() {
+        zoomState.scale = Math.min(zoomState.scale * 1.2, 5);
+        updateTransform();
+      }
 
-            zoomImage.addEventListener('mousedown', function(e) {
-                zoomState.isDragging = true;
-                zoomState.startX = e.clientX - zoomState.translateX;
-                zoomState.startY = e.clientY - zoomState.translateY;
-                zoomImage.style.cursor = 'grabbing';
-                e.preventDefault();
-            });
+      function zoomOut() {
+        zoomState.scale = Math.max(zoomState.scale / 1.2, 0.5);
+        updateTransform();
+      }
 
-            document.addEventListener('mousemove', function(e) {
-                if (!zoomState.isDragging) return;
-                
-                zoomState.translateX = e.clientX - zoomState.startX;
-                zoomState.translateY = e.clientY - zoomState.startY;
-                updateTransform();
-            });
+      function resetZoom() {
+        zoomState.scale = 1;
+        zoomState.translateX = 0;
+        zoomState.translateY = 0;
+        updateTransform();
+      }
 
-            document.addEventListener('mouseup', function() {
-                zoomState.isDragging = false;
-                zoomImage.style.cursor = 'grab';
-            });
+      // Mouse drag handlers
+      document.addEventListener("DOMContentLoaded", function () {
+        const zoomContainer = document.getElementById("zoomContainer");
+        const zoomImage = document.getElementById("zoomImage");
 
-            // Mouse wheel zoom
-            zoomContainer.addEventListener('wheel', function(e) {
-                e.preventDefault();
-                
-                if (e.deltaY < 0) {
-                    zoomIn();
-                } else {
-                    zoomOut();
-                }
-            });
-
-            // Touch support for mobile
-            let touchStartDist = 0;
-            
-            zoomImage.addEventListener('touchstart', function(e) {
-                if (e.touches.length === 1) {
-                    zoomState.isDragging = true;
-                    zoomState.startX = e.touches[0].clientX - zoomState.translateX;
-                    zoomState.startY = e.touches[0].clientY - zoomState.translateY;
-                } else if (e.touches.length === 2) {
-                    const dx = e.touches[0].clientX - e.touches[1].clientX;
-                    const dy = e.touches[0].clientY - e.touches[1].clientY;
-                    touchStartDist = Math.sqrt(dx * dx + dy * dy);
-                }
-                e.preventDefault();
-            });
-
-            zoomImage.addEventListener('touchmove', function(e) {
-                if (e.touches.length === 1 && zoomState.isDragging) {
-                    zoomState.translateX = e.touches[0].clientX - zoomState.startX;
-                    zoomState.translateY = e.touches[0].clientY - zoomState.startY;
-                    updateTransform();
-                } else if (e.touches.length === 2) {
-                    const dx = e.touches[0].clientX - e.touches[1].clientX;
-                    const dy = e.touches[0].clientY - e.touches[1].clientY;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (touchStartDist > 0) {
-                        const scaleDiff = dist / touchStartDist;
-                        zoomState.scale = Math.min(Math.max(zoomState.scale * scaleDiff, 0.5), 5);
-                        updateTransform();
-                    }
-                    touchStartDist = dist;
-                }
-                e.preventDefault();
-            });
-
-            zoomImage.addEventListener('touchend', function() {
-                zoomState.isDragging = false;
-                touchStartDist = 0;
-            });
-
-            // ESC key to close modal
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeImageModal();
-                }
-            });
+        zoomImage.addEventListener("mousedown", function (e) {
+          zoomState.isDragging = true;
+          zoomState.startX = e.clientX - zoomState.translateX;
+          zoomState.startY = e.clientY - zoomState.translateY;
+          zoomImage.style.cursor = "grabbing";
+          e.preventDefault();
         });
 
-        // Collapsible functionality
-        function toggleCollapsible(header) {
-            header.classList.toggle('is-collapsed');
-            const content = header.nextElementSibling;
-            if (content && content.classList.contains('collapsible-content')) {
-                content.classList.toggle('is-collapsed');
-            }
-        }
+        document.addEventListener("mousemove", function (e) {
+          if (!zoomState.isDragging) return;
 
-        // Initialize collapsibles
-        document.addEventListener('DOMContentLoaded', function() {
-            const headers = document.querySelectorAll('.collapsible-header');
-            headers.forEach(header => {
-                header.addEventListener('click', function() {
-                    toggleCollapsible(this);
-                });
-            });
+          zoomState.translateX = e.clientX - zoomState.startX;
+          zoomState.translateY = e.clientY - zoomState.startY;
+          updateTransform();
         });
 
-        // Auto-save functionality
-        function saveToLocalStorage() {
-            const formData = {};
-            const inputs = document.querySelectorAll('#lab-form input, #lab-form select, #lab-form textarea');
-            inputs.forEach(input => {
-                if (input.id) {
-                    formData[input.id] = input.value;
-                }
-            });
-            localStorage.setItem('lab06_data', JSON.stringify(formData));
-        }
-
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem('lab06_data');
-            if (savedData) {
-                const formData = JSON.parse(savedData);
-                Object.keys(formData).forEach(id => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.value = formData[id];
-                    }
-                });
-                updateProgress();
-            }
-        }
-
-        // Export answers
-        function exportAnswers() {
-            // Validation
-            const requiredFields = [
-                { id: 'q1', name: 'Question 1' },
-                { id: 'q2_from', name: 'Question 2 (From)' },
-                { id: 'q2_to', name: 'Question 2 (To)' },
-                { id: 'q3', name: 'Question 3' },
-                { id: 'q4', name: 'Question 4' },
-                { id: 'q5', name: 'Question 5' },
-                { id: 'q6', name: 'Question 6' },
-                { id: 'q7', name: 'Question 7' },
-                { id: 'q8', name: 'Question 8' },
-                { id: 'q9', name: 'Question 9' },
-                { id: 'q10', name: 'Question 10' },
-                { id: 'q11_from', name: 'Question 11 (From)' },
-                { id: 'q11_to', name: 'Question 11 (To)' },
-                { id: 'q12', name: 'Question 12' },
-                { id: 'q13', name: 'Question 13' },
-                { id: 'q14', name: 'Question 14' },
-                { id: 'q15', name: 'Question 15' },
-                { id: 'q16_1', name: 'Question 16 (State 1)' },
-                { id: 'q16_2', name: 'Question 16 (State 2)' },
-                { id: 'q17', name: 'Question 17' }
-            ];
-
-            const missing = [];
-            requiredFields.forEach(field => {
-                const element = document.getElementById(field.id);
-                if (!element || !element.value.trim()) {
-                    missing.push(field.name);
-                }
-            });
-
-            if (missing.length > 0) {
-                alert('⚠️ Please complete all questions before downloading.\n\nMissing:\n' + missing.join('\n'));
-                return;
-            }
-
-            // Build the output string
-            let output = '';
-            output += 'ASSIGNMENT=Lab6_Upper_Air_Analysis\n';
-            output += 'DATE=' + new Date().toISOString() + '\n';
-            output += 'TOTAL_POINTS=30\n';
-            output += '---BEGIN_ANSWERS---\n';
-            
-            // Part 1
-            output += 'Q1=' + document.getElementById('q1').value + '\n';
-            output += 'Q2_FROM=' + document.getElementById('q2_from').value + '\n';
-            output += 'Q2_TO=' + document.getElementById('q2_to').value + '\n';
-            output += 'Q3=' + document.getElementById('q3').value + '\n';
-            output += 'Q4=' + document.getElementById('q4').value + '\n';
-            output += 'Q5=' + document.getElementById('q5').value + '\n';
-            output += 'Q6=' + document.getElementById('q6').value + '\n';
-            output += 'Q7=' + document.getElementById('q7').value + '\n';
-
-            // Part 2
-            output += 'Q8=' + document.getElementById('q8').value + '\n';
-            output += 'Q9=' + document.getElementById('q9').value + '\n';
-            output += 'Q10=' + document.getElementById('q10').value + '\n';
-            output += 'Q11_FROM=' + document.getElementById('q11_from').value + '\n';
-            output += 'Q11_TO=' + document.getElementById('q11_to').value + '\n';
-            output += 'Q12=' + document.getElementById('q12').value.replace(/\n/g, ' ') + '\n';
-            output += 'Q13=' + document.getElementById('q13').value + '\n';
-
-            // Part 3
-            output += 'Q14=' + document.getElementById('q14').value + '\n';
-            output += 'Q15=' + document.getElementById('q15').value + '\n';
-            output += 'Q16_1=' + document.getElementById('q16_1').value + '\n';
-            output += 'Q16_2=' + document.getElementById('q16_2').value + '\n';
-            output += 'Q17=' + document.getElementById('q17').value + '\n';
-            
-            output += '---END_ANSWERS---\n';
-            
-            // Create a Blob and trigger the download
-            const blob = new Blob([output], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const filename = 'Lab06_UpperAirAnalysis.txt';
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            alert('✅ Answers exported successfully!\n\nFile: ' + filename + '\n\nPlease submit this file to Canvas.');
-        }
-
-        function clearForm() {
-            if (confirm('⚠️ Are you sure you want to clear all answers? This cannot be undone.')) {
-                document.getElementById('lab-form').reset();
-                localStorage.removeItem('lab06_data');
-                updateProgress();
-                alert('✅ All answers have been cleared.');
-            }
-        }
-
-        // Update progress indicator
-        function updateProgress() {
-            let completedCount = 0;
-            const totalQuestions = 17;
-
-            const inputs = [
-                'q1', 'q2_from', 'q2_to', 'q3', 'q4', 'q5', 'q6', 'q7',
-                'q8', 'q9', 'q10', 'q11_from', 'q11_to', 'q12', 'q13',
-                'q14', 'q15', 'q16_1', 'q16_2', 'q17'
-            ];
-
-            inputs.forEach(id => {
-                const element = document.getElementById(id);
-                if (element && element.value.trim()) {
-                    completedCount++;
-                }
-            });
-
-            // Adjust count since q2, q11, and q16 each have 2 fields but count as 1 question
-            if (document.getElementById('q2_from').value.trim() && 
-                document.getElementById('q2_to').value.trim()) {
-                completedCount--;
-            }
-            if (document.getElementById('q11_from').value.trim() && 
-                document.getElementById('q11_to').value.trim()) {
-                completedCount--;
-            }
-            if (document.getElementById('q16_1').value.trim() && 
-                document.getElementById('q16_2').value.trim()) {
-                completedCount--;
-            }
-
-            const percentage = (completedCount / totalQuestions) * 100;
-            document.getElementById('progressFill').style.width = percentage + '%';
-            
-            // Auto-save
-            saveToLocalStorage();
-        }
-
-        // Add event listeners to all inputs
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('#lab-form input, #lab-form select, #lab-form textarea').forEach((element) => {
-                element.addEventListener('input', updateProgress);
-                element.addEventListener('change', updateProgress);
-            });
-
-            // Load saved data
-            loadFromLocalStorage();
-            
-            // Initial progress update
-            updateProgress();
+        document.addEventListener("mouseup", function () {
+          zoomState.isDragging = false;
+          zoomImage.style.cursor = "grab";
         });
-    </script>
-        function exportAnswers() {
-            // Build the output string in the Canvas LMS compatible format
-            let output = '';
-            output += 'ASSIGNMENT=Lab6_Upper_Air_Analysis\n';
-            output += 'DATE=' + new Date().toISOString() + '\n';
-            output += 'TOTAL_POINTS=30\n';
-            output += '---BEGIN_ANSWERS---\n';
-            
-            // Part 1
-            output += 'Q1=' + document.getElementById('q1').value + '\n';
-            output += 'Q2_FROM=' + document.getElementById('q2_from').value + '\n';
-            output += 'Q2_TO=' + document.getElementById('q2_to').value + '\n';
-            output += 'Q3=' + document.getElementById('q3').value + '\n';
-            output += 'Q4=' + document.getElementById('q4').value + '\n';
-            output += 'Q5=' + document.getElementById('q5').value + '\n';
-            output += 'Q6=' + document.getElementById('q6').value + '\n';
-            output += 'Q7=' + document.getElementById('q7').value + '\n';
 
-            // Part 2
-            output += 'Q8=' + document.getElementById('q8').value + '\n';
-            output += 'Q9=' + document.getElementById('q9').value + '\n';
-            output += 'Q10=' + document.getElementById('q10').value + '\n';
-            output += 'Q11_FROM=' + document.getElementById('q11_from').value + '\n';
-            output += 'Q11_TO=' + document.getElementById('q11_to').value + '\n';
-            output += 'Q12=' + document.getElementById('q12').value.replace(/\n/g, ' ') + '\n'; // Replace newlines for single-line processing
-            output += 'Q13=' + document.getElementById('q13').value + '\n';
+        // Mouse wheel zoom
+        zoomContainer.addEventListener("wheel", function (e) {
+          e.preventDefault();
 
-            // Part 3
-            output += 'Q14=' + document.getElementById('q14').value + '\n';
-            output += 'Q15=' + document.getElementById('q15').value + '\n';
-            output += 'Q16_1=' + document.getElementById('q16_1').value + '\n';
-            output += 'Q16_2=' + document.getElementById('q16_2').value + '\n';
-            output += 'Q17=' + document.getElementById('q17').value + '\n';
-            
-            output += '---END_ANSWERS---\n';
-            
-            // Create a Blob and trigger the download
-            const blob = new Blob([output], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const filename = 'Lab06_UpperAirAnalysis.txt';
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            alert('✅ Answers exported successfully!\n\nFile: ' + filename + '\n\nPlease submit this file to Canvas.');
-        }
-
-        function clearForm() {
-            if (confirm('⚠️ Are you sure you want to clear all answers? This cannot be undone.')) {
-                document.getElementById('lab-form').reset();
-                updateProgress();
-                alert('✅ All answers have been cleared.');
-            }
-        }
-
-        // Update progress indicator
-        function updateProgress() {
-            let completedCount = 0;
-            const totalQuestions = 17;
-
-            // Count completed questions (checking all input fields)
-            const inputs = [
-                'q1', 'q2_from', 'q2_to', 'q3', 'q4', 'q5', 'q6', 'q7',
-                'q8', 'q9', 'q10', 'q11_from', 'q11_to', 'q12', 'q13',
-                'q14', 'q15', 'q16_1', 'q16_2', 'q17'
-            ];
-
-            inputs.forEach(id => {
-                const element = document.getElementById(id);
-                if (element && element.value.trim()) {
-                    completedCount++;
-                }
-            });
-
-            // Adjust count since q2, q11, and q16 each have 2 fields but count as 1 question
-            if (document.getElementById('q2_from').value.trim() && 
-                document.getElementById('q2_to').value.trim()) {
-                completedCount--; // Remove double count
-            }
-            if (document.getElementById('q11_from').value.trim() && 
-                document.getElementById('q11_to').value.trim()) {
-                completedCount--; // Remove double count
-            }
-            if (document.getElementById('q16_1').value.trim() && 
-                document.getElementById('q16_2').value.trim()) {
-                completedCount--; // Remove double count
-            }
-
-            const percentage = (completedCount / totalQuestions) * 100;
-            document.getElementById('progressFill').style.width = percentage + '%';
-        }
-
-        // Add event listeners to all inputs
-        document.querySelectorAll('input, textarea').forEach((element) => {
-            element.addEventListener('input', updateProgress);
+          if (e.deltaY < 0) {
+            zoomIn();
+          } else {
+            zoomOut();
+          }
         });
+
+        // Touch support for mobile
+        let touchStartDist = 0;
+
+        zoomImage.addEventListener("touchstart", function (e) {
+          if (e.touches.length === 1) {
+            zoomState.isDragging = true;
+            zoomState.startX = e.touches[0].clientX - zoomState.translateX;
+            zoomState.startY = e.touches[0].clientY - zoomState.translateY;
+          } else if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            touchStartDist = Math.sqrt(dx * dx + dy * dy);
+          }
+          e.preventDefault();
+        });
+
+        zoomImage.addEventListener("touchmove", function (e) {
+          if (e.touches.length === 1 && zoomState.isDragging) {
+            zoomState.translateX = e.touches[0].clientX - zoomState.startX;
+            zoomState.translateY = e.touches[0].clientY - zoomState.startY;
+            updateTransform();
+          } else if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (touchStartDist > 0) {
+              const scaleDiff = dist / touchStartDist;
+              zoomState.scale = Math.min(
+                Math.max(zoomState.scale * scaleDiff, 0.5),
+                5
+              );
+              updateTransform();
+            }
+            touchStartDist = dist;
+          }
+          e.preventDefault();
+        });
+
+        zoomImage.addEventListener("touchend", function () {
+          zoomState.isDragging = false;
+          touchStartDist = 0;
+        });
+
+        // ESC key to close modal
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeImageModal();
+          }
+        });
+      });
+
+      // Collapsible functionality
+      function toggleCollapsible(header) {
+        header.classList.toggle("is-collapsed");
+        const content = header.nextElementSibling;
+        if (content && content.classList.contains("collapsible-content")) {
+          content.classList.toggle("is-collapsed");
+        }
+      }
+
+      // Initialize collapsibles
+      document.addEventListener("DOMContentLoaded", function () {
+        const headers = document.querySelectorAll(".collapsible-header");
+        headers.forEach((header) => {
+          header.addEventListener("click", function () {
+            toggleCollapsible(this);
+          });
+        });
+      });
+
+      // Auto-save functionality
+      function saveToLocalStorage() {
+        const formData = {};
+        const inputs = document.querySelectorAll(
+          "#lab-form input, #lab-form select, #lab-form textarea"
+        );
+        inputs.forEach((input) => {
+          if (input.id) {
+            formData[input.id] = input.value;
+          }
+        });
+        localStorage.setItem("lab06_data", JSON.stringify(formData));
+      }
+
+      function loadFromLocalStorage() {
+        const savedData = localStorage.getItem("lab06_data");
+        if (savedData) {
+          const formData = JSON.parse(savedData);
+          Object.keys(formData).forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+              element.value = formData[id];
+            }
+          });
+          updateProgress();
+        }
+      }
+
+      // Export answers
+      function exportAnswers() {
+        // Validation
+        const requiredFields = [
+          { id: "q1", name: "Question 1" },
+          { id: "q2_from", name: "Question 2 (From)" },
+          { id: "q2_to", name: "Question 2 (To)" },
+          { id: "q3", name: "Question 3" },
+          { id: "q4", name: "Question 4" },
+          { id: "q5", name: "Question 5" },
+          { id: "q6", name: "Question 6" },
+          { id: "q7", name: "Question 7" },
+          { id: "q8", name: "Question 8" },
+          { id: "q9", name: "Question 9" },
+          { id: "q10", name: "Question 10" },
+          { id: "q11_from", name: "Question 11 (From)" },
+          { id: "q11_to", name: "Question 11 (To)" },
+          { id: "q12", name: "Question 12" },
+          { id: "q13", name: "Question 13" },
+          { id: "q14", name: "Question 14" },
+          { id: "q15", name: "Question 15" },
+          { id: "q16_1", name: "Question 16 (State 1)" },
+          { id: "q16_2", name: "Question 16 (State 2)" },
+          { id: "q17", name: "Question 17" },
+        ];
+
+        const missing = [];
+        requiredFields.forEach((field) => {
+          const element = document.getElementById(field.id);
+          if (!element || !element.value.trim()) {
+            missing.push(field.name);
+          }
+        });
+
+        if (missing.length > 0) {
+          alert(
+            "⚠️ Please complete all questions before downloading.\n\nMissing:\n" +
+              missing.join("\n")
+          );
+          return;
+        }
+
+        // Build the output string
+        let output = "";
+        output += "ASSIGNMENT=Lab6_Upper_Air_Analysis\n";
+        output += "DATE=" + new Date().toISOString() + "\n";
+        output += "TOTAL_POINTS=30\n";
+        output += "---BEGIN_ANSWERS---\n";
+
+        // Part 1
+        output += "Q1=" + document.getElementById("q1").value + "\n";
+        output += "Q2_FROM=" + document.getElementById("q2_from").value + "\n";
+        output += "Q2_TO=" + document.getElementById("q2_to").value + "\n";
+        output += "Q3=" + document.getElementById("q3").value + "\n";
+        output += "Q4=" + document.getElementById("q4").value + "\n";
+        output += "Q5=" + document.getElementById("q5").value + "\n";
+        output += "Q6=" + document.getElementById("q6").value + "\n";
+        output += "Q7=" + document.getElementById("q7").value + "\n";
+
+        // Part 2
+        output += "Q8=" + document.getElementById("q8").value + "\n";
+        output += "Q9=" + document.getElementById("q9").value + "\n";
+        output += "Q10=" + document.getElementById("q10").value + "\n";
+        output +=
+          "Q11_FROM=" + document.getElementById("q11_from").value + "\n";
+        output += "Q11_TO=" + document.getElementById("q11_to").value + "\n";
+        output +=
+          "Q12=" +
+          document.getElementById("q12").value.replace(/\n/g, " ") +
+          "\n";
+        output += "Q13=" + document.getElementById("q13").value + "\n";
+
+        // Part 3
+        output += "Q14=" + document.getElementById("q14").value + "\n";
+        output += "Q15=" + document.getElementById("q15").value + "\n";
+        output += "Q16_1=" + document.getElementById("q16_1").value + "\n";
+        output += "Q16_2=" + document.getElementById("q16_2").value + "\n";
+        output += "Q17=" + document.getElementById("q17").value + "\n";
+
+        output += "---END_ANSWERS---\n";
+
+        // Create a Blob and trigger the download
+        const blob = new Blob([output], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const filename = "Lab06_UpperAirAnalysis.txt";
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert(
+          "✅ Answers exported successfully!\n\nFile: " +
+            filename +
+            "\n\nPlease submit this file to Canvas."
+        );
+      }
+
+      function clearForm() {
+        if (
+          confirm(
+            "⚠️ Are you sure you want to clear all answers? This cannot be undone."
+          )
+        ) {
+          document.getElementById("lab-form").reset();
+          localStorage.removeItem("lab06_data");
+          updateProgress();
+          alert("✅ All answers have been cleared.");
+        }
+      }
+
+      // Update progress indicator
+      function updateProgress() {
+        let completedCount = 0;
+        const totalQuestions = 17;
+
+        const inputs = [
+          "q1",
+          "q2_from",
+          "q2_to",
+          "q3",
+          "q4",
+          "q5",
+          "q6",
+          "q7",
+          "q8",
+          "q9",
+          "q10",
+          "q11_from",
+          "q11_to",
+          "q12",
+          "q13",
+          "q14",
+          "q15",
+          "q16_1",
+          "q16_2",
+          "q17",
+        ];
+
+        inputs.forEach((id) => {
+          const element = document.getElementById(id);
+          if (element && element.value.trim()) {
+            completedCount++;
+          }
+        });
+
+        // Adjust count since q2, q11, and q16 each have 2 fields but count as 1 question
+        if (
+          document.getElementById("q2_from").value.trim() &&
+          document.getElementById("q2_to").value.trim()
+        ) {
+          completedCount--;
+        }
+        if (
+          document.getElementById("q11_from").value.trim() &&
+          document.getElementById("q11_to").value.trim()
+        ) {
+          completedCount--;
+        }
+        if (
+          document.getElementById("q16_1").value.trim() &&
+          document.getElementById("q16_2").value.trim()
+        ) {
+          completedCount--;
+        }
+
+        const percentage = (completedCount / totalQuestions) * 100;
+        document.getElementById("progressFill").style.width = percentage + "%";
+
+        // Auto-save
+        saveToLocalStorage();
+      }
+
+      // Add event listeners to all inputs
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .querySelectorAll(
+            "#lab-form input, #lab-form select, #lab-form textarea"
+          )
+          .forEach((element) => {
+            element.addEventListener("input", updateProgress);
+            element.addEventListener("change", updateProgress);
+          });
+
+        // Load saved data
+        loadFromLocalStorage();
 
         // Initial progress update
         updateProgress();
+      });
+      // ...existing code...
+      // (Move all orphaned JS code above into this script block)
+      function exportAnswers() {
+        // Build the output string in the Canvas LMS compatible format
+        let output = "";
+        output += "ASSIGNMENT=Lab6_Upper_Air_Analysis\n";
+        output += "DATE=" + new Date().toISOString() + "\n";
+        output += "TOTAL_POINTS=30\n";
+        output += "---BEGIN_ANSWERS---\n";
+
+        // Part 1
+        output += "Q1=" + document.getElementById("q1").value + "\n";
+        output += "Q2_FROM=" + document.getElementById("q2_from").value + "\n";
+        output += "Q2_TO=" + document.getElementById("q2_to").value + "\n";
+        output += "Q3=" + document.getElementById("q3").value + "\n";
+        output += "Q4=" + document.getElementById("q4").value + "\n";
+        output += "Q5=" + document.getElementById("q5").value + "\n";
+        output += "Q6=" + document.getElementById("q6").value + "\n";
+        output += "Q7=" + document.getElementById("q7").value + "\n";
+
+        // Part 2
+        output += "Q8=" + document.getElementById("q8").value + "\n";
+        output += "Q9=" + document.getElementById("q9").value + "\n";
+        output += "Q10=" + document.getElementById("q10").value + "\n";
+        output +=
+          "Q11_FROM=" + document.getElementById("q11_from").value + "\n";
+        output += "Q11_TO=" + document.getElementById("q11_to").value + "\n";
+        output +=
+          "Q12=" +
+          document.getElementById("q12").value.replace(/\n/g, " ") +
+          "\n"; // Replace newlines for single-line processing
+        output += "Q13=" + document.getElementById("q13").value + "\n";
+
+        // Part 3
+        output += "Q14=" + document.getElementById("q14").value + "\n";
+        output += "Q15=" + document.getElementById("q15").value + "\n";
+        output += "Q16_1=" + document.getElementById("q16_1").value + "\n";
+        output += "Q16_2=" + document.getElementById("q16_2").value + "\n";
+        output += "Q17=" + document.getElementById("q17").value + "\n";
+
+        output += "---END_ANSWERS---\n";
+
+        // Create a Blob and trigger the download
+        const blob = new Blob([output], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const filename = "Lab06_UpperAirAnalysis.txt";
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert(
+          "✅ Answers exported successfully!\n\nFile: " +
+            filename +
+            "\n\nPlease submit this file to Canvas."
+        );
+      }
+
+      function clearForm() {
+        if (
+          confirm(
+            "⚠️ Are you sure you want to clear all answers? This cannot be undone."
+          )
+        ) {
+          document.getElementById("lab-form").reset();
+          updateProgress();
+          alert("✅ All answers have been cleared.");
+        }
+      }
+
+      // Update progress indicator
+      function updateProgress() {
+        let completedCount = 0;
+        const totalQuestions = 17;
+
+        // Count completed questions (checking all input fields)
+        const inputs = [
+          "q1",
+          "q2_from",
+          "q2_to",
+          "q3",
+          "q4",
+          "q5",
+          "q6",
+          "q7",
+          "q8",
+          "q9",
+          "q10",
+          "q11_from",
+          "q11_to",
+          "q12",
+          "q13",
+          "q14",
+          "q15",
+          "q16_1",
+          "q16_2",
+          "q17",
+        ];
+
+        inputs.forEach((id) => {
+          const element = document.getElementById(id);
+          if (element && element.value.trim()) {
+            completedCount++;
+          }
+        });
+
+        // Adjust count since q2, q11, and q16 each have 2 fields but count as 1 question
+        if (
+          document.getElementById("q2_from").value.trim() &&
+          document.getElementById("q2_to").value.trim()
+        ) {
+          completedCount--; // Remove double count
+        }
+        if (
+          document.getElementById("q11_from").value.trim() &&
+          document.getElementById("q11_to").value.trim()
+        ) {
+          completedCount--; // Remove double count
+        }
+        if (
+          document.getElementById("q16_1").value.trim() &&
+          document.getElementById("q16_2").value.trim()
+        ) {
+          completedCount--; // Remove double count
+        }
+
+        const percentage = (completedCount / totalQuestions) * 100;
+        document.getElementById("progressFill").style.width = percentage + "%";
+      }
+
+      // Add event listeners to all inputs
+      document.querySelectorAll("input, textarea").forEach((element) => {
+        element.addEventListener("input", updateProgress);
+      });
+
+      // Initial progress update
+      updateProgress();
     </script>
-</body>
+  </body>
 </html>

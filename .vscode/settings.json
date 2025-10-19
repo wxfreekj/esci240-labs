@@ -9,5 +9,6 @@
   },
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
-  "liveServer.settings.root": "/web-components"
+  "liveServer.settings.root": "/web-components",
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true
 }

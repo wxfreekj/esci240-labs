@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lab 4: Earth-Sun Geometry and Seasons</title>
     <style>
+      :root {
+        --indigo: #667eea;
+        --purple: #764ba2;
+        --google-blue: #4285f4;
+        --surface: #f0f4ff;
+        --ink-700: #3a4a7a;
+        --fs-h1: clamp(1.25rem, 2.2vw + 1rem, 1.75rem);
+        --fs-body: clamp(0.95rem, 0.7vw + 0.8rem, 1rem);
+        --pad-card: clamp(14px, 2vw, 20px);
+        --pad-header-y: 14px;
+        --hit-area: 44px;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -12,14 +25,18 @@
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial,
+          sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         padding: 20px;
+        color: var(--ink-700);
+        font-size: var(--fs-body);
+        line-height: 1.5;
       }
 
       .container {
-        max-width: 1200px;
+        max-width: 960px;
         margin: 0 auto;
         background: white;
         border-radius: 15px;
@@ -28,21 +45,28 @@
       }
 
       .header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        background: linear-gradient(
+          135deg,
+          var(--indigo) 0%,
+          var(--purple) 100%
+        );
         color: white;
-        padding: 30px;
+        padding: max(var(--pad-header-y), 16px) var(--pad-card);
         text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
       }
 
       .header h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        font-size: var(--fs-h1);
+        margin-bottom: 6px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
       }
 
       .header p {
-        font-size: 1.2em;
-        opacity: 0.9;
+        font-size: 0.98em;
+        opacity: 0.95;
+        color: #e8ebff;
+        font-weight: 600;
       }
 
       .student-info {
@@ -78,12 +102,90 @@
         padding: 30px;
       }
 
+      /* Collapsible Sections */
       .section {
-        margin-bottom: 40px;
-        padding: 25px;
-        background: #e3f2fd;
-        border-radius: 8px;
-        border-left: 5px solid #2196f3;
+        margin: 0 0 16px 0;
+      }
+
+      .collapsible-container {
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0 0 16px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        background: var(--surface);
+        border: 1px solid #dfe7ff;
+        transition: margin 0.2s ease;
+      }
+
+      .collapsible-container:has(.collapsible-header.is-collapsed) {
+        margin: 0 0 6px 0;
+      }
+
+      .collapsible-header {
+        margin: 0;
+        padding: max(var(--pad-header-y), 12px) 48px
+          max(var(--pad-header-y), 12px) var(--pad-card);
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+        font-weight: 800;
+        color: #1f3b82;
+        background: var(--surface);
+        min-height: var(--hit-area);
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+      }
+
+      .collapsible-header.is-collapsed {
+        padding: 8px 48px 8px var(--pad-card);
+        min-height: auto;
+        font-size: 0.9em;
+        font-weight: 700;
+      }
+
+      .collapsible-header:hover {
+        filter: brightness(0.98);
+      }
+
+      .collapsible-header::after {
+        content: "▼";
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95em;
+        color: #6a6a6a;
+        transition: transform 0.2s ease, font-size 0.2s ease;
+      }
+
+      .collapsible-header.is-collapsed::after {
+        transform: translateY(-50%) rotate(-90deg);
+        font-size: 0.85em;
+      }
+
+      .stripe-blue {
+        border-left: 4px solid var(--google-blue);
+      }
+
+      .stripe-indigo {
+        border-left: 4px solid var(--indigo);
+      }
+
+      .stripe-purple {
+        border-left: 4px solid var(--purple);
+      }
+
+      .collapsible-content {
+        display: block;
+        background: var(--surface);
+        padding: var(--pad-card);
+        border-top: 1px solid #e5ecff;
+      }
+
+      .collapsible-content.is-collapsed {
+        display: none;
       }
 
       .section h2 {
@@ -99,20 +201,61 @@
         font-size: 1.3em;
       }
 
+      /* Form groups */
+      .form-group {
+        margin: 15px 0 25px 0;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--ink-700);
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="number"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #d1d9e6;
+        border-radius: 8px;
+        font-size: 1em;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--indigo);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
       .intro-box {
-        background: #e3f2fd;
-        border-left: 4px solid #2196f3;
+        background: var(--surface);
+        border-left: 4px solid var(--google-blue);
         padding: 20px;
         border-radius: 8px;
         margin-bottom: 25px;
         line-height: 1.8;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       }
 
       .intro-box p {
         margin-bottom: 15px;
       }
 
-      .intro-box ul {
+      .intro-box ul,
+      .intro-box ol {
         margin-left: 30px;
         line-height: 2;
       }
@@ -289,13 +432,13 @@
         padding: 20px;
         margin: 15px 0;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         transition: transform 0.2s, box-shadow 0.2s;
       }
 
       .question:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       }
 
       .question-label {
@@ -318,10 +461,10 @@
       textarea {
         width: 100%;
         padding: 12px;
-        border: 2px solid #dee2e6;
+        border: 2px solid #d1d9e6;
         border-radius: 6px;
         font-size: 16px;
-        transition: border-color 0.3s;
+        transition: border-color 0.3s, box-shadow 0.2s;
       }
 
       input[type="text"]:focus,
@@ -329,7 +472,7 @@
       select:focus,
       textarea:focus {
         outline: none;
-        border-color: #667eea;
+        border-color: var(--indigo);
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
       }
 
@@ -516,515 +659,542 @@
       <div class="content">
         <!-- For This Lab Section -->
         <div class="section">
-          <h2>📋 For This Lab</h2>
-          <div
-            style="
-              background: #e3f2fd;
-              border-left: 4px solid #2196f3;
-              padding: 20px;
-              border-radius: 8px;
-              margin-bottom: 25px;
-            "
-          >
-            <h3
-              style="
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #1976d2;
-                font-size: 1.1em;
-              "
-            >
-              Instructions
-            </h3>
-            <ol style="margin: 0; padding-left: 25px; line-height: 2">
-              <li>
-                Study the Earth-Sun geometry concepts and diagrams carefully
-              </li>
-              <li>
-                Calculate solar declination angles for different times of year
-              </li>
-              <li>
-                Determine sun angles and noon sun heights at various latitudes
-              </li>
-              <li>Complete all questions about seasons and solar radiation</li>
-              <li>
-                Monitor your progress using the progress bar at the top of the
-                page
-              </li>
-              <li>Your work is automatically saved as you type</li>
-              <li>
-                When complete, click
-                <strong>"Download file for Canvas Submission"</strong>
-              </li>
-              <li>
-                Locate the downloaded file (<em>Lab04_EarthSunGeometry.txt</em>)
-                and upload it to Canvas
-              </li>
-            </ol>
-            <p
-              style="
-                margin-top: 15px;
-                margin-bottom: 0;
-                font-size: 0.95em;
-                color: #555;
-              "
-            >
-              💡 <strong>Tip:</strong> Remember that Earth's 23.5° tilt is the
-              key to understanding seasons and the changing position of the Sun
-              throughout the year!
-            </p>
+          <div class="collapsible-container stripe-blue">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              📋 For This Lab
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <h3
+                  style="
+                    margin-top: 0;
+                    margin-bottom: 15px;
+                    color: #1976d2;
+                    font-size: 1.1em;
+                  "
+                >
+                  Instructions
+                </h3>
+                <ol style="margin: 0; padding-left: 25px; line-height: 2">
+                  <li>
+                    Study the Earth-Sun geometry concepts and diagrams carefully
+                  </li>
+                  <li>
+                    Calculate solar declination angles for different times of
+                    year
+                  </li>
+                  <li>
+                    Determine sun angles and noon sun heights at various
+                    latitudes
+                  </li>
+                  <li>
+                    Complete all questions about seasons and solar radiation
+                  </li>
+                  <li>
+                    Monitor your progress using the progress bar at the top of
+                    the page
+                  </li>
+                  <li>Your work is automatically saved as you type</li>
+                  <li>
+                    When complete, click
+                    <strong>"Download file for Canvas Submission"</strong>
+                  </li>
+                  <li>
+                    Locate the downloaded file
+                    (<em>Lab04_EarthSunGeometry.txt</em>) and upload it to
+                    Canvas
+                  </li>
+                </ol>
+                <p
+                  style="
+                    margin-top: 15px;
+                    margin-bottom: 0;
+                    font-size: 0.95em;
+                    color: #555;
+                  "
+                >
+                  💡 <strong>Tip:</strong> Remember that Earth's 23.5° tilt is
+                  the key to understanding seasons and the changing position of
+                  the Sun throughout the year!
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Introduction Section -->
         <div class="section">
-          <h2>📚 Introduction</h2>
-          <div class="intro-box">
-            <p>
-              <strong
-                >Earth's axis of rotation is tilted 23.5° from the
-                perpendicular</strong
-              >
-              and is oriented in the same direction throughout the year. Our
-              seasons occur because of this tilt, which we call the
-              <strong>solar declination</strong>.
-            </p>
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              📚 Introduction
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <p>
+                  <strong>Earth's axis of rotation is tilted 23.5° from the perpendicular</strong>
+                  and is oriented in the same direction throughout the year. Our
+                  seasons occur because of this tilt, which we call the
+                  <strong>solar declination</strong>.
+                </p>
 
-            <p>
-              As Earth revolves around the Sun, the Sun's direct rays strike
-              different latitudes. When the Northern Hemisphere is tilted toward
-              the Sun, it receives more direct and intense solar radiation. Six
-              months later, when the Southern Hemisphere is tilted toward the
-              Sun, it receives more direct solar radiation.
-            </p>
+                <p>
+                  As Earth revolves around the Sun, the Sun's direct rays strike
+                  different latitudes. When the Northern Hemisphere is tilted toward
+                  the Sun, it receives more direct and intense solar radiation. Six
+                  months later, when the Southern Hemisphere is tilted toward the
+                  Sun, it receives more direct solar radiation.
+                </p>
 
-            <p>
-              <strong>Key Concept:</strong> At any moment, there is a single
-              latitude where the Sun's rays are perpendicular. To a person at
-              this latitude, the Sun would appear directly overhead at noon.
-            </p>
-          </div>
+                <p>
+                  <strong>Key Concept:</strong> At any moment, there is a single
+                  latitude where the Sun's rays are perpendicular. To a person at
+                  this latitude, the Sun would appear directly overhead at noon.
+                </p>
+              </div>
 
-          <div class="info-box">
-            <strong>🌟 Important:</strong> Because Earth is approximately 150
-            million kilometers (93 million miles) from the Sun, we can assume
-            the Sun's rays strike Earth parallel with each other in straight
-            paths.
-          </div>
+              <div class="info-box">
+                <strong>🌟 Important:</strong> Because Earth is approximately 150
+                million kilometers (93 million miles) from the Sun, we can assume
+                the Sun's rays strike Earth parallel with each other in straight
+                paths.
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Solstice-pic.png"
-              alt="Earth's orbital positions showing solstices and equinoxes"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 1: The 4 orientations of the Sun and Earth during our
-              equinoxes and solstices.
-            </div>
-          </div>
+              <div class="diagram-container">
+                <img
+                  src="Solstice-pic.png"
+                  alt="Earth's orbital positions showing solstices and equinoxes"
+                  width="100%"
+                />
+                <div class="image-caption">
+                  Figure 1: The 4 orientations of the Sun and Earth during our
+                  equinoxes and solstices.
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Fig2.png"
-              alt="Profile view of sun rays striking Earth"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 2: Profile view showing how the angle of incoming Sun rays
-              strikes Earth at different latitudes.
+              <div class="diagram-container">
+                <img
+                  src="Fig2.png"
+                  alt="Profile view of sun rays striking Earth"
+                  width="100%"
+                />
+                <div class="image-caption">
+                  Figure 2: Profile view showing how the angle of incoming Sun rays
+                  strikes Earth at different latitudes.
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Section 1: December Solstice Questions -->
+        <!-- Section 1: Equinox Questions -->
         <div class="section">
-          <h2>Part 1: Equinox</h2>
+          <div class="collapsible-container stripe-blue">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              Part 1: Equinox
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <p>
+                  The diagram below shows the Sun angle for an observer at various
+                  latitudes. The <strong>black arrow</strong> represents a correct
+                  solar angle of
+                  <strong>90° for an observer at 0° latitude</strong>. The blue,
+                  orange, and magenta arrows represent possibilities for the Sun
+                  angle for an observer at 23.5° S. Additionally, the bottom half of
+                  the figure shows three possibilities (left, center, right) for the
+                  orientation of the Sun's incoming rays.
+                </p>
+              </div>
 
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>90° for an observer at 0° latitude</strong>. The blue,
-              orange, and magenta arrows represent possibilities for the Sun
-              angle for an observer at 23.5° S. Additionally, the bottom half of
-              the figure shows three possibilities (left, center, right) for the
-              orientation of the Sun's incoming rays.
-            </p>
-          </div>
+              <div class="diagram-container">
+                <img src="Fig6.png" alt="December Solstice diagram" width="100%" />
+                <div class="image-caption">
+                  Figure 3: Sun angles and Earth orientations for an Equinox
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img src="Fig6.png" alt="December Solstice diagram" width="100%" />
-            <div class="image-caption">
-              Figure 3: Sun angles and Earth orientations for an Equinox
-            </div>
-          </div>
+              <h3>Question 1: Sun Angle for 23.5°S (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Determine which color arrow
+                represents the correct Sun angle for an observer at 23.5°S.
+              </p>
+              <div class="form-group">
+                <label for="q1">Arrow color:</label>
+                <select id="q1" required>
+                  <option value="">Select an answer...</option>
+                  <option value="blue">A: Blue</option>
+                  <option value="orange">B: Orange</option>
+                  <option value="magenta">C: Magenta</option>
+                </select>
+              </div>
 
-          <h3>Question 1: Sun Angle for 23.5°S (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents the correct Sun angle for an observer at 23.5°S.
-          </p>
-          <div class="form-group">
-            <label for="q1">Arrow color:</label>
-            <select id="q1" required>
-              <option value="">Select an answer...</option>
-              <option value="blue">A: Blue</option>
-              <option value="orange">B: Orange</option>
-              <option value="magenta">C: Magenta</option>
-            </select>
-          </div>
+              <h3>Question 2: Earth Orientation (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify which Earth orientation
+                (left, center, or right) correctly illustrates the orientation of
+                the Sun's incoming rays to Earth's surface.
+              </p>
+              <div class="form-group">
+                <label for="q2">Earth orientation:</label>
+                <select id="q2" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
 
-          <h3>Question 2: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q2">Earth orientation:</label>
-            <select id="q2" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
+              <h3>Question 3: Months of Occurrence (2 pts)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify the two months when this
+                orientation could have occurred.
+              </p>
+              <div class="form-group">
+                <label>Months:</label>
+                <div class="two-column">
+                  <select id="q3a" required>
+                    <option value="">Select an answer...</option>
+                    <option value="march">March</option>
+                    <option value="june">June</option>
+                    <option value="september">September</option>
+                    <option value="december">December</option>
+                  </select>
 
-          <h3>Question 3: Months of Occurrence (2 pts)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the two months when this
-            orientation could have occurred.
-          </p>
-          <div class="form-group">
-            <label>Months:</label>
-            <div class="two-column">
-              <select id="q3a" required>
-                <option value="">Select an answer...</option>
-                <option value="march">March</option>
-                <option value="june">June</option>
-                <option value="september">September</option>
-                <option value="december">December</option>
-              </select>
-
-              <select id="q3b" required>
-                <option value="">Select an answer...</option>
-                <option value="march">March</option>
-                <option value="june">June</option>
-                <option value="eptember">September</option>
-                <option value="december">December</option>
-              </select>
+                  <select id="q3b" required>
+                    <option value="">Select an answer...</option>
+                    <option value="march">March</option>
+                    <option value="june">June</option>
+                    <option value="eptember">September</option>
+                    <option value="december">December</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <!-- Section 2: Summer Solstice Questions -->
         <div class="section">
-          <h2>Part 2: Summer Solstice in Northern Hemisphere</h2>
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              Part 2: Summer Solstice in Northern Hemisphere
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <p>
+                  The diagram below shows the Sun angle for an observer at various
+                  latitudes. The <strong>black arrow</strong> represents a correct
+                  solar angle of
+                  <strong>82.5° for an observer at 30°N latitude</strong>. The blue,
+                  orange, green, and magenta arrows represent possibilities for the
+                  Sun angle for observers at 0° and 66.5°N. Additionally, the bottom
+                  half of the figure shows three possibilities (left, center, right)
+                  for the orientation of the Sun's incoming rays to Earth.
+                </p>
+              </div>
 
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>82.5° for an observer at 30°N latitude</strong>. The blue,
-              orange, green, and magenta arrows represent possibilities for the
-              Sun angle for observers at 0° and 66.5°N. Additionally, the bottom
-              half of the figure shows three possibilities (left, center, right)
-              for the orientation of the Sun's incoming rays to Earth.
-            </p>
-          </div>
+              <div class="diagram-container">
+                <img src="Fig5.png" alt="June Solstice diagram" width="100%" />
+                <div class="image-caption">
+                  Figure 4: Sun angles and Earth orientations for Summer Solstice in
+                  North America
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img src="Fig5.png" alt="June Solstice diagram" width="100%" />
-            <div class="image-caption">
-              Figure 4: Sun angles and Earth orientations for Summer Solstice in
-              North America
+              <h3>Question 4: Correct Sun Angle Arrow (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Determine which color arrow
+                represents a correct Sun angle for one of the observers.
+              </p>
+              <div class="form-group">
+                <label for="q4">Arrow color:</label>
+                <select id="q4" required>
+                  <option value="">Select an answer...</option>
+                  <option value="green">A: Green</option>
+                  <option value="blue">B: Blue</option>
+                  <option value="orange">C: Orange</option>
+                </select>
+              </div>
+
+              <h3>Question 5: Earth Orientation (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify which Earth orientation
+                (left, center, or right) correctly illustrates the orientation of
+                the Sun's incoming rays to Earth's surface.
+              </p>
+              <div class="form-group">
+                <label for="q5">Earth orientation:</label>
+                <select id="q5" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+
+              <h3>Question 6: Month of Occurrence (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify the month when this
+                orientation occurred.
+              </p>
+              <div class="form-group">
+                <label for="q6">Month:</label>
+                <select id="q6" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="september">September</option>
+                  <option value="december">December</option>
+                </select>
+              </div>
             </div>
-          </div>
-
-          <h3>Question 4: Correct Sun Angle Arrow (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents a correct Sun angle for one of the observers.
-          </p>
-          <div class="form-group">
-            <label for="q4">Arrow color:</label>
-            <select id="q4" required>
-              <option value="">Select an answer...</option>
-              <option value="green">A: Green</option>
-              <option value="blue">B: Blue</option>
-              <option value="orange">C: Orange</option>
-            </select>
-          </div>
-
-          <h3>Question 5: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q5">Earth orientation:</label>
-            <select id="q5" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          <h3>Question 6: Month of Occurrence (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the month when this
-            orientation occurred.
-          </p>
-          <div class="form-group">
-            <label for="q6">Month:</label>
-            <select id="q6" required>
-              <option value="">Select an answer...</option>
-              <option value="march">March</option>
-              <option value="june">June</option>
-              <option value="september">September</option>
-              <option value="december">December</option>
-            </select>
           </div>
         </div>
 
-        <!-- Section 3: December at High Latitude -->
+        <!-- Section 3: Winter Solstice Questions -->
         <div class="section">
-          <h2>Part 3: Winter Solstice in Northern Hemisphere</h2>
+          <div class="collapsible-container stripe-purple">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              Part 3: Winter Solstice in Northern Hemisphere
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <p>
+                  The diagram below shows the Sun angle for an observer at various
+                  latitudes. The <strong>black arrow</strong> represents a correct
+                  solar angle of
+                  <strong>90° for an observer at 23.5°S latitude</strong>. The blue,
+                  green, and magenta arrows represent possibilities for the Sun
+                  angle for an observer at 66.5°N. Additionally, the bottom half of
+                  the figure shows three possibilities (left, center, right) for the
+                  orientation of the Sun's incoming rays.
+                </p>
+              </div>
 
-          <div class="intro-box">
-            <p>
-              The diagram below shows the Sun angle for an observer at various
-              latitudes. The <strong>black arrow</strong> represents a correct
-              solar angle of
-              <strong>90° for an observer at 23.5°S latitude</strong>. The blue,
-              green, and magenta arrows represent possibilities for the Sun
-              angle for an observer at 66.5°N. Additionally, the bottom half of
-              the figure shows three possibilities (left, center, right) for the
-              orientation of the Sun's incoming rays.
-            </p>
-          </div>
+              <div class="diagram-container">
+                <img
+                  src="Fig7.png"
+                  alt="December high latitude diagram"
+                  width="100%"
+                />
+                <div class="image-caption">
+                  Figure 5: Sun angles and Earth orientations for December at high
+                  northern latitude
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Fig7.png"
-              alt="December high latitude diagram"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 5: Sun angles and Earth orientations for December at high
-              northern latitude
-            </div>
-          </div>
+              <h3>Question 7: Correct Sun Angle Arrow (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Determine which color arrow
+                represents a possible correct Sun angle for the observer.
+              </p>
+              <div class="form-group">
+                <label for="q7">Arrow color:</label>
+                <select id="q7" required>
+                  <option value="">Select an answer...</option>
+                  <option value="blue">A: Blue</option>
+                  <option value="magenta">B: Magenta</option>
+                  <option value="green">C: Green</option>
+                </select>
+              </div>
 
-          <h3>Question 7: Correct Sun Angle Arrow (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Determine which color arrow
-            represents a possible correct Sun angle for the observer.
-          </p>
-          <div class="form-group">
-            <label for="q7">Arrow color:</label>
-            <select id="q7" required>
-              <option value="">Select an answer...</option>
-              <option value="blue">A: Blue</option>
-              <option value="magenta">B: Magenta</option>
-              <option value="green">C: Green</option>
-            </select>
-          </div>
+              <h3>Question 8: Earth Orientation (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify which Earth orientation
+                (left, center, or right) correctly illustrates the orientation of
+                the Sun's incoming rays to Earth's surface.
+              </p>
+              <div class="form-group">
+                <label for="q8">Earth orientation:</label>
+                <select id="q8" required>
+                  <option value="">Select an answer...</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
 
-          <h3>Question 8: Earth Orientation (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify which Earth orientation
-            (left, center, or right) correctly illustrates the orientation of
-            the Sun's incoming rays to Earth's surface.
-          </p>
-          <div class="form-group">
-            <label for="q8">Earth orientation:</label>
-            <select id="q8" required>
-              <option value="">Select an answer...</option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
+              <h3>Question 9: Month of Occurrence (1 pt)</h3>
+              <p>
+                <strong>Instructions:</strong> Identify the month when this
+                orientation occurred.
+              </p>
+              <div class="form-group">
+                <label for="q9">Month:</label>
+                <select id="q9" required>
+                  <option value="">Select an answer...</option>
+                  <option value="march">March</option>
+                  <option value="june">June</option>
+                  <option value="eptember">September</option>
+                  <option value="december">December</option>
+                </select>
+              </div>
 
-          <h3>Question 9: Month of Occurrence (1 pt)</h3>
-          <p>
-            <strong>Instructions:</strong> Identify the month when this
-            orientation occurred.
-          </p>
-          <div class="form-group">
-            <label for="q9">Month:</label>
-            <select id="q9" required>
-              <option value="">Select an answer...</option>
-              <option value="march">March</option>
-              <option value="june">June</option>
-              <option value="eptember">September</option>
-              <option value="december">December</option>
-            </select>
-          </div>
-
-          <h3>Question 10: Sunbathing at 80°N (5 pts)</h3>
-          <p>
-            <strong>Instructions:</strong> On this day, a friend says they are
-            spending the day at 80°N and plan on trying to lay out and catch a
-            suntan. Explain to your friend why this does or doesn't make sense.
-            Be sure to discuss the Sun angle and length of daylight in your
-            response.
-          </p>
-          <div class="form-group">
-            <label for="q10">Your explanation:</label>
-            <textarea
-              id="q10"
-              placeholder="Your explanation here..."
-              rows="6"
-              required
-            ></textarea>
-            <div class="info-box">
-              <strong>💡 Hint:</strong> Consider that 80°N is inside the Arctic
-              Circle (66.5°N). What happens to sunlight at high latitudes during
-              the December solstice? Think about both the angle of the sun and
-              whether the sun even rises at this latitude on this date.
+              <h3>Question 10: Sunbathing at 80°N (5 pts)</h3>
+              <p>
+                <strong>Instructions:</strong> On this day, a friend says they are
+                spending the day at 80°N and plan on trying to lay out and catch a
+                suntan. Explain to your friend why this does or doesn't make sense.
+                Be sure to discuss the Sun angle and length of daylight in your
+                response.
+              </p>
+              <div class="form-group">
+                <label for="q10">Your explanation:</label>
+                <textarea
+                  id="q10"
+                  placeholder="Your explanation here..."
+                  rows="6"
+                  required
+                ></textarea>
+                <div class="info-box">
+                  <strong>💡 Hint:</strong> Consider that 80°N is inside the Arctic
+                  Circle (66.5°N). What happens to sunlight at high latitudes during
+                  the December solstice? Think about both the angle of the sun and
+                  whether the sun even rises at this latitude on this date.
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Section 4: Understanding Sun Angle Calculations -->
         <div class="section">
-          <h2>Part 4: Calculating Sun Angles</h2>
+          <div class="collapsible-container stripe-blue">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              Part 4: Calculating Sun Angles
+            </h2>
+            <div class="collapsible-content">
+              <div class="intro-box">
+                <h3>Key Definitions:</h3>
+                <ul>
+                  <li>
+                    <strong>Subsolar Point:</strong> The latitude at which the Sun
+                    is directly overhead at solar noon
+                  </li>
+                  <li>
+                    <strong>Zenith Angle:</strong> The angle between a point
+                    directly overhead and the Sun at solar noon
+                  </li>
+                  <li>
+                    <strong>Solar Elevation (Sun) Angle:</strong> The angle of the
+                    Sun above the horizon at solar noon
+                  </li>
+                </ul>
+              </div>
 
-          <div class="intro-box">
-            <h3>Key Definitions:</h3>
-            <ul>
-              <li>
-                <strong>Subsolar Point:</strong> The latitude at which the Sun
-                is directly overhead at solar noon
-              </li>
-              <li>
-                <strong>Zenith Angle:</strong> The angle between a point
-                directly overhead and the Sun at solar noon
-              </li>
-              <li>
-                <strong>Solar Elevation (Sun) Angle:</strong> The angle of the
-                Sun above the horizon at solar noon
-              </li>
-            </ul>
-          </div>
+              <div class="diagram-container">
+                <img
+                  src="Fig8.png"
+                  alt="Zenith and solar elevation angles"
+                  width="500"
+                />
+                <div class="image-caption">
+                  Figure 6: Relationship between zenith angle and solar elevation
+                  angle
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Fig8.png"
-              alt="Zenith and solar elevation angles"
-              width="500"
-            />
-            <div class="image-caption">
-              Figure 6: Relationship between zenith angle and solar elevation
-              angle
-            </div>
-          </div>
+              <div class="diagram-container">
+                <img
+                  src="Fig9.png"
+                  alt="Earth showing subsolar point and zenith angle"
+                  width="100%"
+                />
+                <div class="image-caption">
+                  Figure 7: The zenith angle equals the latitude separation between
+                  observer and subsolar point
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Fig9.png"
-              alt="Earth showing subsolar point and zenith angle"
-              width="100%"
-            />
-            <div class="image-caption">
-              Figure 7: The zenith angle equals the latitude separation between
-              observer and subsolar point
-            </div>
-          </div>
+              <div class="intro-box">
+                <p>
+                  As stated earlier, we assume that the Sun's rays strike Earth in
+                  straight, parallel paths. This means that
+                  <strong>the zenith angle of any location is the same as the number of
+                  degrees of latitude separating the location and the place
+                  receiving direct solar rays</strong>
+                  (subsolar point).
+                </p>
+              </div>
 
-          <div class="intro-box">
-            <p>
-              As stated earlier, we assume that the Sun's rays strike Earth in
-              straight, parallel paths. This means that
-              <strong
-                >the zenith angle of any location is the same as the number of
-                degrees of latitude separating the location and the place
-                receiving direct solar rays</strong
-              >
-              (subsolar point).
-            </p>
-          </div>
+              <div class="formula-box">
+                <h3>📐 Calculation Method:</h3>
+                <p>
+                  <strong>Step 1:</strong> Find the subsolar point (use analemma)
+                </p>
+                <p>
+                  <strong>Step 2:</strong> Calculate latitude separation between
+                  observer and subsolar point
+                </p>
+                <p>
+                  <strong>Step 3:</strong> Sun Angle = 90° - Latitude Separation
+                </p>
+                <br />
+                <p>
+                  <strong>Example:</strong> On September 5th at Omaha, NE (41°N):
+                </p>
+                <p>• Subsolar point: 7°N (from analemma)</p>
+                <p>• Latitude separation: 41° - 7° = 34°</p>
+                <p>• Sun angle: 90° - 34° = 56°</p>
+              </div>
 
-          <div class="formula-box">
-            <h3>📐 Calculation Method:</h3>
-            <p>
-              <strong>Step 1:</strong> Find the subsolar point (use analemma)
-            </p>
-            <p>
-              <strong>Step 2:</strong> Calculate latitude separation between
-              observer and subsolar point
-            </p>
-            <p>
-              <strong>Step 3:</strong> Sun Angle = 90° - Latitude Separation
-            </p>
-            <br />
-            <p>
-              <strong>Example:</strong> On September 5th at Omaha, NE (41°N):
-            </p>
-            <p>• Subsolar point: 7°N (from analemma)</p>
-            <p>• Latitude separation: 41° - 7° = 34°</p>
-            <p>• Sun angle: 90° - 34° = 56°</p>
-          </div>
-
-          <div class="diagram-container">
-            <img
-              src="Fig10.png"
-              alt="Analemma example"
-              width="600"
-              class="zoomable"
-              onclick="openImageModal(this)"
-            />
-            <div class="zoom-hint">
-              🔍 Click to zoom and pan around the image
-            </div>
-            <div class="image-caption">
-              Figure 8: Example of using the analemma to find subsolar point for
-              September 5th
+              <div class="diagram-container">
+                <img
+                  src="Fig10.png"
+                  alt="Analemma example"
+                  width="600"
+                  class="zoomable"
+                  onclick="openImageModal(this)"
+                />
+                <div class="zoom-hint">
+                  🔍 Click to zoom and pan around the image
+                </div>
+                <div class="image-caption">
+                  Figure 8: Example of using the analemma to find subsolar point for
+                  September 5th
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Section 5: Analemma and Sun Angle Table -->
         <div class="section">
-          <h2>Part 5: Sun Angle Calculations Table</h2>
+          <div class="collapsible-container stripe-indigo">
+            <h2 class="collapsible-header" onclick="toggleCollapsible(this)">
+              Part 5: Sun Angle Calculations Table
+            </h2>
+            <div class="collapsible-content">
+              <div class="info-box">
+                <strong>📋 Instructions:</strong> Use the analemma below to find the
+                subsolar point for each date, then calculate the sun angle for each
+                location. Each cell is worth 0.5 points.
+              </div>
 
-          <div class="info-box">
-            <strong>📋 Instructions:</strong> Use the analemma below to find the
-            subsolar point for each date, then calculate the sun angle for each
-            location. Each cell is worth 0.5 points.
-          </div>
+              <div class="diagram-container">
+                <img
+                  src="Fig11.png"
+                  alt="The Analemma"
+                  width="600"
+                  class="zoomable"
+                  onclick="openImageModal(this)"
+                />
+                <div class="zoom-hint">
+                  🔍 Click to zoom and pan around the image
+                </div>
+                <div class="image-caption">
+                  Figure 9: The Analemma - Use this to find the subsolar point for
+                  any date of the year
+                </div>
+              </div>
 
-          <div class="diagram-container">
-            <img
-              src="Fig11.png"
-              alt="The Analemma"
-              width="600"
-              class="zoomable"
-              onclick="openImageModal(this)"
-            />
-            <div class="zoom-hint">
-              🔍 Click to zoom and pan around the image
-            </div>
-            <div class="image-caption">
-              Figure 9: The Analemma - Use this to find the subsolar point for
-              any date of the year
-            </div>
-          </div>
-
-          <h2>
-            Question 11: Using the Analemma (15 pts total - 0.5 pt each cell)
-          </h2>
-          <p>
-            <strong>Instructions:</strong> Use the analemma to fill in the
-            missing values in the table below. If on a phone, you will need to
-            scroll for all entry boxes to appear.
-          </p>
+              <h3>
+                Question 11: Using the Analemma (15 pts total - 0.5 pt each cell)
+              </h3>
+              <p>
+                <strong>Instructions:</strong> Use the analemma to fill in the
+                missing values in the table below. If on a phone, you will need to
+                scroll for all entry boxes to appear.
+              </p>
 
           <div class="table-container">
             <table>
@@ -1300,7 +1470,10 @@
               </tbody>
             </table>
           </div>
+            </div>
+          </div>
         </div>
+        
         <!-- Export Section -->
         <div class="button-container">
           <button class="btn-export" onclick="exportAnswers()">
@@ -1335,6 +1508,15 @@
     </div>
 
     <script>
+      // Toggle collapsible sections
+      function toggleCollapsible(header) {
+        header.classList.toggle('is-collapsed');
+        const content = header.nextElementSibling;
+        if (content && content.classList.contains('collapsible-content')) {
+          content.classList.toggle('is-collapsed');
+        }
+      }
+
       // Validation functions
       function validateSelect(select) {
         const value = select.value.trim();

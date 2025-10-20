@@ -275,9 +275,8 @@
       </div>
     </div>
 
-    <div class="container">
-      <div class="header">
-        <h1>🌦️ Lab 5: Surface Map Analysis</h1>
+    <div class="collapsible-container"><!-- <div class="container"> -->
+      <h1 class="collapsible-header">Lab 5: Surface Map Analysis</h1>
         <p>Understanding Station Models and Weather Maps (30 Points)</p>
       </div>
 
@@ -800,38 +799,17 @@
 
       <!-- Q5: Multiple Lines -->
       <div class="section">
-        <div class="collapsible-container">
-          <div
-            class="collapsible-header stripe-blue"
-            onclick="toggleCollapsible(this)"
-          >
-            🧩 Question 5: Drawing Multiple Isotherms (8 pts)
-          </div>
+        <div class="collapsible-container stripe-indigo">
+          <h3 class="collapsible-header" onclick="toggleCollapsible(this)">🧩 Question 5: Drawing Multiple Isotherms (8 pts)</h3>
           <div class="collapsible-content">
-            <p>
-              <strong>Instructions:</strong> Using the surface map below, draw
-              the <strong>35°F, 40°F, and 45°F isotherms</strong> and the
-              <strong>45°F isodrosotherm (Td)</strong>. Remember to label each
-              clearly and use smooth lines that follow the gradients.
-            </p>
+            <p><strong>Instructions:</strong> Using the surface map below, draw the <strong>35°F, 40°F, and 45°F isotherms</strong> and the <strong>45°F isodrosotherm (Td)</strong>. Remember to label each clearly and use smooth lines that follow the gradients.</p>
 
             <div class="curve-widget-wrapper">
               <div class="stage">
-                <img
-                  id="bg-img-multi"
-                  src="BlankAnalysis.png"
-                  alt="Background analysis map"
-                />
-                <canvas
-                  id="draw-canvas-multi"
-                  style="left: 13px; top: -6px"
-                ></canvas>
+                <img id="bg-img-multi" src="BlankAnalysis.png" alt="Background analysis map" />
+                <canvas id="draw-canvas-multi" style="left: 13px; top: -6px"></canvas>
               </div>
-              <p class="hint">
-                Click to add points and define your line. Drag dots to move.
-                Right-click a dot to remove. “Save” merges your lines with the
-                image.
-              </p>
+              <p class="hint">Click to add points and define your line. Drag dots to move. Right-click a dot to remove. “Save” merges your lines with the image.</p>
               <div class="controls">
                 <label for="line-select-multi">Edit Line:</label>
                 <select id="line-select-multi">
@@ -842,9 +820,7 @@
                 </select>
                 <button id="undo-last-btn-multi" class="btn">Undo Last</button>
                 <button id="undo-all-btn-multi" class="btn">Undo All</button>
-                <button id="save-btn-multi" class="btn-save">
-                  Save as PNG
-                </button>
+                <button id="save-btn-multi" class="btn-save">Save as PNG</button>
               </div>
             </div>
           </div>
@@ -870,8 +846,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script type="module" src="lab05-main.js?v=6"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module" src="lab05-main.js"></script>
 
     <!-- Lightweight helpers: progress, autosave/restore, collapsibles -->
     <script>

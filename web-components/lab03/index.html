@@ -284,7 +284,7 @@
       .fill-in-line {
         /* was line-height: 2.5; now an inline-flex row that wraps cleanly */
         display: inline-flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         align-items: baseline;
         gap: 0.3rem 0.25rem;
         margin: 6px 0;
@@ -606,8 +606,9 @@
             >
 
             <div class="fill-in-line">
-              <strong>a.</strong> At a typical jet cruising altitude (11 km):
-              Pressure
+              <strong>a.</strong> At a typical jet cruising altitude (11 km),
+              what is the atmospheric pressure (mb) and what percentage of the
+              atmosphere remains above this altitude? Pressure
               <input
                 type="number"
                 class="inline-input wide"
@@ -633,8 +634,9 @@
             </div>
 
             <div class="fill-in-line">
-              <strong>b.</strong> At the summit of Mt. Everest (8.85 km):
-              Pressure:
+              <strong>b.</strong> At the summit of Mt. Everest (8.85 km), what
+              is the atmospheric pressure (mb) and what percentage of the
+              atmosphere remains above this altitude? Pressure:
               <input
                 type="number"
                 class="inline-input wide"
@@ -660,7 +662,9 @@
             </div>
 
             <div class="fill-in-line">
-              <strong>c.</strong> In Denver, CO (1.6 km): Pressure:
+              <strong>c.</strong> In Denver, CO (1.6 km), what is the
+              atmospheric pressure (mb) and what percentage of the atmosphere
+              remains above this altitude? Pressure:
               <input
                 type="number"
                 class="inline-input wide"
@@ -752,7 +756,7 @@
                 id="q4"
                 maxlength="1"
                 placeholder="A (Blue) / B (Red) / C (Magenta)"
-                style="width: 30ch"
+                style="width: clamp(15ch, 50vw, 30ch)"
               />
               has the highest surface temperature.
               <span class="points">(1 pt)</span>
@@ -766,7 +770,7 @@
                 id="q5"
                 maxlength="1"
                 placeholder="A (Blue) / B (Red) / C (Magenta)"
-                style="width: 30ch"
+                style="width: clamp(15ch, 50vw, 30ch)"
               />
               has the highest temperature at 10 km.
               <span class="points">(1 pt)</span>
@@ -780,7 +784,7 @@
                 id="q6"
                 maxlength="1"
                 placeholder="A (Blue) / B (Red) / C (Magenta)"
-                style="width: 30ch"
+                style="width: clamp(15ch, 50vw, 30ch)"
               />
               has the highest temperature at 14 km.
               <span class="points">(1 pt)</span>
@@ -1521,7 +1525,7 @@
         if (startClosed) {
           h.classList.add("is-collapsed");
           const c = h.nextElementSibling;
-          if (c) c.classList.add("is-collapsed");
+          if c) c.classList.add("is-collapsed");
         }
       });
     </script>

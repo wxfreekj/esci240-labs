@@ -8,6 +8,7 @@ import { initializeSingleLineCanvas } from "./shared/components/single-line-canv
 import { initializeMultiLineCanvas } from "./shared/components/multi-line-canvas.js";
 import {
   exportLabAnswers,
+  exportLabAnswersAsZip,
   clearLabForm,
 } from "./shared/utils/form-exporter.js";
 import { lab05Config } from "./lab05-config.js";
@@ -30,13 +31,40 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeMultiLineCanvas(lab05Config.multiLineCanvas);
 
   // Make export functions globally available
-  window.exportAnswers = () => {
-    const filename = exportLabAnswers(lab05Config);
-    alert(
-      "✅ Answers exported successfully!\n\nFile: " +
-        filename +
-        "\n\nPlease submit this file AND your images for Questions 3, 4, and 5 to Canvas."
-    );
+  window.exportAnswers = async () => {
+    try {
+      // Show a loading message since this might take a moment
+      const originalButton = event?.target;
+      if (originalButton) {
+        originalButton.disabled = true;
+        originalButton.textContent = "⏳ Creating zip file...";
+      }
+
+      const filename = await exportLabAnswersAsZip(lab05Config);
+
+      alert(
+        "✅ Complete submission exported successfully!\n\n" +
+          "File: " +
+          filename +
+          "\n\n" +
+          "This zip file contains:\n" +
+          "• Your answers (text file)\n" +
+          "• Station Model image\n" +
+          "• Isodrosotherm drawing\n" +
+          "• Isotherms drawing\n\n" +
+          "Please upload ONLY this zip file to Canvas."
+      );
+
+      if (originalButton) {
+        originalButton.disabled = false;
+        originalButton.textContent = "📥 Download file for Canvas Submission";
+      }
+    } catch (error) {
+      console.error("Export failed:", error);
+      alert(
+        "❌ There was an error creating the zip file. Please try again or contact your instructor."
+      );
+    }
   };
 
   window.clearForm = () => {

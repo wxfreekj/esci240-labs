@@ -1,5 +1,52 @@
 /**
- * Export lab answers AND images as a single ZIP file for Canvas submission
+ * Generic form export utility for lab assignments
+ */
+
+/**
+ * Export lab answers to a text file for Canvas submission (OLD METHOD)
+ * @param {Object} config - Lab configuration object
+ * @returns {string} - Filename of the exported file
+ */
+export function exportLabAnswers(config) {
+  const { labNumber, labName, totalPoints, questions } = config;
+
+  let output = "";
+  output += `ASSIGNMENT=${labName}\n`;
+  output += `LAB_NUMBER=${labNumber}\n`;
+  output += `DATE=${new Date().toISOString()}\n`;
+  output += `TOTAL_POINTS=${totalPoints}\n`;
+  output += "---BEGIN_ANSWERS---\n";
+
+  questions.forEach((q) => {
+    if (q.id) {
+      const element = document.getElementById(q.id);
+      if (element) {
+        output += `${q.key}=${element.value}\n`;
+      }
+    } else if (q.note) {
+      output += `${q.key}=${q.note}\n`;
+    }
+  });
+
+  output += "---END_ANSWERS---\n";
+  output += "\nIMPORTANT: Please also upload any required images to Canvas.\n";
+
+  const blob = new Blob([output], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const filename = `Lab${labNumber}_Answers_${Date.now()}.txt`;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  return filename;
+}
+
+/**
+ * Export lab answers AND images as a single ZIP file for Canvas submission (NEW METHOD)
  * @param {Object} config - Lab configuration object
  * @returns {Promise<string>} - Filename of the exported zip file
  */
@@ -25,7 +72,6 @@ export async function exportLabAnswersAsZip(config) {
   textContent += `TOTAL_POINTS=${totalPoints}\n`;
   textContent += "---BEGIN_ANSWERS---\n";
 
-  // Export each question
   questions.forEach((q) => {
     if (q.id) {
       const element = document.getElementById(q.id);
@@ -38,8 +84,6 @@ export async function exportLabAnswersAsZip(config) {
   });
 
   textContent += "---END_ANSWERS---\n";
-
-  // Add the text file to the zip
   zip.file(`${labName}.txt`, textContent);
 
   // 2. Add the Station Model Builder image (Question 3)
@@ -63,10 +107,7 @@ export async function exportLabAnswersAsZip(config) {
     const singleCanvas = document.getElementById("draw-canvas-single");
     const singleImg = document.getElementById("bg-img-single");
     if (singleCanvas && singleImg) {
-      const mergedSingleCanvas = await mergeCanvasWithImage(
-        singleCanvas,
-        singleImg
-      );
+      const mergedSingleCanvas = mergeCanvasWithImage(singleCanvas, singleImg);
       const singleData = mergedSingleCanvas
         .toDataURL("image/png")
         .split(",")[1];
@@ -81,10 +122,7 @@ export async function exportLabAnswersAsZip(config) {
     const multiCanvas = document.getElementById("draw-canvas-multi");
     const multiImg = document.getElementById("bg-img-multi");
     if (multiCanvas && multiImg) {
-      const mergedMultiCanvas = await mergeCanvasWithImage(
-        multiCanvas,
-        multiImg
-      );
+      const mergedMultiCanvas = mergeCanvasWithImage(multiCanvas, multiImg);
       const multiData = mergedMultiCanvas.toDataURL("image/png").split(",")[1];
       zip.file("Lab05_Isotherms.png", multiData, { base64: true });
     }
@@ -113,17 +151,41 @@ export async function exportLabAnswersAsZip(config) {
  * @param {HTMLImageElement} img - The background image
  * @returns {HTMLCanvasElement} - New canvas with merged content
  */
-async function mergeCanvasWithImage(canvas, img) {
+function mergeCanvasWithImage(canvas, img) {
   const tempCanvas = document.createElement("canvas");
   tempCanvas.width = canvas.width;
   tempCanvas.height = canvas.height;
   const ctx = tempCanvas.getContext("2d");
 
-  // Draw the background image
+  // Draw the background image first
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-  // Draw the canvas on top
+  // Draw the student's drawing on top
   ctx.drawImage(canvas, 0, 0);
 
   return tempCanvas;
+}
+
+/**
+ * Clear all form inputs
+ */
+export function clearLabForm() {
+  if (
+    confirm(
+      "⚠️ Are you sure you want to clear all answers? This cannot be undone."
+    )
+  ) {
+    const inputs = document.querySelectorAll(
+      'input[type="text"], input[type="number"], select, textarea'
+    );
+    inputs.forEach((input) => {
+      input.value = "";
+    });
+
+    inputs.forEach((input) => {
+      input.dispatchEvent(new Event("change"));
+    });
+
+    alert("✅ All answers have been cleared.");
+  }
 }

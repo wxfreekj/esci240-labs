@@ -31,7 +31,7 @@ export const lab05Config = {
     saveBtnId: "save-btn-single",
     saveFilename: "Lab05_Isodrosotherm_45F.png",
     lineColor: "#FF0000",
-    lineWidth: 2,
+    lineWidth: 3,
     lineDash: [6, 10],
   },
 

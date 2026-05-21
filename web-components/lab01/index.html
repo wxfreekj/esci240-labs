@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -46,7 +46,13 @@
       }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif;
         color: var(--ink-700);
         background: #fff;
@@ -175,7 +181,13 @@
         padding: 12px 14px;
         border: 1px solid #c9d4ff;
         border-radius: 10px;
-        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font:
+          16px/1.4 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif; /* 16px avoids iOS zoom */
         box-sizing: border-box;
         background: #fff;
@@ -222,7 +234,9 @@
         font-size: var(--fs-btn);
         border: none;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
         min-height: 44px;
       }
       .btn:hover {
@@ -543,7 +557,10 @@
           <button
             type="button"
             class="btn btn-primary"
-            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 1 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 1:%0D%0A%0D%0A'"
+            onclick="
+              window.location.href =
+                'mailto:JMartinelli@peru.edu?subject=Lab 1 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 1:%0D%0A%0D%0A'
+            "
           >
             ❓ Questions, concerns, feedback, or need help?
           </button>
@@ -551,6 +568,7 @@
       </form>
     </div>
 
+    <script src="../shared/utils/question-pager.js"></script>
     <script>
       /* ---------- Progress ---------- */
       function updateProgress() {
@@ -662,7 +680,7 @@
           if (empty.length) msg += `Empty fields: ${empty.join(", ")}\n`;
           if (short.length)
             msg += `Fields needing more detail (min 20 chars): ${short.join(
-              ", "
+              ", ",
             )}`;
           alert(msg);
           if (firstBad) {
@@ -707,7 +725,7 @@
         answers.push("POINTS: 3");
         answers.push("TYPE: essay");
         answers.push(
-          "PROMPT: What are the fixed steps of science that scientists always follow?"
+          "PROMPT: What are the fixed steps of science that scientists always follow?",
         );
         answers.push("");
         answers.push("[ANSWER]");
@@ -721,7 +739,7 @@
         answers.push("POINTS: 3");
         answers.push("TYPE: essay");
         answers.push(
-          "PROMPT: How can scientists test or validate ideas about events that happened in the past?"
+          "PROMPT: How can scientists test or validate ideas about events that happened in the past?",
         );
         answers.push("");
         answers.push("[ANSWER]");
@@ -738,7 +756,7 @@
         answers.push("");
         answers.push("[PART_A]");
         answers.push(
-          "How might a scientist introduce bias into their data unintentionally?"
+          "How might a scientist introduce bias into their data unintentionally?",
         );
         answers.push("");
         answers.push(document.getElementById("q4a").value.trim());
@@ -746,7 +764,7 @@
         answers.push("");
         answers.push("[PART_B]");
         answers.push(
-          "What is one strategy scientists can use to minimize bias in their work?"
+          "What is one strategy scientists can use to minimize bias in their work?",
         );
         answers.push("");
         answers.push(document.getElementById("q4b").value.trim());
@@ -762,7 +780,7 @@
         answers.push("");
         answers.push("[PART_A]");
         answers.push(
-          "What does it mean to say that science is not based on authority?"
+          "What does it mean to say that science is not based on authority?",
         );
         answers.push("");
         answers.push(document.getElementById("q5a").value.trim());
@@ -770,7 +788,7 @@
         answers.push("");
         answers.push("[PART_B]");
         answers.push(
-          "How does this affect the way scientific knowledge is accepted or challenged?"
+          "How does this affect the way scientific knowledge is accepted or challenged?",
         );
         answers.push("");
         answers.push(document.getElementById("q5b").value.trim());
@@ -817,7 +835,7 @@
       document.getElementById("clearBtn").addEventListener("click", () => {
         if (
           confirm(
-            "Are you sure you want to clear all fields? This cannot be undone."
+            "Are you sure you want to clear all fields? This cannot be undone.",
           )
         ) {
           const fields = [

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -48,7 +48,13 @@
       }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif;
         color: var(--ink-700);
         background: #fff;
@@ -176,7 +182,13 @@
         padding: 12px 14px;
         border: 1px solid #c9d4ff;
         border-radius: 10px;
-        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font:
+          16px/1.4 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif;
         box-sizing: border-box;
         background: #fff;
@@ -222,7 +234,9 @@
         font-size: var(--fs-btn);
         border: none;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
         min-height: 44px;
       }
       .btn:hover {
@@ -1016,13 +1030,17 @@
         <button
           type="button"
           class="btn btn-primary"
-          onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 3 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 3:%0D%0A%0D%0A'"
+          onclick="
+            window.location.href =
+              'mailto:JMartinelli@peru.edu?subject=Lab 3 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 3:%0D%0A%0D%0A'
+          "
         >
           ❓ Questions, concerns, feedback, or need help?
         </button>
       </div>
     </div>
 
+    <script src="../shared/utils/question-pager.js"></script>
     <script>
       /* ------------------- Validation ------------------- */
       function validateNumber(input, min = null, max = null) {
@@ -1114,7 +1132,7 @@
           const needsMax = id.endsWith("percent");
           if (!validateNumber(input, 0, needsMax ? 100 : null)) {
             errors.emptyNumbers.push(
-              "Q3: " + id.replace("q3", "").replace("_", " ").toUpperCase()
+              "Q3: " + id.replace("q3", "").replace("_", " ").toUpperCase(),
             );
             isValid = false;
             if (!firstInvalid) firstInvalid = input;
@@ -1127,7 +1145,7 @@
           const value = input.value.trim().toUpperCase();
           if (!value || !["A", "B", "C"].includes(value)) {
             errors.emptyNumbers.push(
-              `Q${idx + 4}: Station letter (A, B, or C)`
+              `Q${idx + 4}: Station letter (A, B, or C)`,
             );
             input.style.borderColor = "#dc2626";
             input.style.backgroundColor = "#fef2f2";
@@ -1150,7 +1168,7 @@
           const input = document.getElementById(id);
           if (!validateNumber(input, 0)) {
             errors.emptyNumbers.push(
-              "Q7: " + id.replace("q7_", "") + " height"
+              "Q7: " + id.replace("q7_", "") + " height",
             );
             isValid = false;
             if (!firstInvalid) firstInvalid = input;
@@ -1174,7 +1192,7 @@
           const select = document.getElementById(id);
           if (!validateSelect(select)) {
             errors.emptyDropdowns.push(
-              i === 0 ? "Q11: Alaska color" : "Q12: Tropics color"
+              i === 0 ? "Q11: Alaska color" : "Q12: Tropics color",
             );
             isValid = false;
             if (!firstInvalid) firstInvalid = select;
@@ -1273,13 +1291,13 @@
           "--------------------------------------------------------------------------------\n";
         output += "Question 3 (6 pts): Pressure and percentage estimates\n";
         output += `  a. Jet cruising altitude (11 km): ${getValue(
-          "q3a_pressure"
+          "q3a_pressure",
         )} mb; ${getValue("q3a_percent")}% above\n`;
         output += `  b. Mt. Everest (8.85 km): ${getValue(
-          "q3b_pressure"
+          "q3b_pressure",
         )} mb; ${getValue("q3b_percent")}% above\n`;
         output += `  c. Denver, CO (1.6 km): ${getValue(
-          "q3c_pressure"
+          "q3c_pressure",
         )} mb; ${getValue("q3c_percent")}% above\n\n`;
 
         // Part 4
@@ -1287,25 +1305,25 @@
         output +=
           "--------------------------------------------------------------------------------\n";
         output += `Question 4 (1 pt): Highest surface temperature -> Station ${getValue(
-          "q4"
+          "q4",
         )}\n`;
         output += `Question 5 (1 pt): Highest temp at 10 km -> Station ${getValue(
-          "q5"
+          "q5",
         )}\n`;
         output += `Question 6 (1 pt): Highest temp at 14 km -> Station ${getValue(
-          "q6"
+          "q6",
         )}\n`;
         output += `Question 7 (2 pts): Inversion color: ${getValue(
-          "q7_color"
+          "q7_color",
         )}; start: ${getValue("q7_start")} km; end: ${getValue("q7_end")} km\n`;
         output += `Question 8 (2 pts): Red station tropopause -> ${getValue(
-          "q8_height"
+          "q8_height",
         )} km at ${getValue("q8_temp")} °C\n`;
         output += `Question 9 (2 pts): Blue station tropopause -> ${getValue(
-          "q9_height"
+          "q9_height",
         )} km at ${getValue("q9_temp")} °C\n`;
         output += `Question 10 (2 pts): Magenta station tropopause -> ${getValue(
-          "q10_height"
+          "q10_height",
         )} km at ${getValue("q10_temp")} °C\n`;
         output += `Question 11 (1 pt): Alaska color -> ${getValue("q11")}\n`;
         output += `Question 12 (1 pt): Tropics color -> ${getValue("q12")}\n\n`;
@@ -1377,7 +1395,7 @@
         const data = { timestamp: new Date().toISOString() };
         document
           .querySelectorAll(
-            'input[type="text"], input[type="number"], textarea, select'
+            'input[type="text"], input[type="number"], textarea, select',
           )
           .forEach((el) => {
             data[el.id] = el.value;
@@ -1396,14 +1414,14 @@
       function resetForm() {
         if (
           !confirm(
-            "Are you sure you want to reset all answers? This cannot be undone."
+            "Are you sure you want to reset all answers? This cannot be undone.",
           )
         )
           return;
         localStorage.removeItem("lab3_progress");
         document
           .querySelectorAll(
-            'input[type="text"], input[type="number"], textarea, select'
+            'input[type="text"], input[type="number"], textarea, select',
           )
           .forEach((el) => {
             el.value = "";
@@ -1417,7 +1435,7 @@
 
       setInterval(() => {
         const inputs = document.querySelectorAll(
-          'input[type="text"], input[type="number"], textarea, select'
+          'input[type="text"], input[type="number"], textarea, select',
         );
         let hasData = false;
         inputs.forEach((i) => {
@@ -1432,7 +1450,7 @@
       });
       window.addEventListener("beforeunload", (e) => {
         const inputs = document.querySelectorAll(
-          'input[type="text"], input[type="number"], textarea, select'
+          'input[type="text"], input[type="number"], textarea, select',
         );
         let hasData = false;
         inputs.forEach((i) => {
@@ -1455,7 +1473,7 @@
           (id) => {
             const el = document.getElementById(id);
             return el && el.value.trim();
-          }
+          },
         );
         if (p1) completed++;
 

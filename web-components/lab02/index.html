@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -46,7 +46,13 @@
       }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif;
         color: var(--ink-700);
         background: #fff;
@@ -224,7 +230,9 @@
         font-weight: 800;
         line-height: 1.25;
         min-height: 44px;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
         box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
         border: none;
         text-align: center;
@@ -299,7 +307,13 @@
         padding: 12px 14px;
         border: 1px solid #c9d4ff;
         border-radius: 10px;
-        font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+        font:
+          16px/1.4 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial,
           sans-serif; /* 16px avoids iOS zoom */
         box-sizing: border-box;
         background: #fff;
@@ -338,7 +352,9 @@
         font-size: var(--fs-btn);
         border: none;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
         min-height: 44px;
       }
       .btn:hover {
@@ -1366,7 +1382,10 @@
           <button
             type="button"
             class="btn btn-primary"
-            onclick="window.location.href='mailto:JMartinelli@peru.edu?subject=Lab 2 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 2:%0D%0A%0D%0A'"
+            onclick="
+              window.location.href =
+                'mailto:JMartinelli@peru.edu?subject=Lab 2 - Question/Feedback&body=Hi Dr. M,%0D%0A%0D%0AI have a question about Lab 2:%0D%0A%0D%0A'
+            "
           >
             ❓ Questions, concerns, feedback, or need help?
           </button>
@@ -1374,6 +1393,7 @@
       </form>
     </div>
 
+    <script src="../shared/utils/question-pager.js"></script>
     <script>
       /* ---------- Progress ---------- */
       function updateProgress() {
@@ -1443,13 +1463,13 @@
             msg += `Missing links for item(s): ${emptyL.join(", ")}\n`;
           if (badL.length)
             msg += `Invalid URL format for item(s): ${badL.join(
-              ", "
+              ", ",
             )} (must start with http:// or https://)\n`;
           if (emptyC.length)
             msg += `Missing captions for item(s): ${emptyC.join(", ")}\n`;
           if (shortC.length)
             msg += `Caption(s) too short (need at least 20 characters) for item(s): ${shortC.join(
-              ", "
+              ", ",
             )}\n`;
           alert(msg);
           if (firstBad) {
@@ -1510,7 +1530,7 @@
       document.getElementById("clearBtn").addEventListener("click", () => {
         if (
           confirm(
-            "Are you sure you want to clear all fields? This cannot be undone."
+            "Are you sure you want to clear all fields? This cannot be undone.",
           )
         ) {
           document.getElementById("weatherForm").reset();

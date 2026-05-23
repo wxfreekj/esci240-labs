@@ -148,7 +148,9 @@ https://wxfreekj.github.io/lab10-student
 
 ## Student Instructions
 
-**To complete a lab:**
+For a full, shareable version of the directions, use [`STUDENT_INSTRUCTIONS.md`](STUDENT_INSTRUCTIONS.md).
+
+**Quick version:**
 
 1. Click on the lab link
 2. Complete the questions directly in your browser

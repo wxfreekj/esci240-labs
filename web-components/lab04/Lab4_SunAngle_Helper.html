@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4: Sun Angles Tutorial</title>
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #E74C3C;
+            --bg: #F8F9FA;
+            --text: #333333;
+            --border: #DEE2E6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            color: var(--primary);
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .interactive-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .controls {
+            flex: 1;
+            min-width: 250px;
+            background: #f1f3f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .visualization {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .input-row input {
+            flex: 2;
+        }
+        .input-row select {
+            flex: 1;
+        }
+        .result-box {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .result-box h4 {
+            margin: 0 0 10px 0;
+            color: #ffc107;
+        }
+        .result-val {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .example-box {
+            background-color: #e9ecef;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+            margin: 20px auto;
+        }
+        .caption {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        svg {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌍 Mastering Sun Angles: A Guide to Question 11</h1>
+
+    <p>Understanding how solar radiation strikes the Earth is fundamental to meteorology and climatology. To solve Question 11 and complete your table, you need to calculate the <strong>Solar Elevation Angle</strong> (or simply, the Sun Angle) for various locations on specific dates.</p>
+
+    <img src="./SunAngle.jpg" alt="Earth diagram showing geometry">
+    <div class="caption">Geometry of the solar elevation and zenith angles</div>
+
+    <p>This calculation relies on three straightforward steps mapping out the geometry of the Earth and Sun.</p>
+
+    <div class="card">
+        <h3>Step 1: Find the Subsolar Point</h3>
+        <p>The subsolar point is the exact latitude where the sun's rays are striking the Earth perpendicularly (directly overhead) at solar noon. Earth's axial tilt restricts this point to oscillating between 23.5°N (Tropic of Cancer) and 23.5°S (Tropic of Capricorn).</p>
+        
+        <ul>
+            <li><strong>December 22 (Winter Solstice):</strong> 23.5°S</li>
+            <li><strong>March 22 / Sept 22 (Equinoxes):</strong> 0° (The Equator)</li>
+            <li><strong>June 22 (Summer Solstice):</strong> 23.5°N</li>
+        </ul>
+
+        <p>For any other day of the year, use the <strong>Interactive Analemma Explorer</strong> below to find the exact solar declination (subsolar point).</p>
+        
+        <div class="interactive-container">
+            <div class="controls">
+                <div class="form-group">
+                    <label>Select Date:</label>
+                    <div class="input-row">
+                        <select id="a-month" onchange="updateAnalemma()">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6" selected>June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select id="a-day" onchange="updateAnalemma()">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h4>Subsolar Point</h4>
+                    <div id="analemma-result" class="result-val">23.5° N</div>
+                    <div style="font-size: 14px; margin-top:5px;">(Solar Declination)</div>
+                </div>
+            </div>
+            <div class="visualization">
+                <svg id="analemma-svg" width="600" height="800" viewBox="-30 -30 60 60"></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Step 2: Calculate Latitude Separation</h3>
+        <p>Next, determine the distance in degrees between the observer's latitude and the subsolar point you just found.</p>
+        <ul>
+            <li><strong>Same Hemisphere:</strong> Subtract the smaller latitude from the larger one.</li>
+            <li><strong>Opposite Hemispheres:</strong> Add the two latitudes together.</li>
+        </ul>
+
+        <h3>Step 3: Calculate the Sun Angle</h3>
+        <p>Because the zenith (directly overhead) is exactly 90° from the horizon, and we assume incoming solar rays travel in parallel lines, calculating the final angle is simple:</p>
+        <div style="background:#e9ecef; padding: 15px; text-align: center; font-size: 1.2em; font-weight: bold; border-radius: 5px;">
+            Sun Angle = 90° - Latitude Separation
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📝 Walkthrough Examples</h3>
+        
+        <div class="example-box">
+            <strong>Example 1: Peru, NE (40.5°N) on December 22nd</strong>
+            <ul>
+                <li><strong>Subsolar Point:</strong> 23.5°S (December Solstice)</li>
+                <li><strong>Latitude Separation:</strong> Since Peru, NE is in the Northern Hemisphere and the subsolar point is in the Southern Hemisphere, we add them together. 40.5° + 23.5° = 64°.</li>
+                <li><strong>Sun Angle:</strong> 90° - 64° = <strong>26°</strong> <em>(Note: The multiple-choice option in your lab table may round this to 26.5°, assuming a flat 40°N latitude for the exercise).</em></li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <strong>Example 2: Exeter, UK (51°N) on June 22nd</strong>
+            <ul>
+                <li><strong>Subsolar Point:</strong> 23.5°N (June Solstice)</li>
+                <li><strong>Latitude Separation:</strong> Both locations are in the Northern Hemisphere, so we subtract. 51° - 23.5° = 27.5°.</li>
+                <li><strong>Sun Angle:</strong> 90° - 27.5° = <strong>62.5°</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🧮 Sun Angle Geometry Calculator</h3>
+        <p>Use this interactive tool to visualize the geometry and verify your calculations for the rest of the table in Question 11.</p>
+        
+        <div class="interactive-container">
+            <div class="controls">
+                <div class="form-group">
+                    <label>Observer Latitude:</label>
+                    <div class="input-row">
+                        <input type="number" id="obsLat" value="40.5" min="0" max="90" step="0.5" oninput="updateSunAngle()">
+                        <select id="obsHem" onchange="updateSunAngle()">
+                            <option value="N">N</option>
+                            <option value="S">S</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Subsolar Point:</label>
+                    <div class="input-row">
+                        <input type="number" id="subLat" value="23.5" min="0" max="23.5" step="0.5" oninput="updateSunAngle()">
+                        <select id="subHem" onchange="updateSunAngle()">
+                            <option value="S">S</option>
+                            <option value="N">N</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="result-box">
+                    <h4>Latitude Separation</h4>
+                    <div id="sepOut" style="font-size: 20px; margin-bottom: 10px;">64.0°</div>
+                    <h4>Sun Elevation Angle</h4>
+                    <div id="angOut" class="result-val">26.0°</div>
+                </div>
+            </div>
+            <div class="visualization">
+                <canvas id="earthCanvas" width="300" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Analemma Logic ---
+        function getDayOfYear(month, day) {
+            const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let doy = day;
+            for (let i = 0; i < month - 1; i++) doy += daysInMonth[i];
+            return doy;
+        }
+
+        function populateDays() {
+            const m = parseInt(document.getElementById('a-month').value);
+            const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            const daySelect = document.getElementById('a-day');
+            const currentDay = parseInt(daySelect.value) || 22;
+            daySelect.innerHTML = '';
+            for(let i=1; i<=daysInMonth[m-1]; i++) {
+                let opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = i;
+                if(i === currentDay) opt.selected = true;
+                daySelect.appendChild(opt);
+            }
+            if(currentDay > daysInMonth[m-1]) daySelect.value = daysInMonth[m-1];
+        }
+
+        function drawAnalemma(selectedDoy) {
+            const svg = document.getElementById('analemma-svg');
+            svg.innerHTML = '';
+            
+            // Draw grid
+            const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            gridGroup.setAttribute('stroke', '#eee');
+            gridGroup.setAttribute('stroke-width', '0.5');
+            for(let y=-23.5; y<=23.5; y+=10) {
+                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', -25); line.setAttribute('x2', 25);
+                line.setAttribute('y1', -y); line.setAttribute('y2', -y); // svg y is inverted
+                gridGroup.appendChild(line);
+                let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', -28); text.setAttribute('y', -y + 1);
+                text.setAttribute('font-size', '3'); text.setAttribute('fill', '#999');
+                text.textContent = Math.abs(y) + (y>0?'°N':(y<0?'°S':'°'));
+                svg.appendChild(text);
+            }
+            svg.insertBefore(gridGroup, svg.firstChild);
+
+            // Draw axis
+            let xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', -25); xAxis.setAttribute('x2', 25);
+            xAxis.setAttribute('y1', 0); xAxis.setAttribute('y2', 0);
+            xAxis.setAttribute('stroke', '#ccc'); xAxis.setAttribute('stroke-width', '0.5');
+            svg.appendChild(xAxis);
+
+            let yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', 0); yAxis.setAttribute('x2', 0);
+            yAxis.setAttribute('y1', -25); yAxis.setAttribute('y2', 25);
+            yAxis.setAttribute('stroke', '#ccc'); yAxis.setAttribute('stroke-width', '0.5');
+            svg.appendChild(yAxis);
+
+            // Generate points
+            let points = [];
+            let activePoint = null;
+            let activeDec = 0;
+
+            for(let d=1; d<=365; d++) {
+                let b = (2 * Math.PI / 365) * (d - 81);
+                let eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
+                let dec = 23.45 * Math.sin(b);
+                
+                let x = eot; 
+                let y = -dec; // Invert Y for SVG
+
+                points.push(`${x},${y}`);
+
+                if(d === selectedDoy) {
+                    activePoint = {x, y};
+                    activeDec = dec;
+                }
+            }
+
+            let polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            polyline.setAttribute('points', points.join(' '));
+            polyline.setAttribute('fill', 'none');
+            polyline.setAttribute('stroke', '#2C3E50');
+            polyline.setAttribute('stroke-width', '0.8');
+            svg.appendChild(polyline);
+
+            if(activePoint) {
+                let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', activePoint.x);
+                circle.setAttribute('cy', activePoint.y);
+                circle.setAttribute('r', '2');
+                circle.setAttribute('fill', '#E74C3C');
+                svg.appendChild(circle);
+
+                let resultText = Math.abs(activeDec).toFixed(1) + "° " + (activeDec >= 0 ? "N" : "S");
+                if (Math.abs(activeDec) < 0.1) resultText = "0° (Equator)";
+                document.getElementById('analemma-result').innerText = resultText;
+            }
+        }
+
+        function updateAnalemma() {
+            let m = parseInt(document.getElementById('a-month').value);
+            let d = parseInt(document.getElementById('a-day').value);
+            let doy = getDayOfYear(m, d);
+            drawAnalemma(doy);
+        }
+
+        // Initialize Analemma
+        document.getElementById('a-month').addEventListener('change', populateDays);
+        populateDays();
+        document.getElementById('a-day').value = 22; // Default to June 22
+        updateAnalemma();
+
+
+        // --- Sun Angle Logic ---
+        function updateSunAngle() {
+            let oLat = parseFloat(document.getElementById('obsLat').value);
+            if (isNaN(oLat)) oLat = 0;
+            if (oLat > 90) oLat = 90;
+            let oHem = document.getElementById('obsHem').value;
+            
+            let sLat = parseFloat(document.getElementById('subLat').value);
+            if (isNaN(sLat)) sLat = 0;
+            if (sLat > 23.5) sLat = 23.5;
+            let sHem = document.getElementById('subHem').value;
+
+            let sep = 0;
+            if (oHem === sHem) {
+                sep = Math.abs(oLat - sLat);
+            } else {
+                sep = oLat + sLat;
+            }
+
+            let angle = 90 - sep;
+            if (angle < 0) angle = 0;
+
+            document.getElementById('sepOut').innerText = sep.toFixed(1) + "°";
+            document.getElementById('angOut').innerText = angle.toFixed(1) + "°";
+
+            drawEarth(oLat, oHem, sLat, sHem);
+        }
+
+        function drawEarth(oLat, oHem, sLat, sHem) {
+            const canvas = document.getElementById('earthCanvas');
+            const ctx = canvas.getContext('2d');
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const r = 100;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw incoming sun rays
+            ctx.strokeStyle = '#f39c12';
+            ctx.lineWidth = 2;
+            
+            // Subsolar point angle relative to equator
+            let sunAngleRad = (sHem === 'N' ? -sLat : sLat) * Math.PI / 180;
+            
+            for(let i=-80; i<=80; i+=20) {
+                ctx.beginPath();
+                // Rays coming from right side
+                let startX = cx + 150;
+                let startY = cy + i;
+                let dx = -150;
+                let dy = dx * Math.tan(sunAngleRad);
+                
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(startX + dx, startY + dy);
+                ctx.stroke();
+                
+                // Draw arrow head
+                ctx.beginPath();
+                ctx.moveTo(startX + dx, startY + dy);
+                ctx.lineTo(startX + dx + 10, startY + dy - 5);
+                ctx.lineTo(startX + dx + 10, startY + dy + 5);
+                ctx.fillStyle = '#f39c12';
+                ctx.fill();
+            }
+
+            // Draw Earth
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3498db';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#2980b9';
+            ctx.stroke();
+
+            // Draw Equator
+            ctx.beginPath();
+            ctx.moveTo(cx - r, cy);
+            ctx.lineTo(cx + r, cy);
+            ctx.strokeStyle = '#ecf0f1';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Axis
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - r - 10);
+            ctx.lineTo(cx, cy + r + 10);
+            ctx.strokeStyle = '#bdc3c7';
+            ctx.stroke();
+
+            // Draw Observer
+            let obsRad = (oHem === 'N' ? -oLat : oLat) * Math.PI / 180;
+            let ox = cx + r * Math.cos(obsRad);
+            let oy = cy + r * Math.sin(obsRad);
+
+            ctx.beginPath();
+            ctx.arc(ox, oy, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e74c3c';
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.stroke();
+            
+            // Draw Subsolar point on Earth surface
+            let ssx = cx + r * Math.cos(sunAngleRad);
+            let ssy = cy + r * Math.sin(sunAngleRad);
+            ctx.beginPath();
+            ctx.arc(ssx, ssy, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#f1c40f';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Label
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '12px Arial';
+            ctx.fillText("Equator", cx - 45, cy + 15);
+            ctx.fillText("N", cx - 4, cy - r - 15);
+        }
+
+        // Initialize Sun Angle
+        updateSunAngle();
+    </script>
+</body>
+</html>

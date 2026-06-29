@@ -295,22 +295,41 @@
             const svg = document.getElementById('analemma-svg');
             svg.innerHTML = '';
             
-          // Draw grid
+ // Draw grid with meaningful latitude values
 const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-gridGroup.setAttribute('stroke', '#eee');
-gridGroup.setAttribute('stroke-width', '0.5');
-for(let y=-23.5; y<=23.5; y+=10) {
+gridGroup.setAttribute('stroke', '#cbd5e1');
+gridGroup.setAttribute('stroke-width', '0.3');
+
+const gridLines = [
+    {val: 23.5, label: '23.5°N'},
+    {val: 10,   label: '10°N'},
+    {val: 0,    label: 'Equator'},
+    {val: -10,  label: '10°S'},
+    {val: -23.5, label: '23.5°S'}
+];
+
+gridLines.forEach(g => {
     let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', -25); line.setAttribute('x2', 25);
-    line.setAttribute('y1', -y); line.setAttribute('y2', -y);
+    line.setAttribute('x1', -20);
+    line.setAttribute('x2', 20);
+    line.setAttribute('y1', -g.val);
+    line.setAttribute('y2', -g.val);
+    if (g.val === 0) {
+        line.setAttribute('stroke', '#94a3b8');
+        line.setAttribute('stroke-width', '0.5');
+    }
     gridGroup.appendChild(line);
+
     let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', -28); text.setAttribute('y', -y + 1);
-    text.setAttribute('font-size', '3'); text.setAttribute('fill', '#999');
-    // y is the declination value: positive = North, negative = South
-    text.textContent = y === 0 ? '0° (Eq)' : Math.abs(y) + (y > 0 ? '°N' : '°S');
+    text.setAttribute('x', -22);
+    text.setAttribute('y', -g.val + 1);
+    text.setAttribute('font-size', '3');
+    text.setAttribute('fill', '#64748b');
+    text.setAttribute('text-anchor', 'end');
+    text.textContent = g.label;
     svg.appendChild(text);
-}
+});
+
 svg.insertBefore(gridGroup, svg.firstChild);
 
             // Draw axis

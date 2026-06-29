@@ -300,22 +300,23 @@
             const svg = document.getElementById('analemma-svg');
             svg.innerHTML = '';
             
-            // Draw grid
-            const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            gridGroup.setAttribute('stroke', '#eee');
-            gridGroup.setAttribute('stroke-width', '0.5');
-            for(let y=-23.5; y<=23.5; y+=10) {
-                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', -25); line.setAttribute('x2', 25);
-                line.setAttribute('y1', -y); line.setAttribute('y2', -y); // svg y is inverted
-                gridGroup.appendChild(line);
-                let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', -28); text.setAttribute('y', -y + 1);
-                text.setAttribute('font-size', '3'); text.setAttribute('fill', '#999');
-                text.textContent = Math.abs(y) + (y>0?'°N':(y<0?'°S':'°'));
-                svg.appendChild(text);
-            }
-            svg.insertBefore(gridGroup, svg.firstChild);
+          // Draw grid
+const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+gridGroup.setAttribute('stroke', '#eee');
+gridGroup.setAttribute('stroke-width', '0.5');
+for(let y=-23.5; y<=23.5; y+=10) {
+    let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', -25); line.setAttribute('x2', 25);
+    line.setAttribute('y1', -y); line.setAttribute('y2', -y);
+    gridGroup.appendChild(line);
+    let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', -28); text.setAttribute('y', -y + 1);
+    text.setAttribute('font-size', '3'); text.setAttribute('fill', '#999');
+    // y is the declination value: positive = North, negative = South
+    text.textContent = y === 0 ? '0° (Eq)' : Math.abs(y) + (y > 0 ? '°N' : '°S');
+    svg.appendChild(text);
+}
+svg.insertBefore(gridGroup, svg.firstChild);
 
             // Draw axis
             let xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
